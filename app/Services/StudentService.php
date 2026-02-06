@@ -131,6 +131,38 @@ class StudentService
         });
     }
 
+    public function changeStatus(Student $student, string $status){
+        return DB::transaction(function() use($student,$status){
+             // If trying to mark Active but no active enrollment exists, block (optional but professional)
+        if ($status === 'active') {
+            $hasActiveEnrollment = Enrollment::query()
+                ->where('student_id', $student->id)
+                ->where('is_active', true)
+                ->exists();
+
+            if (! $hasActiveEnrollment) {
+                throw ValidationException::withMessages([
+                    'status' => 'Cannot set student to Active without an active enrollment. Transfer/enroll the student first.',
+                ]);
+            }
+        }
+
+         // If trying to mark Active but no active enrollment exists, block (optional but professional)
+        if ($status === 'active') {
+            $hasActiveEnrollment = Enrollment::query()
+                ->where('student_id', $student->id)
+                ->where('is_active', true)
+                ->exists();
+
+            if (! $hasActiveEnrollment) {
+                throw ValidationException::withMessages([
+                    'status' => 'Cannot set student to Active without an active enrollment. Transfer/enroll the student first.',
+                ]);
+            }
+        }
+        });
+    }
+
     /**
      * Resolve Term by ID, or fall back to currently active term
      */

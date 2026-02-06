@@ -29,6 +29,7 @@ class StudentController extends Controller
             'activeEnrollment.schoolClass',
             'activeEnrollment.stream',
         ])
+            ->when(!$status, fn($q) => $q->whereNotIn('status', ['archived']))
             ->when($status, fn ($query) => $query->where('status', $status))
             ->when($classId, function ($query) use ($classId) {
                 $query->whereHas('activeEnrollment', fn ($q) => $q->where('class_id', $classId));

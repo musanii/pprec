@@ -43,7 +43,7 @@
                         class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm
                                focus:outline-none focus:ring-2 focus:ring-primary/20">
                     <option value="">All</option>
-                    @foreach(['admitted','active','suspended','alumni'] as $s)
+                    @foreach(['admitted','active','suspended','alumni','archived'] as $s)
                         <option value="{{ $s }}" @selected($filters['status'] === $s)>{{ ucfirst($s) }}</option>
                     @endforeach
                 </select>
@@ -143,6 +143,7 @@
                                     'admitted' => 'bg-blue-50 text-blue-700 border-blue-200',
                                     'suspended' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
                                     'alumni' => 'bg-slate-50 text-slate-700 border-slate-200',
+                                    'archived' => 'bg-slate-100 text-slate-700 border-slate-200',
                                     default => 'bg-slate-50 text-slate-700 border-slate-200',
                                 };
                             @endphp
@@ -191,15 +192,39 @@
                 class="fixed z-[9999]"
                 :style="`left:${x}px; top:${y}px; transform: translateX(-100%);`"
             >
-                <div class="w-40 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
-                    <a
-                        href="{{ route('admin.students.edit', $student) }}"
-                        class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
-                        @click="open=false"
-                    >
-                        Edit
-                    </a>
-                </div>
+                <div class="w-44 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+                <a href="{{ route('admin.students.edit', $student) }}"
+                class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+                    Edit
+                </a>
+
+                <div class="h-px bg-slate-100"></div>
+
+                {{-- Quick status actions --}}
+                @php $current = $student->status; @endphp
+
+                @foreach([
+                    'active' => 'Mark Active',
+                    'suspended' => 'Suspend',
+                    'alumni' => 'Mark Alumni',
+                    'archived' => 'Archive (Transfer Out)',
+                ] as $value => $label)
+                    <form method="POST" action="{{ route('admin.students.status', $student) }}">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="{{ $value }}">
+                        <button
+                            type="submit"
+                            class="w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50
+                                {{ $current === $value ? 'text-slate-400 cursor-not-allowed' : 'text-slate-700' }}"
+                            {{ $current === $value ? 'disabled' : '' }}
+                        >
+                            {{ $label }}
+                        </button>
+                    </form>
+                @endforeach
+            </div>
+
             </div>
         </template>
     </div>

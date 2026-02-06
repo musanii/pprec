@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
-            $table->enum('status', ['admitted', 'active', 'alumni', 'suspended'])->default('admitted')->index();
+            $table->enum('status', ['admitted', 'active', 'alumni', 'suspended','archived'])->default('admitted')->index();
 
             $table->timestamps();
             $table->softDeletes();
