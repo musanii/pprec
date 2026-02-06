@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,13 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', function(){
         return view('dashboard');
+    });
+});
+
+//students module
+Route::middleware([''])->group(function(){
+    Route::prefix('admin')->name('admin.')->group(function(){
+    Route::resource('students', StudentController::class)->only(['index','create','store']);
     });
 });
 

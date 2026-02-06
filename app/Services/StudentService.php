@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Services;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Term;
