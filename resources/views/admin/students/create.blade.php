@@ -3,10 +3,10 @@
 @section('page_title', 'Add Student')
 
 @section('content')
-<div class="flex items-start justify-between mb-5">
+<div class="flex items-start justify-between mb-6">
     <div>
         <h1 class="text-2xl font-semibold text-slate-900">Add Student</h1>
-        <p class="text-sm text-slate-500 mt-1">Create a student, link a parent, and enroll them in a class.</p>
+        <p class="text-sm text-slate-500 mt-1">Create a student, link a parent, and enroll them.</p>
     </div>
 
     <a href="{{ route('admin.students.index') }}"
@@ -17,8 +17,8 @@
 
 {{-- Error summary --}}
 @if ($errors->any())
-    <div class="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4">
-        <div class="text-sm font-semibold text-red-800">Please fix the following errors:</div>
+    <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4">
+        <div class="text-sm font-semibold text-red-800">Please fix the highlighted fields below.</div>
         <ul class="mt-2 list-disc list-inside text-sm text-red-700 space-y-1">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -27,18 +27,18 @@
     </div>
 @endif
 
-<form method="POST" action="{{ route('admin.students.store') }}" class="space-y-6">
+<form method="POST" action="{{ route('admin.students.store') }}" class="space-y-6" x-data="{ saving:false }" @submit="saving=true">
     @csrf
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {{-- Left column: Student + Parent --}}
+        {{-- Left: Student + Parent --}}
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Student Details --}}
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100">
-                    <h2 class="text-sm font-semibold text-slate-900">Student Details</h2>
-                    <p class="text-xs text-slate-500 mt-1">Basic student information for identification.</p>
+                    <div class="text-sm font-semibold text-slate-900">Student Details</div>
+                    <div class="text-xs text-slate-500 mt-1">Basic student information.</div>
                 </div>
 
                 <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -48,7 +48,7 @@
                             name="student_name"
                             value="{{ old('student_name') }}"
                             placeholder="e.g. Amina Wanjiku"
-                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm
+                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm bg-white
                                    focus:outline-none focus:ring-2 focus:ring-primary/20
                                    @error('student_name') border-red-300 ring-2 ring-red-100 @else border-slate-200 @enderror"
                             
@@ -64,7 +64,7 @@
                             name="admission_no"
                             value="{{ old('admission_no') }}"
                             placeholder="e.g. PR-2026-001"
-                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm
+                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm bg-white
                                    focus:outline-none focus:ring-2 focus:ring-primary/20
                                    @error('admission_no') border-red-300 ring-2 ring-red-100 @else border-slate-200 @enderror"
                             
@@ -96,8 +96,8 @@
             {{-- Parent Details --}}
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100">
-                    <h2 class="text-sm font-semibold text-slate-900">Parent Details</h2>
-                    <p class="text-xs text-slate-500 mt-1">Used for communication and parent portal access.</p>
+                    <div class="text-sm font-semibold text-slate-900">Parent Details</div>
+                    <div class="text-xs text-slate-500 mt-1">Contact info + parent portal access.</div>
                 </div>
 
                 <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -107,7 +107,7 @@
                             name="parent_name"
                             value="{{ old('parent_name') }}"
                             placeholder="e.g. Kevin Musanii"
-                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm
+                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm bg-white
                                    focus:outline-none focus:ring-2 focus:ring-primary/20
                                    @error('parent_name') border-red-300 ring-2 ring-red-100 @else border-slate-200 @enderror"
                             
@@ -124,7 +124,7 @@
                             name="parent_email"
                             value="{{ old('parent_email') }}"
                             placeholder="e.g. parent@example.com"
-                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm
+                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm bg-white
                                    focus:outline-none focus:ring-2 focus:ring-primary/20
                                    @error('parent_email') border-red-300 ring-2 ring-red-100 @else border-slate-200 @enderror"
                             
@@ -140,7 +140,7 @@
                             name="parent_phone"
                             value="{{ old('parent_phone') }}"
                             placeholder="e.g. 0712 345 678"
-                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm
+                            class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm bg-white
                                    focus:outline-none focus:ring-2 focus:ring-primary/20
                                    @error('parent_phone') border-red-300 ring-2 ring-red-100 @else border-slate-200 @enderror"
                         />
@@ -148,11 +148,17 @@
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div class="md:col-span-2">
+                        <p class="text-xs text-slate-500">
+                            A temporary password is generated for the parent automatically. We’ll add a “Send invite / reset link” flow next.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Right column: Enrollment --}}
+        {{-- Right: Enrollment --}}
         <div class="lg:col-span-1">
             <div
                 class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
@@ -170,8 +176,8 @@
                 x-init="resetStreamIfInvalid()"
             >
                 <div class="p-5 border-b border-slate-100">
-                    <h2 class="text-sm font-semibold text-slate-900">Enrollment</h2>
-                    <p class="text-xs text-slate-500 mt-1">Assign class and stream.</p>
+                    <div class="text-sm font-semibold text-slate-900">Enrollment</div>
+                    <div class="text-xs text-slate-500 mt-1">Assign class and stream.</div>
                 </div>
 
                 <div class="p-5 space-y-4">
@@ -188,7 +194,9 @@
                         >
                             <option value="">Select Class</option>
                             @foreach($classes as $class)
-                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                <option value="{{ $class->id }}" @selected((string)old('class_id') === (string)$class->id)>
+                                    {{ $class->name }}
+                                </option>
                             @endforeach
                         </select>
                         @error('class_id')
@@ -221,7 +229,7 @@
                     <div class="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <div class="text-xs font-medium text-slate-700">Tip</div>
                         <p class="mt-1 text-xs text-slate-500">
-                            If your school has no streams for a class, leave Stream empty.
+                            If a class has no streams, leave Stream empty.
                         </p>
                     </div>
                 </div>
@@ -229,7 +237,7 @@
         </div>
     </div>
 
-    {{-- Sticky actions (premium feel) --}}
+    {{-- Sticky action bar --}}
     <div class="sticky bottom-4">
         <div class="bg-white/90 backdrop-blur rounded-2xl border border-slate-200 shadow-sm px-4 py-3 flex items-center justify-between">
             <a href="{{ route('admin.students.index') }}"
@@ -237,8 +245,13 @@
                 Cancel
             </a>
 
-            <button class="text-sm rounded-xl bg-primary px-5 py-2 text-white hover:opacity-90 shadow-sm">
-                Save Student
+            <button
+                type="submit"
+                class="text-sm rounded-xl bg-primary px-5 py-2 text-white hover:opacity-90 shadow-sm disabled:opacity-60"
+                :disabled="saving"
+            >
+                <span x-show="!saving">Save Student</span>
+                <span x-show="saving">Saving...</span>
             </button>
         </div>
     </div>
