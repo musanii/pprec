@@ -131,9 +131,11 @@ class StudentService
         });
     }
 
-    public function changeStatus(Student $student, string $status){
-        return DB::transaction(function() use($student,$status){
-             // If trying to mark Active but no active enrollment exists, block (optional but professional)
+   public function changeStatus(Student $student, string $status): Student
+{
+    return DB::transaction(function () use ($student, $status) {
+
+        // If trying to mark Active but no active enrollment exists, block (optional but professional)
         if ($status === 'active') {
             $hasActiveEnrollment = Enrollment::query()
                 ->where('student_id', $student->id)
@@ -147,21 +149,19 @@ class StudentService
             }
         }
 
-         // If trying to mark Active but no active enrollment exists, block (optional but professional)
-        if ($status === 'active') {
-            $hasActiveEnrollment = Enrollment::query()
+        // If Alumni or Archived, deactivate any active enrollment (prevents “ghost active” students)
+        if (in_array($status, ['alumni', 'archived'], true)) {
+            Enrollment::query()
                 ->where('student_id', $student->id)
                 ->where('is_active', true)
-                ->exists();
-
-            if (! $hasActiveEnrollment) {
-                throw ValidationException::withMessages([
-                    'status' => 'Cannot set student to Active without an active enrollment. Transfer/enroll the student first.',
-                ]);
-            }
+                ->update(['is_active' => false]);
         }
-        });
-    }
+
+        $student->update(['status' => $status]);
+
+        return $student->fresh();
+    });
+}
 
     /**
      * Resolve Term by ID, or fall back to currently active term

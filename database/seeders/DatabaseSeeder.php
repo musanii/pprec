@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
         AcademicYearSeeder::class,
         TermSeeder::class,
         ClassSeeder::class,
+        RoleSeeder::class,
         AdminUserSeeder::class,
+        
        ]);
     }
 }

@@ -13,6 +13,8 @@ class StudentStatusController extends Controller
 {
     public function update(UpdateStudentStatusRequest $request, Student $student, StudentService $studentService){
 
+
+    
     try{
         $studentService->changeStatus($student, $request->validated()['status']);
         return back()->with('success','Student status updated.');
