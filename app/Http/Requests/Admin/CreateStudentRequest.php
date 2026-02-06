@@ -31,7 +31,7 @@ class CreateStudentRequest extends FormRequest
             'parent_email' => ['required', 'email', 'unique:users,email'],
             'parent_phone' => ['nullable', 'string'],
 
-            'class_id' => ['required', 'exists:school_classes,id'],
+            'class_id' => ['required', 'exists:classes,id'],
             'stream_id' => [
                 'nullable',
                 Rule::exists('streams', 'id')->where(fn ($q) => $q->where('class_id', $request->input('class_id'))),

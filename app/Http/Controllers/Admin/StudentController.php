@@ -177,7 +177,7 @@ class StudentController extends Controller
         $studentService->updateProfile($student, $request->validated());
 
         return redirect()
-        ->route('admin.students.show',$student)
+        ->route('admin.students.edit',$student)
         ->with('success', 'Student updated successfully.');
     }
 }

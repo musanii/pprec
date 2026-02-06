@@ -3,7 +3,8 @@ namespace App\Services;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Term;
-use Dotenv\Exception\ValidationException;
+use Illuminate\Validation\ValidationException;
+
 use Illuminate\Support\Facades\DB;
 
 class StudentService

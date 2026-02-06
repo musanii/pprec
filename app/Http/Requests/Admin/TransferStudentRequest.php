@@ -23,7 +23,7 @@ class TransferStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'class_id' => ['required', Rule::exists('school_classes','id')],
+            'class_id' => ['required', Rule::exists('classes','id')],
             'stream_id' => [
                 'nullable',
                 Rule::exists('streams','id')->where(fn ($q) => $q->where('class_id', $this->input('class_id'))),

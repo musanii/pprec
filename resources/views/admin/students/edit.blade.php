@@ -11,10 +11,10 @@
         </p>
     </div>
 
-    <a href="{{ route('admin.students.show', $student) }}"
-       class="hidden sm:inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
-        Back to Profile
-    </a>
+ <a href="{{ route('admin.students.index') }}"
+   class="hidden sm:inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+    Back to Students
+</a>
 </div>
 
 @if ($errors->any())
@@ -121,8 +121,8 @@
         </div>
 
         <div class="flex justify-end gap-2">
-            <a href="{{ route('admin.students.show', $student) }}"
-               class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+            <a href="{{ route('admin.students.index') }}"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                 Cancel
             </a>
             <button class="rounded-xl bg-primary px-5 py-2.5 text-sm text-white hover:opacity-90 shadow-sm">
