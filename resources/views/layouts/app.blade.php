@@ -223,5 +223,63 @@
 
     </div>
 </div>
+{{-- Toasts --}}
+<div
+    x-data="{
+        show: {{ session()->has('success') || session()->has('error') ? 'true' : 'false' }},
+        type: '{{ session()->has('error') ? 'error' : 'success' }}',
+        message: @js(session('error') ?? session('success')),
+        init() {
+            if (this.show) setTimeout(() => this.show = false, 3500);
+        }
+    }"
+    x-init="init()"
+    class="fixed top-4 right-4 z-[9999] pointer-events-none"
+>
+    <div
+        x-show="show"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 translate-y-[-6px]"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-[-6px]"
+        class="pointer-events-auto w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border shadow-lg bg-white overflow-hidden"
+        :class="type === 'success' ? 'border-green-200' : 'border-red-200'"
+        x-cloak
+    >
+        <div class="px-4 py-3 flex gap-3">
+            <div class="mt-0.5">
+                <template x-if="type === 'success'">
+                    <div class="h-9 w-9 rounded-xl bg-green-50 border border-green-200 flex items-center justify-center text-green-700">
+                        ✓
+                    </div>
+                </template>
+                <template x-if="type === 'error'">
+                    <div class="h-9 w-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-red-700">
+                        !
+                    </div>
+                </template>
+            </div>
+
+            <div class="min-w-0 flex-1">
+                <div class="text-sm font-semibold text-slate-900" x-text="type === 'success' ? 'Success' : 'Action failed'"></div>
+                <div class="text-sm text-slate-600 mt-0.5 break-words" x-text="message"></div>
+            </div>
+
+            <button
+                type="button"
+                class="text-slate-400 hover:text-slate-700"
+                @click="show=false"
+                aria-label="Close"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="h-1 w-full" :class="type === 'success' ? 'bg-green-500/70' : 'bg-red-500/70'"></div>
+    </div>
+</div>
+
 </body>
 </html>

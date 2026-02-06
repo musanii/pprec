@@ -4,7 +4,6 @@ use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Term;
 use Illuminate\Validation\ValidationException;
-
 use Illuminate\Support\Facades\DB;
 
 class StudentService
