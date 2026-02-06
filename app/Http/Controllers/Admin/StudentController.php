@@ -11,6 +11,7 @@ use App\Services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -63,20 +64,20 @@ class StudentController extends Controller
     public function create()
     {
 
-      $classes = SchoolClass::orderBy('level')->get();
-      $streamsByClass = Stream::query()
-      ->orderBy('name')
-      ->get()
-      ->groupBy('class_id')
-      ->map(fn($items) =>$items->map(fn($s) =>[
-        'id'=>$s->id,
-        'name'=>$s->name,
-      ])->values())
-      ->toArray();
+        $classes = SchoolClass::orderBy('level')->get();
+        $streamsByClass = Stream::query()
+            ->orderBy('name')
+            ->get()
+            ->groupBy('class_id')
+            ->map(fn ($items) => $items->map(fn ($s) => [
+                'id' => $s->id,
+                'name' => $s->name,
+            ])->values())
+            ->toArray();
 
         return view('admin.students.create', [
             'classes' => $classes,
-            'streamsByClass' =>$streamsByClass
+            'streamsByClass' => $streamsByClass,
         ]);
     }
 
@@ -91,8 +92,16 @@ class StudentController extends Controller
             'parent_email' => ['required', 'email', 'unique:users,email'],
             'parent_phone' => ['nullable', 'string'],
 
-            'class_id' => ['required', 'exists:classes,id'],
-            'stream_id' => ['nullable', 'exists:streams,id'],
+            'class_id' => ['required', 'exists:school_classes,id'],
+            'stream_id' => [
+                'nullable',
+                Rule::exists('streams', 'id')->where(fn ($q) => $q->where('class_id', $request->input('class_id'))),
+            ],
+        ], [
+            'class_id.required' => 'Please select a class.',
+            'class_id.exists' => 'The selected class is invalid.',
+            'stream_id.exists' => 'The selected stream is invalid for the chosen class.',
+
         ]);
 
         DB::transaction(function () use ($data, $studentService) {

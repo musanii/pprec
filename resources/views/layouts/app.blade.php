@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 <div x-data="{ sidebarOpen:false, sidebarCollapsed:false }" class="min-h-screen">
 
     {{-- Mobile overlay --}}
