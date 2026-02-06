@@ -103,6 +103,34 @@ class StudentService
         });
     }
 
+    public function updateProfile(Student $student, array $data){
+        return DB::transaction(function() use($student,$data){
+            //Student User
+            $student->user()->update([
+                'name'=>$data['student_name'],
+            ]);
+
+            //Parent User + Profile
+            $parentProfile = $student->parent;
+            $parentProfile?->user?->update([
+                 'name' => $data['parent_name'],
+            // 'email' => $data['parent_email'] ?? $parentProfile->user->email,
+
+            ]);
+
+            $parentProfile?->update([
+                'phone'=>$data['parent_phone'] ?? null
+            ]);
+
+            $student->update([
+                'admission_no'=>$data['admission_no'],
+                'gender'=>$data['gender'] ?? null,
+                'status'=>$data['status'],
+            ]);
+            return $student->fresh(['user','parent.user','activeEnrollment.schoolClass','activeEnrollment.stream']);
+        });
+    }
+
     /**
      * Resolve Term by ID, or fall back to currently active term
      */

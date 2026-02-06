@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateStudentRequest;
 use App\Models\SchoolClass;
 use App\Models\Stream;
 use App\Models\Student;
@@ -148,5 +149,35 @@ class StudentController extends Controller
             ->route('admin.students.index')
             ->with('success', 'Student created and enrolled successfully.');
 
+    }
+
+    public function edit(Student $student){
+                                                                                        
+    $student->load(['user','parent.user','parent','activeEnrollment.schoolClass','activeEnrollment.stream']);
+        $classes = SchoolClass::orderBy('level')->get();
+        $streamsByClass = Stream::query()
+            ->orderBy('name')
+            ->get()
+            ->groupBy('class_id')
+            ->map(fn ($items) => $items->map(fn ($s) => [
+                'id' => $s->id,
+                'name' => $s->name,
+            ])->values())
+            ->toArray();
+
+            return view('admin.students.edit',[
+                'student'=>$student,
+                'classes'=>$classes,
+                'streamsByClass'=>$streamsByClass
+            ]);
+
+    }
+
+    public function update(UpdateStudentRequest $request, Student $student, StudentService $studentService){
+        $studentService->updateProfile($student, $request->validated());
+
+        return redirect()
+        ->route('admin.students.show',$student)
+        ->with('success', 'Student updated successfully.');
     }
 }

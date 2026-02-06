@@ -103,6 +103,7 @@
                     <th class="px-6 py-3 text-left font-medium">Parent</th>
                     <th class="px-6 py-3 text-left font-medium">Status</th>
                     <th class="px-6 py-3 text-left font-medium">Created</th>
+                    <th class="px-6 py-3 text-right font-medium">Actions</th>
                 </tr>
             </thead>
 
@@ -153,6 +154,59 @@
                         <td class="px-6 py-4 text-slate-600">
                             {{ $student->created_at?->format('d M Y') }}
                         </td>
+                        <td class="px-6 py-4 text-right">
+    <div
+        class="inline-block"
+        x-data="{
+            open:false,
+            x:0, y:0, w:0,
+            place() {
+                const r = this.$refs.btn.getBoundingClientRect();
+                this.w = r.width;
+                this.x = r.right; // anchor to right edge
+                this.y = r.bottom;
+            }
+        }"
+        x-init="
+            window.addEventListener('scroll', () => open && place(), true);
+            window.addEventListener('resize', () => open && place());
+        "
+    >
+        <button
+            type="button"
+            x-ref="btn"
+            @click="open = !open; if(open) $nextTick(() => place())"
+            class="inline-flex items-center justify-center rounded-lg px-2 py-1 text-slate-500 hover:bg-slate-100"
+            aria-label="Actions"
+        >
+            ⋯
+        </button>
+
+        <template x-teleport="body">
+            <div
+                x-show="open"
+                x-transition.opacity
+                @click.outside="open=false"
+                x-cloak
+                class="fixed z-[9999]"
+                :style="`left:${x}px; top:${y}px; transform: translateX(-100%);`"
+            >
+                <div class="w-40 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+                    <a
+                        href="{{ route('admin.students.edit', $student) }}"
+                        class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
+                        @click="open=false"
+                    >
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </template>
+    </div>
+</td>
+
+
+                        
                     </tr>
                 @empty
                     <tr>
