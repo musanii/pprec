@@ -62,9 +62,21 @@ class StudentController extends Controller
 
     public function create()
     {
+
+      $classes = SchoolClass::orderBy('level')->get();
+      $streamsByClass = Stream::query()
+      ->orderBy('name')
+      ->get()
+      ->groupBy('class_id')
+      ->map(fn($items) =>$items->map(fn($s) =>[
+        'id'=>$s->id,
+        'name'=>$s->name,
+      ])->values())
+      ->toArray();
+
         return view('admin.students.create', [
-            'classes' => SchoolClass::orderBy('level')->get(),
-            'streams' => Stream::all(),
+            'classes' => $classes,
+            'streamsByClass' =>$streamsByClass
         ]);
     }
 

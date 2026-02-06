@@ -27,23 +27,56 @@
         <input name="parent_phone" placeholder="Parent Phone" class="input w-full" />
     </div>
 
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="font-medium mb-4">Enrollment</h2>
+   <div class="bg-white p-6 rounded shadow"
+     x-data="{
+        classId: '{{ old('class_id') }}',
+        streamId: '{{ old('stream_id') }}',
+        streamsByClass: @js($streamsByClass),
+        get streams() { return this.streamsByClass[this.classId] ?? [] },
+        resetStreamIfInvalid() {
+            if (!this.streams.find(s => String(s.id) === String(this.streamId))) {
+                this.streamId = ''
+            }
+        }
+     }"
+     x-init="resetStreamIfInvalid()"
+>
+    <h2 class="font-medium mb-4">Enrollment</h2>
 
-        <select name="class_id" class="input w-full mb-3" required>
-            <option value="">Select Class</option>
-            @foreach($classes as $class)
-                <option value="{{ $class->id }}">{{ $class->name }}</option>
-            @endforeach
-        </select>
+    <select name="class_id"
+            class="border rounded px-3 py-2 w-full mb-3"
+            required
+            x-model="classId"
+            @change="resetStreamIfInvalid()"
+    >
+        <option value="">Select Class</option>
+        @foreach($classes as $class)
+            <option value="{{ $class->id }}">{{ $class->name }}</option>
+        @endforeach
+    </select>
 
-        <select name="stream_id" class="input w-full">
-            <option value="">Select Stream</option>
-            @foreach($streams as $stream)
-                <option value="{{ $stream->id }}">{{ $stream->name }}</option>
-            @endforeach
-        </select>
-    </div>
+    <select name="stream_id"
+            class="border rounded px-3 py-2 w-full"
+            x-model="streamId"
+            :disabled="!classId || streams.length === 0"
+    >
+        <option value="">
+            <span x-text="!classId ? 'Select class first' : (streams.length ? 'Select Stream' : 'No streams available')"></span>
+        </option>
+
+        <template x-for="s in streams" :key="s.id">
+            <option :value="s.id" x-text="s.name"></option>
+        </template>
+    </select>
+
+    @error('class_id')
+        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+    @enderror
+    @error('stream_id')
+        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+    @enderror
+</div>
+
 
     <button class="bg-primary text-white px-6 py-2 rounded">
         Save Student
