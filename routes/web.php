@@ -20,6 +20,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('students', StudentController::class)->only(['index', 'create', 'store','edit','update']);
     Route::post('students/{student}/transfer',[StudentTransferController::class,'store'])->name('students.transfer');
     Route::patch('students/{student}/status',[StudentStatusController::class,'update'])->name('students.status');
+    
+    //class and stream routes
+    Route::resource('classes', SchoolClassController::class)->except(['show']);
+    Route::resource('streams', StreamController::class)->except(['show']);
 
 });
 
