@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\ClassSubjectController;
+use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
@@ -36,6 +38,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('teachers/{teacher}/assignments', [TeacherAssignmentController::class, 'update'])
         ->name('teachers.assignments.update');
 
+    Route::resource('exams',ExamController::class)->except(['show']);
+    Route::get('exams/{exam}/marks', [ExamMarkController::class, 'edit'])
+    ->name('exams.marks.edit');
+    Route::post('exams/{exam}/marks', [ExamMarkController::class, 'update'])
+    ->name('exams.marks.update');
+    Route::patch('exams/{exams}/publish',[ExamController::class,'publish'])->name('exams.publish');
+
+    
     // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);
     Route::resource('streams', StreamController::class)->except(['show']);

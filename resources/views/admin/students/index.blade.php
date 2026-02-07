@@ -213,6 +213,7 @@
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="status" value="{{ $value }}">
+                    
                         <button
                             type="submit"
                             class="w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50
