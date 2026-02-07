@@ -198,6 +198,24 @@
                     Edit
                 </a>
 
+            @if($exams->count())
+                <div class="px-2 py-1 text-[11px] uppercase tracking-wide text-slate-400">
+                    Exam Results
+                </div>
+
+                @foreach($exams as $exam)
+                    <a
+                        href="{{ route('admin.students.exams.show', [$student, $exam]) }}"
+                        class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                    >
+                        {{ $exam->name }}
+                    </a>
+                @endforeach
+
+                <div class="h-px bg-slate-100 my-1"></div>
+            @endif
+            
+
                 <div class="h-px bg-slate-100"></div>
 
                 {{-- Quick status actions --}}

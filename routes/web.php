@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\StudentExamResultController;
 use App\Http\Controllers\Admin\StudentStatusController;
 use App\Http\Controllers\Admin\StudentTransferController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -45,6 +46,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     ->name('exams.marks.update');
     Route::patch('exams/{exams}/publish',[ExamController::class,'publish'])->name('exams.publish');
 
+    Route::get('students/{student}/exams/{exam}',[StudentExamResultController::class,'show'])->name('students.exams.show');
     
     // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);

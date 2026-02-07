@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateStudentRequest;
+use App\Models\Exam;
 use App\Models\SchoolClass;
 use App\Models\Stream;
 use App\Models\Student;
@@ -47,6 +48,9 @@ class StudentController extends Controller
             })->latest()
             ->paginate(20)
             ->withQueryString();
+            $exams = Exam::where('is_published', true)
+            ->orderByDesc('start_date')
+            ->get();
 
         return view('admin.students.index',
             [
@@ -57,8 +61,11 @@ class StudentController extends Controller
                     'class_id' => $classId,
                     'stream_id' => $streamId,
                 ],
+
                 'classes' => SchoolClass::orderBy('level')->get(),
                 'streams' => Stream::orderBy('name')->get(),
+                'exams'=>$exams,
+                
 
             ]);
     }

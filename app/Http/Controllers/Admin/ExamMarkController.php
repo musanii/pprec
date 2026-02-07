@@ -16,7 +16,7 @@ class ExamMarkController extends Controller
 {
     public function edit(Exam $exam, Request $request){
         $classId = $request->integer('class_id');
-        $subjectId= $request->integer('subject_id');
+        $subjectId= (int)$request->input('subject_id');
 
         $students = collect();
 
@@ -44,6 +44,8 @@ class ExamMarkController extends Controller
             'subject_id' => ['required','exists:subjects,id'],
             'marks' => ['required','array'],
         ]);
+    
+
 
         DB::transaction(function() use($data,$exam,$grading){
             foreach($data['marks'] as $studentId=>$mark){

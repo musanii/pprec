@@ -30,7 +30,7 @@
 
     <div>
         <label class="text-xs font-medium text-slate-600">Subject</label>
-        <select name="subject_id" class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm">
+        <select name="subject_id"  required class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm">
             <option value="">Select subject</option>
             @foreach($subjects as $subject)
                 <option value="{{ $subject->id }}" @selected($subjectId == $subject->id)>
@@ -50,8 +50,9 @@
       action="{{ route('admin.exams.marks.update', $exam) }}"
       class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
     @csrf
-    <input type="hidden" name="class_id" value="{{ $classId }}">
-    <input type="hidden" name="subject_id" value="{{ $subjectId }}">
+   <input type="hidden" name="subject_id" value="{{ request('subject_id') }}">
+    <input type="hidden" name="class_id" value="{{ request('class_id') }}">
+
 
     <table class="min-w-full">
         <thead class="bg-slate-50 text-xs text-slate-600">
