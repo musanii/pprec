@@ -98,6 +98,56 @@
                     @endif
                 </a>
 
+                {{-- Academics (active module) --}}
+{{-- Layout sidebar additions (PASTE into your layouts/app.blade.php) --}}
+{{-- 1) Desktop sidebar: place AFTER Students link and BEFORE the "Coming soon" section --}}
+<div class="pt-4">
+    <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
+         x-show="!sidebarCollapsed" x-transition.opacity>
+        Academics
+    </div>
+
+    <a href="{{ route('admin.classes.index') }}"
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('admin.classes.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+                <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                      d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13M4 19h16M8 8h8M8 12h8M8 16h6"/>
+            </svg>
+        </span>
+        <span class="truncate" x-show="!sidebarCollapsed" x-transition.opacity>Classes</span>
+        @if(request()->routeIs('admin.classes.*'))
+            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+        @endif
+    </a>
+
+    <a href="{{ route('admin.streams.index') }}"
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('admin.streams.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+                <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                      d="M7 7h10M7 12h10M7 17h6"/>
+                <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                      d="M5 5h14v14H5z"/>
+            </svg>
+        </span>
+        <span class="truncate" x-show="!sidebarCollapsed" x-transition.opacity>Streams</span>
+        @if(request()->routeIs('admin.streams.*'))
+            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+        @endif
+    </a>
+</div>
+
+
+
+        
+
+                
+
+                
+
                 {{-- Coming soon (kept) --}}
                 <div class="pt-4">
                     <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
@@ -158,6 +208,14 @@
                 <a href="{{ route('admin.students.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700">
                     Students
                 </a>
+                {{-- 2) Mobile sidebar: place AFTER Students link and BEFORE "Coming soon" --}}
+                <a href="{{ route('admin.classes.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700">
+                    Classes
+                </a>
+                <a href="{{ route('admin.streams.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700">
+                    Streams
+                </a>
+
 
                 <div class="pt-4 px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400">
                     Coming soon

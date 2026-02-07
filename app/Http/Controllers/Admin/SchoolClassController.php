@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreSchoolRequest;
+use App\Http\Requests\Admin\UpdateSchoolClassRequest;
+use App\Http\Requests\Admin\UpdateSchoolRequest;
 use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
@@ -12,13 +14,15 @@ class SchoolClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $classes = SchoolClass::query()
+        ->when($request->filled('is_active'), fn($q) => $q->where('is_active', (bool)$request->input('is_active')))
+
         ->withCount('streams')
         ->orderBy('level')
         ->paginate(20);
-        return view('admin.academics.classes.index');
+        return view('admin.academics.classes.index',compact('classes'));
     }
 
     /**
@@ -55,7 +59,7 @@ class SchoolClassController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   public function update(UpdateSchoolClassRequest $request, SchoolClass $class)
     {
         $class->update([
             'name' => $request->name,

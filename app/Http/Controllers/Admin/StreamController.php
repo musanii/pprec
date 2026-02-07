@@ -19,6 +19,7 @@ class StreamController extends Controller
         $classId = $request->integer('class_id') ?: null;
 
         $streams = Stream::query()
+            ->when($request->filled('is_active'), fn($q) => $q->where('is_active', (bool)$request->input('is_active')))
             ->with('schoolClass')
             ->when($classId, fn($q) => $q->where('class_id', $classId))
             ->orderBy('name')
@@ -69,6 +70,8 @@ class StreamController extends Controller
      */
     public function update(UpdateStreamRequest $request, Stream $stream)
     {
+
+   
         $stream->update([
             'class_id' => $request->class_id,
             'name' => $request->name,

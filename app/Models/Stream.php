@@ -8,7 +8,12 @@ class Stream extends Model
 {
     protected $fillable=[
         'class_id',
-        'name'
+        'name',
+        'is_active'
+    ];
+
+     protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function schoolClass(){

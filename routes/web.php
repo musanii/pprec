@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\SchoolClassController;
+use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\StudentStatusController;
 use App\Http\Controllers\Admin\StudentTransferController;
