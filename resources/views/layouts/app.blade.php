@@ -98,6 +98,24 @@
                     @endif
                 </a>
 
+                <a href="{{ route('admin.teachers.index') }}"
+                class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+                {{ request()->routeIs('admin.teachers.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+                    <span class="h-5 w-5 text-slate-500">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+                            <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 14c3.3 0 6-2.7 6-6s-2.7-6-6-6-6 2.7-6 6 2.7 6 6 6z"/>
+                            <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                        </svg>
+                    </span>
+                    <span x-show="!sidebarCollapsed" x-transition.opacity>Teachers</span>
+                    @if(request()->routeIs('admin.teachers.*'))
+                        <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+                    @endif
+                </a>
+
+
                 {{-- Academics (active module) --}}
 {{-- Layout sidebar additions (PASTE into your layouts/app.blade.php) --}}
 {{-- 1) Desktop sidebar: place AFTER Students link and BEFORE the "Coming soon" section --}}
