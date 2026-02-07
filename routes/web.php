@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\StudentStatusController;
 use App\Http\Controllers\Admin\StudentTransferController;
+use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('students/{student}/transfer', [StudentTransferController::class, 'store'])->name('students.transfer');
     Route::patch('students/{student}/status', [StudentStatusController::class, 'update'])->name('students.status');
 
-    // class and stream routes
+    // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);
     Route::resource('streams', StreamController::class)->except(['show']);
 
@@ -35,6 +36,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('terms', TermController::class)->except(['show']);
     Route::patch('terms/{term}/activate', [TermController::class, 'activate'])
         ->name('terms.activate');
+    
+    Route::resource('subjects', SubjectController::class)->except('show');
+    Route::patch('subjects/{subject}/activate',[SubjectController::class,'activate'])->name('subjects.activate');
+
+
 
 });
 

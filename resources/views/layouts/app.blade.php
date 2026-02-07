@@ -164,6 +164,22 @@
     </span>
     <span>Terms</span>
 </a>
+
+<a href="{{ route('admin.subjects.index') }}"
+   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+   {{ request()->routeIs('admin.subjects.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+    <span class="h-5 w-5 text-slate-500">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h10"/>
+        </svg>
+    </span>
+    <span x-show="!sidebarCollapsed" x-transition.opacity>Subjects</span>
+    @if(request()->routeIs('admin.subjects.*'))
+        <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+    @endif
+</a>
+
    
 
 </div>

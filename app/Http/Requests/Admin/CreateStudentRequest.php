@@ -20,8 +20,12 @@ class CreateStudentRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
+    
     public function rules(): array
     {
+
+     $request = $this->route('student');
        return  [
             'student_name' => ['required', 'string', 'max:255'],
             'admission_no' => ['required', 'string', 'unique:students,admission_no'],
