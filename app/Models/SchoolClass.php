@@ -26,4 +26,13 @@ class SchoolClass extends Model
     public function enrollments(){
         return $this->hasMany(Enrollment::class,'class_id');
     }
+
+    public function subjects(){
+        return $this->belongsToMany(Subject::class,
+        'class_subject',
+        'class_id',
+        'subject_id')
+        ->withPivot('is_compulsory')
+        ->withTimestamps();
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicYearController;
+use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
@@ -39,6 +40,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::resource('subjects', SubjectController::class)->except('show');
     Route::patch('subjects/{subject}/activate',[SubjectController::class,'activate'])->name('subjects.activate');
+
+    Route::get('classes/{class}/subjects',[ClassSubjectController::class,'edit'])->name('classes.subjects.edit');
+    Route::post('classes/{class}/subjects',[ClassSubjectController::class,'update'])->name('classes.subjects.update');
+    
+
 
 
 

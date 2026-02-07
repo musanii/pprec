@@ -139,46 +139,62 @@
         @endif
     </a>
 
+
+
+
     <a href="{{ route('admin.academic-years.index') }}"
-   class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-   {{ request()->routeIs('admin.academic-years.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-    <span class="h-5 w-5 text-slate-500">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('admin.academic-years.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
             <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   d="M8 7V3m8 4V3M4 11h16M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-    </span>
-    <span>Academic Years</span>
-</a>
+        </span>
+        <span class="truncate" x-show="!sidebarCollapsed" x-transition.opacity>Academic Years</span>
+        @if(request()->routeIs('admin.academic-years.*'))
+            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+        @endif
+    </a>
+
+ 
+
 
     <a href="{{ route('admin.terms.index') }}"
-   class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-   {{ request()->routeIs('admin.terms.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-    <span class="h-5 w-5 text-slate-500">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('admin.terms.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
             <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   d="M8 6h13M8 12h13M8 18h13"/>
             <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   d="M3.5 6h.5M3.5 12h.5M3.5 18h.5"/>
         </svg>
-    </span>
-    <span>Terms</span>
-</a>
+        </span>
+        <span class="truncate" x-show="!sidebarCollapsed" x-transition.opacity>Terms</span>
+        @if(request()->routeIs('admin.terms.*'))
+            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+        @endif
+    </a>
 
-<a href="{{ route('admin.subjects.index') }}"
-   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-   {{ request()->routeIs('admin.subjects.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-    <span class="h-5 w-5 text-slate-500">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+
+
+  <a href="{{ route('admin.subjects.index') }}"
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('admin.subjects.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
             <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   d="M4 6h16M4 12h16M4 18h10"/>
         </svg>
-    </span>
-    <span x-show="!sidebarCollapsed" x-transition.opacity>Subjects</span>
-    @if(request()->routeIs('admin.subjects.*'))
-        <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
-    @endif
-</a>
+        </span>
+        <span class="truncate" x-show="!sidebarCollapsed" x-transition.opacity>Subjects</span>
+        @if(request()->routeIs('admin.subjects.*'))
+            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+        @endif
+    </a>
+
+
 
    
 
