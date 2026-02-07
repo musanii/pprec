@@ -102,6 +102,10 @@
                                                class="block px-4 py-2.5 text-sm hover:bg-slate-50">
                                                 Edit
                                             </a>
+                                                        <a href="{{ route('admin.teachers.assignments.edit', $teacher) }}"
+                                                        class="block px-4 py-2.5 text-sm hover:bg-slate-50">
+                                                            Assign Subjects
+                                                        </a>
 
                                             <div class="h-px bg-slate-100"></div>
 

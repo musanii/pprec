@@ -7,32 +7,47 @@ use Illuminate\Database\Eloquent\Model;
 class SchoolClass extends Model
 {
     protected $table = 'classes';
-    protected $fillable =[
+
+    protected $fillable = [
         'name',
         'level',
-        'is_active'
+        'is_active',
     ];
 
-      protected $casts = [
+    protected $casts = [
         'is_active' => 'boolean',
     ];
 
-
-    public function streams(){
-        return $this->hasMany(Stream::class,'class_id');
+    public function streams()
+    {
+        return $this->hasMany(Stream::class, 'class_id');
 
     }
 
-    public function enrollments(){
-        return $this->hasMany(Enrollment::class,'class_id');
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'class_id');
     }
 
-    public function subjects(){
+    public function subjects()
+    {
         return $this->belongsToMany(Subject::class,
-        'class_subject',
-        'class_id',
-        'subject_id')
-        ->withPivot('is_compulsory')
-        ->withTimestamps();
+            'class_subject',
+            'class_id',
+            'subject_id')
+            ->withPivot('is_compulsory')
+            ->withTimestamps();
+    }
+
+    public function teachers()
+    {
+        return $this->belongsToMany(
+            Teacher::class, 
+            'teacher_subject_class',
+            'class_id',
+            'teacher_id'
+            )
+            ->withPivot('subject_id')
+            ->withTimestamps();
     }
 }
