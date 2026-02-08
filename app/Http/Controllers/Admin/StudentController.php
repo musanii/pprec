@@ -8,6 +8,7 @@ use App\Models\Exam;
 use App\Models\SchoolClass;
 use App\Models\Stream;
 use App\Models\Student;
+use App\Models\Term;
 use App\Models\User;
 use App\Services\StudentService;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ class StudentController extends Controller
         $status = $request->string('status')->toString();      // admitted|active|alumni|suspended
         $classId = $request->integer('class_id') ?: null;
         $streamId = $request->integer('stream_id') ?: null;
+        
+            $termId = $request->integer('term_id');
         $students = Student::query()->with([
             'user',
             'parent.user',
@@ -51,6 +54,12 @@ class StudentController extends Controller
             $exams = Exam::where('is_published', true)
             ->orderByDesc('start_date')
             ->get();
+            $term = Term::where('is_active', true)->first();
+
+
+        // $term = $termId
+        //     ? Term::find($termId)
+        //     : Term::where('is_active', true)->first();
 
         return view('admin.students.index',
             [
@@ -65,6 +74,7 @@ class StudentController extends Controller
                 'classes' => SchoolClass::orderBy('level')->get(),
                 'streams' => Stream::orderBy('name')->get(),
                 'exams'=>$exams,
+                'term'=>$term
                 
 
             ]);

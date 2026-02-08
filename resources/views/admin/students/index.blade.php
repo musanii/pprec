@@ -217,6 +217,10 @@
                 class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                     View Report Card
                 </a>
+                <a href="{{ route('admin.students.terms.report', [$student, $term]) }}"
+                class="block px-4 py-2.5 text-sm hover:bg-slate-50">
+                    {{ $term->name }} Report
+                </a>
                 @endforeach
 
                 <div class="h-px bg-slate-100 my-1"></div>

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherAssignmentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\TermReportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,8 +49,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('exams/{exam}/marks', [ExamMarkController::class, 'update'])
     ->name('exams.marks.update');
 
+    Route::get('exams/{exam}/classes/{class}/rankings', [ExamRankingController::class,'index'])->name('exams.classes.rankings');
     Route::get('exams/{exam}/classes/{class}/streams/{stream}/rankings', [ExamStreamRankingController::class,'index'])->name('exams.classes.streams.rankings');
    
+    
     Route::patch('exams/{exams}/publish',[ExamController::class,'publish'])->name('exams.publish');
     Route::patch('exams/{exams}/unpublish',[ExamController::class,'unpublish'])->name('exams.unpublish');
    
@@ -59,7 +62,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::get('students/{student}/exams/{exam}/report/pdf', [ReportCardController::class,'pdf'])->name('students.exams.report.pdf');
 
-    Route::get('exams/{exam}/classes/{class}/rankings', [ExamRankingController::class,'index'])->name('exams.classes.rankings');
+    Route::get('student/{student}/terms/{term}/report', [TermReportController::class,'show'])->name('students.terms.report');
     // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);
     Route::resource('streams', StreamController::class)->except(['show']);
