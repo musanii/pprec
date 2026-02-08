@@ -10,12 +10,17 @@ use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
+
    public function index()
    {
-      $terms = Term::whereHas('enrollments', function ($query) {
-         $query->where('student_id', auth()->user()->student->id);
-      })->orderBy('start_date','desc')->get();
+    $student = auth()->user()->student;
 
+  
+        $terms = Term::whereHas('enrollments', function ($q) use ($student) {
+            $q->where('student_id', $student->id);
+        })
+        ->orderBy('start_date', 'desc')
+        ->get();
       return view('student.results.index', compact('terms'));
    }
 
@@ -48,9 +53,9 @@ class ResultController extends Controller
         $overallTotal = $subjects->sum('total');
         $overallAverage = $subjects->count() ? round($subjects->avg('average'),2) : null;
 
-        return view('student.results.index', 
+        return view('student.results.show', 
         [
-             'student'=>$student->load('user', 'activeEnrollment.schoolClass'),
+             'student'=>$student,
             'term'=>$term,
             'exams'=>$exams,
             'subjects'=>$subjects,

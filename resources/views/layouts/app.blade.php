@@ -235,6 +235,12 @@
         <span class="h-5 w-5 text-slate-500">🎓</span>
         <span x-show="!sidebarCollapsed">My Dashboard</span>
     </a>
+    <a href="{{ route('student.results') }}"
+       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+       {{ request()->routeIs('student.results*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+        <span class="h-5 w-5 text-slate-500">📊</span>
+        <span x-show="!sidebarCollapsed">My Results</span>
+    </a>
 @endrole
 
 
