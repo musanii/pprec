@@ -28,6 +28,10 @@ class ExamMarkController extends Controller
             ->map(fn ($en)=> $en->student);
 
         }
+        $existingMarks = ExamResult::where('exam_id', $exam->id)
+            ->where('class_id', $classId)
+            ->where('subject_id', $subjectId)
+            ->pluck('marks', 'student_id');
         return view('admin.exams.marks',[
             'exam'=>$exam,
             'classes'=>SchoolClass::orderBy('level')->get(),
@@ -35,6 +39,7 @@ class ExamMarkController extends Controller
             'students'=>$students,
             'classId'=>$classId,
             'subjectId'=>$subjectId,
+            'existingMarks'=>$existingMarks
         ]);
     }
 
