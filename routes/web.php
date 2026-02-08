@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\ExamRankingController;
+use App\Http\Controllers\Admin\ExamStreamRankingController;
 use App\Http\Controllers\Admin\ReportCardController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
@@ -46,6 +47,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     ->name('exams.marks.edit');
     Route::post('exams/{exam}/marks', [ExamMarkController::class, 'update'])
     ->name('exams.marks.update');
+
+    Route::get('exams/{exam}/classes/{class}/streams/{stream}/rankings', [ExamStreamRankingController::class,'index'])->name('exams.classes.streams.rankings');
    
     Route::patch('exams/{exams}/publish',[ExamController::class,'publish'])->name('exams.publish');
     Route::patch('exams/{exams}/unpublish',[ExamController::class,'unpublish'])->name('exams.unpublish');

@@ -12,6 +12,15 @@
             Class performance ranking
         </p>
     </div>
+    <div class="flex gap-2 mb-4">
+    @foreach($class->streams as $stream)
+        <a href="{{ route('admin.exams.classes.streams.rankings', [$exam, $class, $stream]) }}"
+           class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm hover:bg-slate-50">
+            {{ $stream->name }}
+        </a>
+    @endforeach
+</div>
+
 
     <a href="{{ route('admin.exams.index') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
@@ -58,7 +67,7 @@
             @empty
                 <tr>
                     <td colspan="4" class="px-6 py-12 text-center text-slate-500">
-                        No results available for this class.
+                        No results available for this class/stream.
                     </td>
                 </tr>
             @endforelse
