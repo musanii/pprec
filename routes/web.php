@@ -21,7 +21,10 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TermReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\ResultController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,7 +34,7 @@ Route::middleware(['auth'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-// students module
+// Admin Portal ROutes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('students', StudentController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::post('students/{student}/transfer', [StudentTransferController::class, 'store'])->name('students.transfer');
@@ -87,6 +90,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('classes/{class}/subjects', [ClassSubjectController::class, 'edit'])->name('classes.subjects.edit');
     Route::post('classes/{class}/subjects', [ClassSubjectController::class, 'update'])->name('classes.subjects.update');
 
+});
+
+
+//Student Routes
+Route::middleware(['auth','role:student'])->prefix('student')->name('student.')->group(function(){
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/results', [ResultController::class, 'index'])->name('results');
+
+    Route::get('/results/{term}', [ResultController::class, 'show'])->name('results.show');
 });
 
 Route::middleware('auth')->group(function () {
