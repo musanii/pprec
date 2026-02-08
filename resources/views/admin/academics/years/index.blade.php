@@ -131,4 +131,144 @@
         {{ $years->links() }}
     </div>
 </div>
+
+@php
+    $activeYear = $years->firstWhere('is_active', true);
+@endphp
+
+@if($activeYear)
+    <div x-data="promotionPreview({{ $activeYear->id }})" class="mt-6 bg-white rounded-2xl border border-yellow-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-yellow-200 bg-yellow-50">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 h-10 w-10 rounded-xl bg-yellow-100 border border-yellow-200 flex items-center justify-center text-yellow-700">
+                    ⚠
+                </div>
+                <div>
+                    <div class="text-sm font-semibold text-slate-900">
+                        End-of-Year Promotion
+                    </div>
+                    <div class="text-sm text-slate-600 mt-1">
+                        This will close all active enrollments for
+                        <span class="font-medium">{{ $activeYear->name }}</span>
+                        and create new enrollments for the next academic year.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-5">
+            <form
+                method="POST"
+                action="{{ route('admin.promotions.store', $activeYear) }}"
+                onsubmit="return confirm('This action is irreversible. Do you want to proceed?')"
+                class="flex flex-col sm:flex-row gap-3 items-start sm:items-end"
+            >
+                @csrf
+
+                <div class="w-full sm:w-64">
+                    <label class="text-xs font-medium text-slate-600">
+                        Promotion Action
+                    </label>
+                    <select
+                        name="action"
+                        required
+                        class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        <option value="promote">Promote to next class</option>
+                        <option value="repeat">Repeat same class</option>
+                        <option value="graduate">Graduate all students</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3">
+                <button
+                    type="button"
+                    @click="preview()"
+                    class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
+                >
+                    Preview
+                </button>
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-primary px-5 py-2.5 text-sm text-white hover:opacity-90 shadow-sm"
+                >
+                    Process Promotion
+                </button>
+            </div>
+
+            </form>
+            <div x-show="result" class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div class="text-sm font-semibold text-slate-900 mb-2">
+                    Promotion Preview
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                    <div>Total: <strong x-text="result.total"></strong></div>
+                    <div>Promoted: <strong x-text="result.promoted"></strong></div>
+                    <div>Repeated: <strong x-text="result.repeated"></strong></div>
+                    <div>Graduated: <strong x-text="result.graduated"></strong></div>
+                </div>
+            </div>
+
+            <p class="mt-3 text-xs text-slate-500">
+                Tip: Ensure all exams are published and results finalized before running promotion.
+            </p>
+        </div>
+    </div>
+@endif
+
+<script>
+function promotionPreview(yearId) {
+
+    console.log('Initializing promotion preview for year ID:', yearId);
+    return {
+        loading: false,
+        result: null,
+
+       preview() {
+    this.loading = true;
+
+    fetch(`/admin/academic-years/${yearId}/promotions/preview`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            action: this.$root.querySelector('[name=action]').value
+        })
+    })
+    .then(async response => {
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw data;
+        }
+
+        this.result = data;
+    })
+    .catch(error => {
+        this.result = null;
+
+        // show error nicely
+        window.dispatchEvent(new CustomEvent('toast', {
+            detail: {
+                type: 'error',
+                message: Object.values(error.errors ?? {})
+                    .flat()
+                    .join(', ')
+                    || 'Promotion preview failed'
+            }
+        }));
+    })
+    .finally(() => this.loading = false);
+}
+
+    }
+}
+</script>
+
 @endsection

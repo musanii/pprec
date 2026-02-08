@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -114,6 +115,7 @@
                         <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
                     @endif
                 </a>
+                
 
 
                 {{-- Academics (active module) --}}
@@ -217,6 +219,13 @@
    {{ request()->routeIs('admin.exams.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
    <span class="h-5 w-5 text-slate-500">📝</span>
    <span x-show="!sidebarCollapsed" x-transition.opacity>Exams</span>
+</a>
+
+<a href="{{ route('admin.promotion-logs.index') }}"
+   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+   {{ request()->routeIs('admin.promotion-logs.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+    <span class="h-5 w-5 text-slate-500">🧾</span>
+    <span x-show="!sidebarCollapsed" x-transition.opacity>Promotion Logs</span>
 </a>
 
 
@@ -433,3 +442,34 @@
 
 </body>
 </html>
+
+<script>
+function promotionPreview(yearId) {
+    return {
+        loading: false,
+        result: null,
+
+        preview() {
+            this.loading = true;
+
+            fetch(`/admin/academic-years/${yearId}/promotions/preview`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                },
+                body: JSON.stringify({
+                    action: this.$root.querySelector('[name=action]').value
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                this.result = data;
+            })
+            .finally(() => this.loading = false);
+        }
+    }
+}
+</script>
+
+

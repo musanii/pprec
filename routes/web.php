@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\ExamRankingController;
 use App\Http\Controllers\Admin\ExamStreamRankingController;
+use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\PromotionLogController;
 use App\Http\Controllers\Admin\ReportCardController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
@@ -63,6 +65,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('students/{student}/exams/{exam}/report/pdf', [ReportCardController::class,'pdf'])->name('students.exams.report.pdf');
 
     Route::get('student/{student}/terms/{term}/report', [TermReportController::class,'show'])->name('students.terms.report');
+
+    Route::post('academic-years/{academicYear}/promotions/preview',[PromotionController::class, 'preview'])->name('promotions.preview');
+    Route::post('academic-years/{year}/promotions',[PromotionController::class,'store'])->name('promotions.store');
+    Route::get('promotions/logs', [PromotionLogController::class,'index'])->name('promotion-logs.index');        
     // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);
     Route::resource('streams', StreamController::class)->except(['show']);
