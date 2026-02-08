@@ -109,6 +109,22 @@
                                                class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                                                 Edit
                                             </a>
+                                            @if($exams->count())
+                                                <div class="h-px bg-slate-100"></div>
+
+                                                <div class="px-4 py-2 text-[11px] uppercase tracking-wide text-slate-400">
+                                                    Rankings
+                                                </div>
+
+                                                @foreach($exams as $exam)
+                                                    <a
+                                                        href="{{ route('admin.exams.classes.rankings', [$exam, $class]) }}"
+                                                        class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                                                    >
+                                                        {{ $exam->name }}
+                                                    </a>
+                                                @endforeach
+                                            @endif
 
                                             <a href="{{ route('admin.classes.subjects.edit', $class) }}"
                                             class="block px-4 py-2.5 text-sm hover:bg-slate-50">

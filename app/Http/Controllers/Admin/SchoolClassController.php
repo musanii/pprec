@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreSchoolRequest;
 use App\Http\Requests\Admin\UpdateSchoolClassRequest;
 use App\Http\Requests\Admin\UpdateSchoolRequest;
+use App\Models\Exam;
 use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,11 @@ class SchoolClassController extends Controller
         ->withCount('streams')
         ->orderBy('level')
         ->paginate(20);
-        return view('admin.academics.classes.index',compact('classes'));
+
+        $exams = Exam::where('is_published', true)
+                ->orderByDesc('start_date')
+                ->get();
+        return view('admin.academics.classes.index',compact('classes','exams'));
     }
 
     /**

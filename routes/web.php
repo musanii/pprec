@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
+use App\Http\Controllers\Admin\ExamRankingController;
 use App\Http\Controllers\Admin\ReportCardController;
 use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\Admin\StreamController;
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('students/{student}/exams/{exam}/report', [ReportCardController::class,'show'])->name('students.exams.report');
     
+    Route::get('students/{student}/exams/{exam}/report/pdf', [ReportCardController::class,'pdf'])->name('students.exams.report.pdf');
+
+    Route::get('exams/{exam}/classes/{class}/rankings', [ExamRankingController::class,'index'])->name('exams.classes.rankings');
     // Academics routes
     Route::resource('classes', SchoolClassController::class)->except(['show']);
     Route::resource('streams', StreamController::class)->except(['show']);
