@@ -77,26 +77,37 @@
                                                     Enter Marks
                                                 </a>
                                             @else
-                                                <span class="text-sm text-slate-400 cursor-not-allowed">
+                                                <span class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                                                     Draft
                                                 </span>
                                             @endif
 
                                             <div class="h-px bg-slate-100"></div>
+                                            
+                                            @if(!$exam->is_published)
+                                                <form method="POST" action="{{ route('admin.exams.publish', $exam) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button
+                                                        type="submit"
+                                                        class="w-full text-left px-4 py-2.5 text-sm text-green-700 hover:bg-green-50"
+                                                    >
+                                                        Publish Results
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form method="POST" action="{{ route('admin.exams.unpublish', $exam) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button
+                                                        type="submit"
+                                                        class="w-full text-left px-4 py-2.5 text-sm text-red-700 hover:bg-red-50"
+                                                    >
+                                                        Unlock Results
+                                                    </button>
+                                                </form>
+                                            @endif
 
-                                            <form method="POST" action="{{ route('admin.exams.publish', $exam) }}">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" name="_redirect" value="{{ url()->full() }}">
-                                                     <input type="hidden" name="id" value="{{ $exam->id }}">
-                                                       <input type="hidden" name="is_published" value="true">
-                                                <button type="submit"
-                                                        class="w-full text-left px-4 py-2.5 text-sm hover:bg-slate-50
-                                                        {{ $exam->is_published ? 'text-slate-400 cursor-not-allowed' : 'text-slate-700' }}"
-                                                        {{ $exam->is_published ? 'disabled' : '' }}>
-                                                    Publish
-                                                </button>
-                                            </form>
                                         </div>
                                     </div>
                                 </template>

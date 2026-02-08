@@ -3,6 +3,12 @@
 @section('page_title', 'Enter Marks')
 
 @section('content')
+
+@if($exam->is_published)
+    <div class="mb-5 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-yellow-800">
+        This exam has been published. Marks are locked and read-only.
+    </div>
+@endif
 <div class="mb-6">
     <h1 class="text-2xl font-semibold text-slate-900">
         {{ $exam->name }} — Marks Entry
@@ -67,12 +73,18 @@
                     <td class="px-6 py-4 font-medium text-slate-900">
                         {{ $student->user->name }}
                     </td>
-                    <td class="px-6 py-4">
-                        <input type="number"
-                               name="marks[{{ $student->id }}]"
-                               min="0" max="100" step="0.01"
-                               class="w-28 rounded-lg border px-3 py-2 text-sm">
-                    </td>
+                                <td class="px-6 py-4">
+                    <input
+                        type="number"
+                        name="marks[{{ $student->id }}]"
+                        value="{{ old('marks.' . $student->id, $existingMarks[$student->id] ?? '') }}"
+                        {{ $exam->is_published ? 'disabled' : '' }}
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        class="w-28 rounded-lg border px-3 py-2 text-sm"
+                    >
+                </td>
                 </tr>
                 @empty
                 <tr>
@@ -85,9 +97,11 @@
     </table>
 
     <div class="p-4 border-t flex justify-end">
+        @if(!$exam->is_published)
         <button class="rounded-xl bg-primary px-6 py-2.5 text-sm text-white">
             Save Marks
         </button>
+        @endif
     </div>
 </form>
 @endif

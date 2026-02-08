@@ -46,8 +46,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     ->name('exams.marks.edit');
     Route::post('exams/{exam}/marks', [ExamMarkController::class, 'update'])
     ->name('exams.marks.update');
+   
     Route::patch('exams/{exams}/publish',[ExamController::class,'publish'])->name('exams.publish');
-
+    Route::patch('exams/{exams}/unpublish',[ExamController::class,'unpublish'])->name('exams.unpublish');
+   
     Route::get('students/{student}/exams/{exam}',[StudentExamResultController::class,'show'])->name('students.exams.show');
 
     Route::get('students/{student}/exams/{exam}/report', [ReportCardController::class,'show'])->name('students.exams.report');

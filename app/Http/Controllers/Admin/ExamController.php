@@ -16,10 +16,10 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::with('term.academicYear')
-                ->orderBy('created_at')
-                ->paginate(20);
+            ->orderBy('created_at')
+            ->paginate(20);
 
-                return view('admin.exams.index',compact('exams'));
+        return view('admin.exams.index', compact('exams'));
     }
 
     /**
@@ -33,19 +33,22 @@ class ExamController extends Controller
             ->get();
 
         return view('admin.exams.create', compact('terms'));
-        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-public function store(Request $request)
+    public function store(Request $request)
     {
+        if ($request->is_published) {
+            return back()->with('error', 'Results are published and cannot be modified.');
+        }
         $data = $request->validate([
-            'term_id' => ['required','exists:terms,id'],
-            'name' => ['required','string','max:100'],
-            'start_date' => ['nullable','date'],
-            'end_date' => ['nullable','date','after_or_equal:start_date'],
+            'term_id' => ['required', 'exists:terms,id'],
+            'name' => ['required', 'string', 'max:100'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
         ]);
 
         Exam::create($data);
@@ -55,35 +58,37 @@ public function store(Request $request)
             ->with('success', 'Exam created successfully.');
     }
 
-  
-    
     /**
      * Show the form for editing the specified resource.
      */
-  public function edit(Exam $exam)
+    public function edit(Exam $exam)
     {
         $terms = Term::with('academicYear')
             ->orderByDesc('is_active')
             ->orderBy('start_date')
             ->get();
 
-        return view('admin.exams.edit', compact('exam','terms'));
+        return view('admin.exams.edit', compact('exam', 'terms'));
     }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Exam $exam )
+    public function update(Request $request, Exam $exam)
     {
+        if ($exam->is_published) {
+            return back()->with('error', 'Results are published and cannot be modified.');
+        }
         $data = $request->validate([
-            'term_id' => ['required','exists:terms,id'],
+            'term_id' => ['required', 'exists:terms,id'],
             'name' => [
-                'required','string','max:100',
-                Rule::unique('exams','name')->where(
+                'required', 'string', 'max:100',
+                Rule::unique('exams', 'name')->where(
                     fn ($q) => $q->where('term_id', $request->term_id)
-                )->ignore($exam->id)
+                )->ignore($exam->id),
             ],
-            'start_date' => ['nullable','date'],
-            'end_date' => ['nullable','date','after_or_equal:start_date'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'is_published' => ['boolean'],
         ]);
 
@@ -100,16 +105,30 @@ public function store(Request $request)
     /**
      * Publish the specified resource from storage.
      */
-   public function publish(Request $request, Exam $exam)
+    public function publish(Exam $exam)
     {
-       
-
-
-    
-        Exam::findOrFail($request->id)->update([
-            'is_published' => $request->boolean('is_published'),
+        if ($exam->is_published) {
+            return back()->with('info', 'Exam is already published.');
+        }
+        $exam->update([
+            'is_published' => true,
+            'published_at' => now(),
         ]);
 
-        return back()->with('success', 'Exam publication status updated.');
+        return back()->with('success', 'Exam published and locked.');
+
+    }
+
+    /**
+     * Unpublish the specified resource from storage.
+     */
+    public function unpublish(Exam $exam)
+    {
+        $exam->update([
+            'is_published' => false,
+            'published_at' => null,
+        ]);
+
+        return back()->with('success', 'Results unlocked for editing.');
     }
 }
