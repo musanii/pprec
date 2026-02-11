@@ -213,6 +213,18 @@
 
                 @endrole
                 {{-- =============== END STUDENT NAV =============== --}}
+
+                {{-- =============== PARENT NAV ==================== --}}
+                @role('parent')
+                <a href="{{ route('parent.dashboard') }}"
+                class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50">
+                    <span class="h-5 w-5 text-slate-500">
+                        <!-- Parent SVG icon -->
+                    </span>
+                    <span x-show="!sidebarCollapsed">Parent Dashboard</span>
+                </a>
+            @endrole
+
             </nav>
 
             {{-- Sidebar footer --}}

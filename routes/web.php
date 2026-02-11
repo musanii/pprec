@@ -25,6 +25,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
+use App\Http\Controllers\Parent\ResultController as ParentResultController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -37,6 +39,10 @@ Route::middleware(['auth'])->get('/dashboard', function () {
 
     if ($user->hasRole('student')) {
         return view('student.dashboard');
+    }
+
+     if ($user->hasRole('parent')) {
+        return view('parent.dashboard');
     }
 
     // default = admin (or staff later)
@@ -114,6 +120,14 @@ Route::middleware(['auth','role:student'])->prefix('student')->name('student.')-
     Route::get('/results', [ResultController::class, 'index'])->name('results');
 
     Route::get('/results/{term}', [ResultController::class, 'show'])->name('results.show');
+});
+
+//Parent Routes  ,
+
+Route::middleware('auth','role:parent')->prefix('parent')->name('parent.')->group(function(){
+    Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/students/{student}/results', [ParentResultController::class, 'show'])->name('students.results');
+   
 });
 
 Route::middleware('auth')->group(function () {
