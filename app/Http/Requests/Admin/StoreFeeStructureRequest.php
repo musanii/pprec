@@ -24,7 +24,7 @@ class StoreFeeStructureRequest extends FormRequest
         return [
              'academic_year_id' => ['required', 'exists:academic_years,id'],
             'term_id' => ['required', 'exists:terms,id'],
-            'class_id' => ['required', 'exists:school_classes,id'],
+            'class_id' => ['required', 'exists:classes,id'],
             'name' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:0'],
         ];

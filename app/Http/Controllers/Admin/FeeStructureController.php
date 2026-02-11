@@ -30,7 +30,7 @@ class FeeStructureController extends Controller
         return view(
             'admin.fee_structures.create',
             [
-                'academicYears' => AcademicYear::all(),
+                'years' => AcademicYear::all(),
                 'terms' =>Term::all(),
                 'classes' => SchoolClass::all(),
             ]);
