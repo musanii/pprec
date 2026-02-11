@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\ExamRankingController;
 use App\Http\Controllers\Admin\ExamStreamRankingController;
+use App\Http\Controllers\Admin\FeeStructureController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PromotionLogController;
 use App\Http\Controllers\Admin\ReportCardController;
@@ -109,6 +110,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('classes/{class}/subjects', [ClassSubjectController::class, 'edit'])->name('classes.subjects.edit');
     Route::post('classes/{class}/subjects', [ClassSubjectController::class, 'update'])->name('classes.subjects.update');
+
+    //Finance Routes
+    Route::resource('fee-structures', FeeStructureController::class)->except(['show']);
+    Route::patch('fee-structures/{fee_structure}/toggle', [FeeStructureController::class, 'toggle'])->name('fee-structures.toggle');
 
 });
 
