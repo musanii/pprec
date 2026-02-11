@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
@@ -115,6 +116,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('fee-structures', FeeStructureController::class)->except(['show']);
     Route::patch('fee-structures/{fee_structure}/toggle', [FeeStructureController::class, 'toggle'])->name('fee-structures.toggle');
 
+    Route::post('academic-years/{year}/terms/{term}/generate-bills', [BillingController::class, 'generate'])->name('billing.generate');
+
 });
 
 
@@ -129,7 +132,7 @@ Route::middleware(['auth','role:student'])->prefix('student')->name('student.')-
 
 //Parent Routes  ,
 
-Route::middleware('auth','role:parent')->prefix('parent')->name('parent.')->group(function(){
+Route::middleware(['auth','role:parent'])->prefix('parent')->name('parent.')->group(function(){
     Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/students/{student}/results', [ParentResultController::class, 'show'])->name('students.results');
    
