@@ -27,4 +27,8 @@ class StudentBill extends Model
     {
         return $this->belongsTo(FeeStructure::class);
     }
+
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -23,6 +23,11 @@ class AcademicYear extends Model
         return $this->hasMany(Term::class);
     }
 
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class);
+    }
+
     public function scopeActive($query){
         return $query->where('is_active', true);
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\ExamRankingController;
 use App\Http\Controllers\Admin\ExamStreamRankingController;
 use App\Http\Controllers\Admin\FeeStructureController;
+use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PromotionLogController;
 use App\Http\Controllers\Admin\ReportCardController;
@@ -117,6 +118,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('fee-structures/{fee_structure}/toggle', [FeeStructureController::class, 'toggle'])->name('fee-structures.toggle');
 
     Route::post('academic-years/{year}/terms/{term}/generate-bills', [BillingController::class, 'generate'])->name('billing.generate');
+
+    Route::get('finance',[FinanceController::class,'index'])->name('finance.index');
+    
 
 });
 

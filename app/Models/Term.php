@@ -29,6 +29,11 @@ class Term extends Model
         return $this->hasMany(Enrollment::class);
     }
 
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class);
+    }
+
     public function scopeActive($query){
         return $query->where('is_active', true);
     }

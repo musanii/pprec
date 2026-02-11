@@ -50,4 +50,9 @@ class SchoolClass extends Model
             ->withPivot('subject_id')
             ->withTimestamps();
     }
+
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class, 'class_id');
+    }
 }

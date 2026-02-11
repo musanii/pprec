@@ -34,5 +34,10 @@ class FeeStructure extends Model
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }
+
+    public function bills()
+    {
+        return $this->hasMany(StudentBill::class);
+    }
     
 }

@@ -42,6 +42,11 @@ class Student extends Model
         return $this->hasOne(Enrollment::class)->where('is_active', true);
     }
 
+    public function bills()
+    {
+        return $this->hasMany(StudentBill::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
