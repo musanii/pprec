@@ -3,6 +3,16 @@
 @section('page_title', 'My Dashboard')
 
 @section('content')
+
+@php
+
+     $user = auth()->user();
+       $student = $user->studentProfile;
+       $activeYear = App\Models\AcademicYear::where('is_active', true)->first();
+       $activeTerm = App\Models\Term::where('is_active', true)->first();
+       $enrollment = $student?->activeEnrollment;
+
+@endphp
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- Main card --}}
@@ -12,7 +22,7 @@
                 Welcome, {{ auth()->user()->name }}
             </h2>
             <p class="text-sm text-slate-500 mt-1">
-                Admission No: {{ $student->admission_no }}
+                Admission No: {{ $student->admission_no ?? '—' }}
             </p>
         </div>
 
@@ -44,7 +54,7 @@
             <div class="rounded-xl bg-slate-50 p-4 border border-slate-100">
                 <div class="text-xs text-slate-500">Status</div>
                 <div class="text-sm font-medium text-slate-900 mt-1 capitalize">
-                    {{ $student->status }}
+                    {{ $student->status ?? '—' }}
                 </div>
             </div>
         </div>

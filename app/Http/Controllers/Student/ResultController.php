@@ -13,7 +13,7 @@ class ResultController extends Controller
 
    public function index()
    {
-    $student = auth()->user()->student;
+    $student = auth()->user()->studentProfile;
 
   
         $terms = Term::whereHas('enrollments', function ($q) use ($student) {
@@ -25,7 +25,7 @@ class ResultController extends Controller
    }
 
    public function show(Term $term){
-    $student = auth()->user()->student;
+    $student = auth()->user()->studentProfile;
 
     $exams = Exam::where('term_id', $term->id)
         ->where('is_published', true)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicYearController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Admin\TermReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\ResultController;
+use App\Http\Controllers\Student\StudentDashboardController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -31,11 +33,23 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->get('/dashboard', function () {
+    $user = auth()->user();
+
+    if ($user->hasRole('student')) {
+        return view('student.dashboard');
+    }
+
+    // default = admin (or staff later)
     return view('dashboard');
 })->name('dashboard');
 
+
+
+
 // Admin Portal ROutes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+
     Route::resource('students', StudentController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::post('students/{student}/transfer', [StudentTransferController::class, 'store'])->name('students.transfer');
     Route::patch('students/{student}/status', [StudentStatusController::class, 'update'])->name('students.status');
