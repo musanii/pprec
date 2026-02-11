@@ -7,11 +7,18 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        $parent = auth()->user()->parentProfile();
-        $students = $parent->students->with(['activeEnrollment.schoolClass','activeEnrollment.stream'])->get(); // Assuming a parent has many students
+   public function index()
+{
+    $parent = auth()->user()->parentProfile;
 
-        return view('parent.dashboard', compact('students'));
+    if (!$parent) {
+        abort(403);
     }
+
+    $students = $parent->students()
+        ->with(['user', 'activeEnrollment.schoolClass', 'activeEnrollment.stream'])
+        ->get();
+
+    return view('parent.dashboard', compact('students'));
+}
 }

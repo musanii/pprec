@@ -5,8 +5,11 @@
 @section('content')
 
 @php
-    $parent = auth()->user()->parentProfile();
-        $students = $parent->students->with(['activeEnrollment.schoolClass','activeEnrollment.stream'])->get();
+    $parent = auth()->user()->parentProfile;
+        $students = $parent->students()
+    ->with(['user', 'activeEnrollment.schoolClass', 'activeEnrollment.stream'])
+    ->get();
+
 @endphp
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
