@@ -17,10 +17,24 @@ class FeeStructureController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $fees = FeeStructure ::with(['academicYear','term','schoolClass'])->latest()->paginate(15);
-        return view('admin.fee_structures.index', compact('fees'));
-    }
+{
+    $fees = FeeStructure::with([
+        'academicYear',
+        'term',
+        'schoolClass',
+    ])
+    ->when($request->q, fn ($q) =>
+        $q->where('name', 'like', '%'.$request->q.'%')
+    )
+    ->when($request->is_active !== null && $request->is_active !== '', fn ($q) =>
+        $q->where('is_active', $request->is_active)
+    )
+    ->latest()
+    ->paginate(15)
+    ->withQueryString();
+
+    return view('admin.fee_structures.index', compact('fees'));
+}
 
     /**
      * Show the form for creating a new resource.

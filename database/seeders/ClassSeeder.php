@@ -38,7 +38,7 @@ class ClassSeeder extends Seeder
             foreach ($defaultStreams as $streamName) {
                 Stream::updateOrCreate(
                     ['class_id' => $class->id, 'name' => $streamName],
-                    []
+                    ['is_active' => true] // or 1
                 );
             }
 

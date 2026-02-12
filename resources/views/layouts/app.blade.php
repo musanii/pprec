@@ -188,6 +188,27 @@
                          x-show="!sidebarCollapsed" x-transition.opacity>
                         Finance
                     </div>
+
+                    <a href="{{ route('admin.fee-structures.index') }}"
+                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
+                    {{ request()->routeIs('admin.fee-structures.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
+
+                        <span class="h-5 w-5 text-slate-500">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+                                <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 8c-3 0-6 1.5-6 4v4h12v-4c0-2.5-3-4-6-4z"/>
+                                <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 4v4"/>
+                            </svg>
+                        </span>
+
+                        <span x-show="!sidebarCollapsed">Fee Structures</span>
+
+                        @if(request()->routeIs('admin.fee-structures.*'))
+                            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
+                        @endif
+                    </a>
+                    
                     <a href="{{ route('admin.finance.index') }}"
                     class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
                     {{ request()->routeIs('admin.finance.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
