@@ -163,17 +163,19 @@
                             {{ number_format($bill->balance, 2) }}
                         </td>
 
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-1 text-xs border rounded-full
-                                {{
-                                    $status === 'paid'
-                                    ? 'bg-green-50 text-green-700 border-green-200'
-                                    : ($status === 'partial'
-                                        ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                        : 'bg-red-50 text-red-700 border-red-200')
-                                }}">
-                                {{ ucfirst($status) }}
-                            </span>
+                        <td class="px-6 py-4 text-right">
+
+                        @if($bill->balance > 0)
+                            <button
+                                x-data
+                                @click="$dispatch('open-payment-{{ $bill->id }}')"
+                                class="rounded-lg bg-primary px-3 py-1.5 text-white text-xs hover:opacity-90">
+                                Record Payment
+                            </button>
+                        @else
+                            <span class="text-green-600 text-xs font-medium">Fully Paid</span>
+                        @endif
+
                         </td>
 
                     </tr>
@@ -188,6 +190,69 @@
                 @endforelse
             </tbody>
         </table>
+
+        @foreach($bills as $bill)
+<div
+    x-data="{ open:false }"
+    @open-payment-{{ $bill->id }}.window="open=true"
+    x-show="open"
+    x-cloak
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+    <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
+        <h3 class="text-lg font-semibold mb-4">
+            Record Payment
+        </h3>
+
+        <form method="POST"
+              action="{{ route('admin.payments.store', $bill) }}">
+            @csrf
+
+            <div class="mb-4">
+                <label class="text-xs text-slate-600">Amount</label>
+                <input type="number"
+                       name="amount"
+                       step="0.01"
+                       max="{{ $bill->balance }}"
+                       required
+                       class="mt-1 w-full rounded-xl border px-3 py-2 text-sm">
+                <div class="text-xs text-slate-500 mt-1">
+                    Balance: {{ number_format($bill->balance,2) }}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-xs text-slate-600">Method</label>
+                <select name="method"
+                        class="mt-1 w-full rounded-xl border px-3 py-2 text-sm">
+                    <option value="cash">Cash</option>
+                    <option value="mpesa">M-Pesa</option>
+                    <option value="bank">Bank</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-xs text-slate-600">Reference</label>
+                <input type="text"
+                       name="reference"
+                       class="mt-1 w-full rounded-xl border px-3 py-2 text-sm">
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button type="button"
+                        @click="open=false"
+                        class="px-4 py-2 text-sm border rounded-xl">
+                    Cancel
+                </button>
+                <button class="px-4 py-2 text-sm bg-primary text-white rounded-xl">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
     </div>
 
     {{-- Pagination --}}

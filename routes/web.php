@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ExamRankingController;
 use App\Http\Controllers\Admin\ExamStreamRankingController;
 use App\Http\Controllers\Admin\FeeStructureController;
 use App\Http\Controllers\Admin\FinanceController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PromotionLogController;
 use App\Http\Controllers\Admin\ReportCardController;
@@ -120,6 +121,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('academic-years/{year}/terms/{term}/generate-bills', [BillingController::class, 'generate'])->name('billing.generate');
 
     Route::get('finance',[FinanceController::class,'index'])->name('finance.index');
+
+    Route::post('bills/{bill}/payments', [PaymentController::class, 'store'])->name('payments.store');
     
 
 });
