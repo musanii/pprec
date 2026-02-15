@@ -268,6 +268,13 @@
                 </a>
             @endrole
 
+
+             {{-- =============== Teacher NAV ==================== --}}
+                @role('teacher')
+                
+            @endrole
+
+
             </nav>
 
             {{-- Sidebar footer --}}

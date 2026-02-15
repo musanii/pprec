@@ -13,7 +13,7 @@ class StudentDashboardController extends Controller
 
 
        $user = auth()->user();
-       $student = $user->student;
+       $student = $user->studentProfile;
        $activeYear = AcademicYear::where('is_active', true)->first();
        $activeTerm = Term::where('is_active', true)->first();
        $enrollment = $student?->activeEnrollment;

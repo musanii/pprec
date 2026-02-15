@@ -4,15 +4,7 @@
 
 @section('content')
 
-@php
 
-     $user = auth()->user();
-       $student = $user->studentProfile;
-       $activeYear = App\Models\AcademicYear::where('is_active', true)->first();
-       $activeTerm = App\Models\Term::where('is_active', true)->first();
-       $enrollment = $student?->activeEnrollment;
-
-@endphp
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- Main card --}}

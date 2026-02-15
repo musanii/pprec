@@ -25,32 +25,26 @@ use App\Http\Controllers\Admin\TeacherAssignmentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TermReportController;
+use App\Http\Controllers\Parent\ParentDashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\StudentDashboardController;
-use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\ResultController as ParentResultController;
+use App\Http\Controllers\Teacher\TeacherDashboardController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::middleware(['auth'])->get('/dashboard', function () {
-    $user = auth()->user();
-
-    if ($user->hasRole('student')) {
-        return view('student.dashboard');
-    }
-
-     if ($user->hasRole('parent')) {
-        return view('parent.dashboard');
-    }
-
-    // default = admin (or staff later)
-    return view('dashboard');
+Route::middleware('auth')->get('/dashboard', function () {
+    return match (true) {
+        auth()->user()->hasRole('admin') => redirect()->route('admin.dashboard'),
+        auth()->user()->hasRole('teacher') => redirect()->route('teacher.dashboard'),
+        auth()->user()->hasRole('student') => redirect()->route('student.dashboard'),
+        auth()->user()->hasRole('parent') => redirect()->route('parent.dashboard'),
+        default => abort(403),
+    };
 })->name('dashboard');
 
 
@@ -59,7 +53,7 @@ Route::middleware(['auth'])->get('/dashboard', function () {
 // Admin Portal ROutes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
-
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('students', StudentController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::post('students/{student}/transfer', [StudentTransferController::class, 'store'])->name('students.transfer');
     Route::patch('students/{student}/status', [StudentStatusController::class, 'update'])->name('students.status');
@@ -137,7 +131,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 //Student Routes
 Route::middleware(['auth','role:student'])->prefix('student')->name('student.')->group(function(){
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/results', [ResultController::class, 'index'])->name('results');
 
@@ -151,6 +145,11 @@ Route::middleware(['auth','role:parent'])->prefix('parent')->name('parent.')->gr
     Route::get('/students/{student}/results', [ParentResultController::class, 'show'])->name('students.results');
     Route::get('finance', [\App\Http\Controllers\Parent\FinanceController::class,'index'])->name('finance');
    
+});
+
+//Teacher Routes
+Route::middleware(['auth','role:teacher'])->prefix('teacher')->name('teacher.')->group(function(){
+     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
