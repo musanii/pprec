@@ -12,15 +12,18 @@
             Summary for {{ $year?->name ?? 'No Active Year' }}
             — {{ $term?->name ?? 'No Active Term' }}
         </p>
+        
     </div>
 
     
 
-    <div class="flex gap-3">
+    <div class="flex gap-2">
         <a href="{{ route('admin.fee-structures.index') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
         Manage Fee Structures
     </a>
+
+    
     <a href="{{ route('admin.finance.export.excel') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
         Export Excel
@@ -31,6 +34,13 @@
         Export PDF
     </a>
 </div>
+<form method="POST" 
+      action="{{ route('admin.finance.penalties.apply') }}">
+    @csrf
+    <button class="rounded-xl border bg-red-600 px-4 py-2.5 text-sm text-white hover:opacity-90">
+        Apply Late Penalties
+    </button>
+</form>
 
 </div>
 

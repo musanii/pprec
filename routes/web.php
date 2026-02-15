@@ -127,6 +127,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('finance/export/excel', [FinanceController::class, 'exportExcel'])->name('finance.export.excel');
     Route::get('finance/export/pdf', [FinanceController::class, 'exportPdf'])->name('finance.export.pdf');
+    Route::post('finance/apply-penalties', [FinanceController::class, 'applyPenalties'])->name('finance.penalties.apply');
    
 });
 

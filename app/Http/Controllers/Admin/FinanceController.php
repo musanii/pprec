@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\SchoolClass;
 use App\Models\StudentBill;
 use App\Models\Term;
+use App\Services\PenaltyService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -152,5 +153,15 @@ class FinanceController extends Controller
         $pdf = Pdf::loadView('admin.finance.exports.pdf', ['bills' => $bills, 'year' => $year, 'term' => $term]);
 
         return $pdf->download('finance-report.pdf');
+    }
+
+    public function applyPenalties(PenaltyService $service)
+    {
+        $count = $service->applyLatePenalties();
+
+
+       
+
+        return back()->with('success', "Penalties applied and balances refreshed successfully. {$count} bills updated.");
     }
 }
