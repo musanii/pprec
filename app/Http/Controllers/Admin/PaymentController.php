@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePaymentRequest;
 use App\Models\Payment;
 use App\Models\StudentBill;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-public function store(StorePaymentRequest $request, StudentBill $bill = null)
+public function store(StorePaymentRequest $request, StudentBill $bill = null, ActivityLogger $logger )
 {
     $data = $request->validated();
 
-    DB::transaction(function () use ($data, $bill) {
+    DB::transaction(function () use ($data, $bill, $logger, $request) {
 
     if($this->ensureYearNotLocked($bill ?? StudentBill::find($data['student_bill_id']))) {
         throw \Illuminate\Validation\ValidationException::withMessages([
@@ -41,6 +42,18 @@ public function store(StorePaymentRequest $request, StudentBill $bill = null)
                 'recorded_by'     => auth()->id(),
                 'updated_by'      => auth()->id(),
             ]);
+
+            $logger->log(
+            domain: 'finance',
+            action: 'payment_recorded',
+            subject: $bill,
+            properties: [
+                'amount' => $data['amount'],
+                'method' => $data['method'],
+                'reference' => $data['reference'],
+            ]
+        );
+
 
             $bill->refreshBalance();
 

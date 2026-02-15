@@ -50,6 +50,18 @@ class StudentService
                 'is_active'=>true,
             ]);
 
+            $logger = app(ActivityLogger::class);
+            $logger->log(
+                domain: 'academic',
+                action: 'student_enrolled',
+                subject: $enrollment,
+                properties: [
+                    'class_id' => $classId,
+                    'stream_id' => $streamId,
+                    
+                ]
+            );                                                                                                                                                                                    
+
             if($student->status ==='admitted'){
                 $student->update(['status'=>'active']);
             }

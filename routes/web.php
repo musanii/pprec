@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicYearController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\ClassSubjectController;
@@ -125,6 +126,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('finance/export/pdf', [FinanceController::class, 'exportPdf'])->name('finance.export.pdf');
     Route::post('finance/apply-penalties', [FinanceController::class, 'applyPenalties'])->name('finance.penalties.apply');
     
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');                                                                     
    
 });
 

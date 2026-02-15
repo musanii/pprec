@@ -74,7 +74,7 @@ public function preview(AcademicYear $year, string $action = 'promote'): array
 }
 
 
-public function promote(AcademicYear $year, string $action='promote'){
+public function promote(AcademicYear $year, string $action='promote',){
 
 
 $summary = $this->preview($year, $action);
@@ -125,6 +125,17 @@ $summary = $this->preview($year, $action);
         'graduated'=>$summary['graduated'],
         'repeated'=>$summary['repeated'],
     ]);
+
+    $logger = app(ActivityLogger::class);
+    $logger->log(
+        domain: 'academic',
+        action: 'promotion_executed',
+        subject: $year,
+        properties: [
+            'action_type' => $action,
+            'total_students' => $summary['total'],
+        ]
+    );
 }
 
 protected function handleEnrollment(Enrollment $enrollment, string $action, ?AcademicYear $nextYear){
