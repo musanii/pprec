@@ -32,22 +32,20 @@ class StudentBill extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function refreshBalance()
+public function refreshBalance(): void
+{
+    $paid = $this->payments()->sum('amount');
+
+    $total = $this->amount + $this->penalty_amount;
+
+    $this->balance = $total - $paid;
+
+    $this->save();
+}
+
+
+    public function scopeUnpaid($query)
     {
-        $paid = $this->payments()->sum('amount');
-
-        $total= $this->amount + $this->penalty_amount;
-
-        $this->paid_amount = $paid;
-        $this->balance = $total - $paid;
-        if($this->balance <= 0){
-            $this->status='paid';
-        }else if($paid > 0){
-            $this->status='partial';
-        }else{
-            $this->status='unpaid';
-        }
-        
-        $this->save();
+        return $query->where('balance', '>', 0);
     }
 }

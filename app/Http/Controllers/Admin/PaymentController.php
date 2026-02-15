@@ -11,31 +11,50 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function Store(StorePaymentRequest $request, StudentBill $bill)
-    {
+public function store(StorePaymentRequest $request, StudentBill $bill = null)
+{
+    $data = $request->validated();
 
+    DB::transaction(function () use ($data, $bill) {
 
-    $request->validated();
-    if($request->amount > $bill->balance){
-        return back()->withErrors(['amount' => 'Payment amount cannot exceed the outstanding balance.']);
-    }
+        if ($bill) {
+            // === Manual Bill Payment Mode ===
 
-    DB::transaction(function()use ($request, $bill){
-         Payment::create([
+            if ($data['amount'] > $bill->balance) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'amount' => 'Payment amount cannot exceed outstanding balance.'
+                ]);
+            }
+
+            Payment::create([
                 'student_bill_id' => $bill->id,
                 'student_id'      => $bill->student_id,
-                'amount'          => $request->amount,
-                'method'          => $request->method,
-                'reference'       => $request->reference,
+                'amount'          => $data['amount'],
+                'method'          => $data['method'],
+                'reference'       => $data['reference'],
                 'recorded_by'     => auth()->id(),
             ]);
 
-            $bill->decrement('balance', $request->amount);
-            
-    });
-    return back()->with('success', 'Payment recorded successfully.');
+            $bill->refreshBalance();
 
+        } else {
+            // === Auto Allocation Mode ===
+
+            $student = \App\Models\Student::findOrFail($data['student_id']);
+
+            app(\App\Services\PaymentAllocationService::class)
+                ->allocate(
+                    $student,
+                    $data['amount'],
+                    $data['strategy'] ?? 'oldest'
+                );
+        }
+
+    });
+
+    return back()->with('success', 'Payment recorded successfully.');
 }
+
 
     public function receipt(Payment $payment)
     {

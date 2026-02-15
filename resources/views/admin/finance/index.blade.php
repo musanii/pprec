@@ -417,6 +417,15 @@
                     <option value="bank">Bank</option>
                 </select>
             </div>
+            <div class="mb-4">
+                <select name="strategy"
+        class="rounded-xl border border-slate-200 px-3 py-2 text-sm">
+                <option value="oldest">Allocate to Oldest Bills</option>
+                <option value="highest">Allocate to Highest Balance</option>
+            </select>
+
+            </div>
+            
 
             <div class="mb-4">
                 <label class="text-xs text-slate-600">Reference No</label>
