@@ -30,6 +30,7 @@ class PaymentAllocationService
             'method' => $data['method'] ?? 'manual',
             'reference' => $data['reference'] ?? null,
             'recorded_by' => auth()->id(),
+            'updated_by' => auth()->id(),
         ]);
 
             // Refresh bill status

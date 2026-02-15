@@ -17,6 +17,12 @@ public function store(StorePaymentRequest $request, StudentBill $bill = null)
 
     DB::transaction(function () use ($data, $bill) {
 
+    if($this->ensureYearNotLocked($bill ?? StudentBill::find($data['student_bill_id']))) {
+        throw \Illuminate\Validation\ValidationException::withMessages([
+            'student_bill_id' => 'The academic year for this bill is locked.'
+        ]);
+    }
+
         if ($bill) {
             // === Manual Bill Payment Mode ===
 
@@ -33,6 +39,7 @@ public function store(StorePaymentRequest $request, StudentBill $bill = null)
                 'method'          => $data['method'],
                 'reference'       => $data['reference'],
                 'recorded_by'     => auth()->id(),
+                'updated_by'      => auth()->id(),
             ]);
 
             $bill->refreshBalance();
@@ -66,6 +73,15 @@ public function store(StorePaymentRequest $request, StudentBill $bill = null)
 
         return view('admin.finance.receipt', compact('payment'));
     }
+
+    protected function ensureYearNotLocked($studentBill)
+{
+    $year = $studentBill->feeStructure->academicYear;
+
+    if ($year?->is_locked) {
+        abort(403, 'This academic year is locked.');
+    }
+}
 
 
 }

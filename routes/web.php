@@ -93,6 +93,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('student/{student}/terms/{term}/report', [TermReportController::class,'show'])->name('students.terms.report');
 
+    Route::patch('academic-years/{year}/lock', [AcademicYearController::class, 'lock'])->name('academic-years.lock');
+
     Route::post('academic-years/{academicYear}/promotions/preview',[PromotionController::class, 'preview'])->name('promotions.preview');
     Route::post('academic-years/{year}/promotions',[PromotionController::class,'store'])->name('promotions.store');
     Route::get('promotions/logs', [PromotionLogController::class,'index'])->name('promotion-logs.index');        
@@ -128,6 +130,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('finance/export/excel', [FinanceController::class, 'exportExcel'])->name('finance.export.excel');
     Route::get('finance/export/pdf', [FinanceController::class, 'exportPdf'])->name('finance.export.pdf');
     Route::post('finance/apply-penalties', [FinanceController::class, 'applyPenalties'])->name('finance.penalties.apply');
+    
    
 });
 

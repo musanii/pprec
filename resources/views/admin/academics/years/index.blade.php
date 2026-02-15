@@ -112,6 +112,14 @@
                                                     Set Active
                                                 </button>
                                             </form>
+
+                                            <form method="POST" action="{{ route('admin.academic-years.lock', $year) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-slate-50">
+                                                    Lock Year
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </template>

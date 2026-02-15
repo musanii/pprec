@@ -105,4 +105,13 @@ class AcademicYearController extends Controller
     return redirect($redirect)->with('success', "Academic year '{$academic_year->name}' is now active.");
 }
 
+
+public function lock(AcademicYear $year)
+{
+    $year->update(['is_locked' => true]);
+
+    return back()->with('success', 'Academic year locked successfully.');
+}
+
+
 }
