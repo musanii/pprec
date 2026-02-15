@@ -145,6 +145,7 @@ Route::middleware(['auth','role:student'])->prefix('student')->name('student.')-
 Route::middleware(['auth','role:parent'])->prefix('parent')->name('parent.')->group(function(){
     Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/students/{student}/results', [ParentResultController::class, 'show'])->name('students.results');
+    Route::get('finance', [\App\Http\Controllers\Parent\FinanceController::class,'index'])->name('finance');
    
 });
 

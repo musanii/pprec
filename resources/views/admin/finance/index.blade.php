@@ -14,12 +14,13 @@
         </p>
     </div>
 
-    <a href="{{ route('admin.fee-structures.index') }}"
+    
+
+    <div class="flex gap-3">
+        <a href="{{ route('admin.fee-structures.index') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
         Manage Fee Structures
     </a>
-
-    <div class="flex gap-3">
     <a href="{{ route('admin.finance.export.excel') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
         Export Excel
