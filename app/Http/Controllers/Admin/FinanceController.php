@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StudentBillsExport;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\StudentBill;
 use App\Models\Term;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FinanceController extends Controller
 {
@@ -88,5 +92,33 @@ class FinanceController extends Controller
             'bills',
             'classes'
         ));
+    }
+
+    public function  exportExcel(Request $request){
+        $year = AcademicYear::where('is_active', true)->first();
+        $term = Term::where('is_active', true)->first();
+
+        $bills = StudentBill::with([
+            'student.user',
+            'student.activeEnrollment.schoolClass',
+            'feeStructure'
+        ])->get();
+       
+
+        return Excel::download(new StudentBillsExport($bills),'student_bills.xlsx');
+    }
+
+    public function exportPdf(){
+            $year = AcademicYear::where('is_active', true)->first();
+            $term = Term::where('is_active', true)->first();
+    
+            $bills = StudentBill::with([
+                'student.user',
+                'student.activeEnrollment.schoolClass',
+                'feeStructure'
+            ])->get();
+    
+            $pdf = Pdf::loadView('admin.finance.exports.pdf', ['bills'=>$bills,'year'=>$year,'term'=>$term]);
+            return $pdf->download('finance-report.pdf');
     }
 }

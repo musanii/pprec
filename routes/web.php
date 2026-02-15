@@ -124,6 +124,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::post('bills/{bill}/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+
+    Route::get('finance/export/excel', [FinanceController::class, 'exportExcel'])->name('finance.export.excel');
+    Route::get('finance/export/pdf', [FinanceController::class, 'exportPdf'])->name('finance.export.pdf');
    
 });
 

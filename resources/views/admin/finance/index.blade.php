@@ -18,6 +18,19 @@
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
         Manage Fee Structures
     </a>
+
+    <div class="flex gap-3">
+    <a href="{{ route('admin.finance.export.excel') }}"
+       class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
+        Export Excel
+    </a>
+
+    <a href="{{ route('admin.finance.export.pdf') }}"
+       class="rounded-xl bg-primary px-4 py-2.5 text-sm text-white hover:opacity-90">
+        Export PDF
+    </a>
+</div>
+
 </div>
 
 {{-- KPI Cards --}}
