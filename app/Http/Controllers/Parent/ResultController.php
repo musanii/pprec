@@ -9,14 +9,29 @@ use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    public function show(Student $student){
-        abort_unless($student->parent_id === auth()->user()->parentProfile->id,403);
+    public function show(Student $student)
+{
+    $user = auth()->user();
+    $parent = $user->parentProfile;
 
-        $exams = Exam::query()
-        ->whereHas('marks', fn($q)=>$q->where('student_id', $student->id))
-        ->with(['marks' => fn($q)=>$q->where('student_id', $student->id)])->with(['subject'])->latest()->get();
+    abort_if(!$parent, 403);
 
-        return view('parent.results.show', compact('student','exams'));
+    abort_unless($student->parent_id === $parent->id, 403);
 
-    }
+    $exams = Exam::query()
+        ->whereHas('results', function ($q) use ($student) {
+            $q->where('student_id', $student->id);
+        })
+        ->with([
+            'results' => function ($q) use ($student) {
+                $q->where('student_id', $student->id);
+            },
+            'results.subject'
+        ])
+        ->latest()
+        ->get();
+
+    return view('parent.results.show', compact('student', 'exams'));
+}
+
 }

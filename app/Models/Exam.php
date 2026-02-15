@@ -25,5 +25,10 @@ class Exam extends Model
         return $this->belongsTo(Term::class);
     }
 
+    public function results()
+{
+    return $this->hasMany(ExamResult::class);
+}
+
   
 }
