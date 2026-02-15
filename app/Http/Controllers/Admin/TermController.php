@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateTermRequest;
 use App\Models\AcademicYear;
 use App\Models\Term;
+use App\Services\FinanceGuardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,15 +115,28 @@ class TermController extends Controller
 
  
 
-    public function activate(Term $term, Request $request)
+    public function activate(Term $term, Request $request, FinanceGuardService $financeGuard)
 {
-    DB::transaction(function () use ($term) {
-        AcademicYear::where('is_active', true)->update(['is_active' => false]);
-        $term->academicYear()->update(['is_active' => true]);
+    // DB::transaction(function () use ($term) {
+    //     AcademicYear::where('is_active', true)->update(['is_active' => false]);
+    //     $term->academicYear()->update(['is_active' => true]);
 
-        Term::where('is_active', true)->update(['is_active' => false]);
-        $term->update(['is_active' => true]);
-    });
+    //     Term::where('is_active', true)->update(['is_active' => false]);
+    //     $term->update(['is_active' => true]);
+    // });
+
+     $year = AcademicYear::where('is_active', true)->first();
+    $currentTerm = Term::where('is_active', true)->first();
+
+    if ($currentTerm && $financeGuard->hasOutstandingBalances($year, $currentTerm)) {
+        return back()->with(
+            'error',
+            'Cannot activate new term. Outstanding balances must be cleared first.'
+        );
+    }
+
+    Term::query()->update(['is_active' => false]);
+    $term->update(['is_active' => true]);
 
     $redirect = $request->input('_redirect') ?: route('admin.terms.index');
 

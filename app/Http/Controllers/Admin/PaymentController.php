@@ -31,8 +31,22 @@ class PaymentController extends Controller
             ]);
 
             $bill->decrement('balance', $request->amount);
+            
     });
     return back()->with('success', 'Payment recorded successfully.');
 
 }
+
+    public function receipt(Payment $payment)
+    {
+        $payment->load([
+            'student.user',
+            'bill.feeStructure',
+            'recorder'
+        ]);
+
+        return view('admin.finance.receipt', compact('payment'));
+    }
+
+
 }

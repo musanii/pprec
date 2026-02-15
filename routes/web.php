@@ -123,8 +123,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('finance',[FinanceController::class,'index'])->name('finance.index');
 
     Route::post('bills/{bill}/payments', [PaymentController::class, 'store'])->name('payments.store');
-    
-
+    Route::get('payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+   
 });
 
 

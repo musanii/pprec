@@ -50,8 +50,70 @@
             {{ $studentsWithDebt }}
         </div>
     </div>
+    <div class="mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="p-5 border-b border-slate-100">
+        <div class="text-sm font-semibold text-slate-900">
+            Top Outstanding Students
+        </div>
+    </div>
+
+    <div class="divide-y">
+        @forelse($topDebtors as $bill)
+            <div class="p-4 flex items-center justify-between">
+                <div>
+                    <div class="text-sm font-medium text-slate-900">
+                        {{ $bill->student->user->name }}
+                    </div>
+                </div>
+                <div class="text-sm font-semibold text-red-600">
+                    {{ number_format($bill->balance, 2) }}
+                </div>
+            </div>
+        @empty
+            <div class="p-4 text-sm text-slate-500">
+                No outstanding balances.
+            </div>
+        @endforelse
+    </div>
+</div>
+
+<div class="mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="p-5 border-b border-slate-100">
+        <div class="text-sm font-semibold text-slate-900">
+            Outstanding by Class
+        </div>
+    </div>
+
+    <div class="divide-y">
+        @foreach($classOutstanding as $row)
+            <div class="p-4 flex items-center justify-between">
+                <div class="text-sm text-slate-700">
+                    {{ $row->class_name }}
+                </div>
+                <div class="text-sm font-semibold text-slate-900">
+                    {{ number_format($row->total_balance, 2) }}
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+@if($totalBalance > 0)
+    <div class="mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
+        <div class="text-sm font-semibold text-red-800">
+            Financial Lock Active
+        </div>
+        <div class="text-sm text-red-700 mt-1">
+            Promotion and term closure are blocked until balances are cleared.
+        </div>
+    </div>
+@endif
+
+
+
 
 </div>
+
 
 {{-- Action Card --}}
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -163,7 +225,7 @@
                             {{ number_format($bill->balance, 2) }}
                         </td>
 
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-6 py-4 ">
 
                         @if($bill->balance > 0)
                             <button
@@ -176,8 +238,25 @@
                             <span class="text-green-600 text-xs font-medium">Fully Paid</span>
                         @endif
 
-                        </td>
+                        @foreach($bill->payments as $payment)
+                        <div class="flex justify-between items-center">
+                            <div>
+                                {{ $payment->created_at->format('d M Y') }}
+                                — {{ number_format($payment->amount, 2) }}
+                            </div>
 
+                            <a href="{{ route('admin.payments.receipt', $payment) }}"
+                            target="_blank"
+                            class="text-xs text-primary underline">
+                                Receipt
+                            </a>
+                        </div>
+                    @endforeach
+
+ 
+
+                        </td>
+                        
                     </tr>
 
                 @empty
@@ -232,7 +311,7 @@
             </div>
 
             <div class="mb-4">
-                <label class="text-xs text-slate-600">Reference</label>
+                <label class="text-xs text-slate-600">Reference No</label>
                 <input type="text"
                        name="reference"
                        class="mt-1 w-full rounded-xl border px-3 py-2 text-sm">

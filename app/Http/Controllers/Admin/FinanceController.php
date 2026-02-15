@@ -44,6 +44,35 @@ class FinanceController extends Controller
         ->where('balance', '>', 0)
         ->distinct('student_id')
         ->count('student_id');
+
+        $topDebtors = (clone $billsQuery)
+        ->where('balance', '>', 0)
+        ->orderByDesc('balance')
+        ->limit(5)
+        ->get();
+
+        $classBreakdown = (clone $billsQuery)
+        ->selectRaw('
+        student_id,
+        SUM(balance) as total_balance')
+        ->where('balance', '>', 0)
+        ->groupBy('student_id')
+        ->get();
+
+        $classOutstanding = (clone $billsQuery)
+        ->selectRaw('
+        classes.name as class_name,
+        SUM(student_bills.balance) as total_balance')
+        ->join('students', 'student_bills.student_id', '=', 'students.id')
+        ->join('enrollments', function($join) {
+            $join->on('enrollments.student_id', '=', 'students.id')
+                 ->where('enrollments.is_active', true);
+        })
+        ->join('classes', 'enrollments.class_id', '=', 'classes.id')
+        ->groupBy('classes.name')
+        ->get();
+
+
         $bills = $billsQuery->latest()->paginate(20)->withQueryString();
         $classes = SchoolClass::orderBy('level')->get();
 
@@ -54,6 +83,8 @@ class FinanceController extends Controller
             'totalBalance',
             'totalCollected',
             'studentsWithDebt',
+            'topDebtors',
+            'classOutstanding',
             'bills',
             'classes'
         ));
