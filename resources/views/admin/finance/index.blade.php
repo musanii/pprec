@@ -111,6 +111,29 @@
         @endforeach
     </div>
 </div>
+<div class="mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+        <div class="text-xs text-slate-500">Collection Rate</div>
+        <div class="text-2xl font-semibold text-slate-900 mt-2">
+            {{ $collectionRate }}%
+        </div>
+        <div class="text-xs text-slate-500 mt-1">
+            Collected vs Billed
+        </div>
+    </div>
+
+</div>
+
+<div class="p-5 bg-red-50 border-b border-red-100 mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="text-sm text-red-700">
+        Total Outstanding (Top 5): 
+        <span class="font-semibold">
+            {{ number_format($topDebtClasses->sum('total_debt'), 2) }}
+        </span>
+    </div>
+</div>
+
 
 @if($totalBalance > 0)
     <div class="mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
@@ -126,7 +149,65 @@
 
 
 
+
+
 </div>
+
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <div class="text-sm font-semibold text-slate-900">
+                Monthly Collection ({{ now()->year }})
+            </div>
+            <div class="text-xs text-slate-500">
+                Total payments received per month
+            </div>
+        </div>
+    </div>
+
+    <canvas id="monthlyCollectionChart" height="80"></canvas>
+</div>
+
+@if($topDebtClasses->count())
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-6">
+
+    <div class="p-5 border-b border-slate-100">
+        <div class="text-sm font-semibold text-slate-900">
+            Top Debt Classes
+        </div>
+        <div class="text-xs text-slate-500 mt-1">
+            Classes with highest outstanding balances
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead class="bg-slate-50 text-slate-600 text-xs">
+                <tr>
+                    <th class="px-6 py-3 text-left font-medium">Class</th>
+                    <th class="px-6 py-3 text-right font-medium">Total Debt</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+                @foreach($topDebtClasses as $class)
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-6 py-4 font-medium text-slate-900">
+                            {{ $class->class_name }}
+                        </td>
+
+                        <td class="px-6 py-4 text-right font-semibold text-red-600">
+                            {{ number_format($class->total_debt, 2) }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+</div>
+@endif
+
 
 
 {{-- Action Card --}}
@@ -154,6 +235,9 @@
         </div>
     @endif
 </div>
+
+
+
 
 {{-- Student Bills Table --}}
 <div class="mt-8 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
