@@ -12,6 +12,11 @@
             {{ $exam->name }} • {{ $exam->term->name }}
         </p>
     </div>
+    <a href="{{ route('admin.exams.report', [$exam, $student]) }}"
+        target="_blank"
+        class="text-primary text-xs underline">
+        Report Card
+        </a>
 
     <a href="{{ route('admin.students.index') }}"
        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm hover:bg-slate-50">
