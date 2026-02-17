@@ -95,6 +95,7 @@ class ExamController extends Controller
         $exam->update([
             ...$data,
             'is_published' => $request->boolean('is_published'),
+            'published_at'=>now()
         ]);
 
         return redirect()
