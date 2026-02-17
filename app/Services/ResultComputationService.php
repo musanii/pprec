@@ -16,51 +16,60 @@ class ResultComputationService
         $this->gradeBoundaries = GradeBoundary::where('is_active', true)->get();
     }
 
-    public function computeExam(Exam $exam)
-    {
-        DB::transaction(function () use ($exam) {
+  public function computeExam(Exam $exam)
+{
+    DB::transaction(function () use ($exam) {
 
-            $results = ExamResult::where('exam_id', $exam->id)
-                ->get()
-                ->groupBy('student_id');
+        $results = ExamResult::where('exam_id', $exam->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->groupBy('student_id');
 
-            foreach ($results as $studentId => $subjects) {
-                $total = 0;
-                $subjectCount = 0;
+        foreach ($results as $studentId => $subjects) {
 
-                foreach ($subjects as $result) {
-                    $grade = $this->resolveGrade($result->marks);
+            $total = 0;
+            $subjectCount = 0;
 
-                    $result->update([
-                        'grade' => $grade['grade'],
-                    ]);
+            foreach ($subjects as $result) {
 
-                    $mean = $subjectCount > 0 ? $total/$subjectCount:0;
+                $total += $result->marks;   // 🔥 ADD THIS
+                $subjectCount++;            // 🔥 ADD THIS
 
-                    $hash = hash('sha256',
-                    $exam->id .
-                    $studentId .
-                    $total . 
-                    round($mean,2)
-                    );
+                $grade = $this->resolveGrade($result->marks);
 
-                    $exam->aggregates()->updateOrCreate(
-                        ['student_id'=>$studentId],
-                        [
-                            'total_marks'=>$total,
-                            'mean_score'=>round($mean,2),
-                            'result_hash'=>$hash
-                        ]
-                    );
-
-                }
+                $result->update([
+                    'grade' => $grade['grade'],
+                ]);
             }
 
-            $this->rankClass($exam);
-            $this->rankStream($exam);
+            $mean = $subjectCount > 0
+                ? $total / $subjectCount
+                : 0;
 
-        });
-    }
+            $hash = hash(
+                'sha256',
+                $exam->id .
+                $studentId .
+                $total .
+                round($mean, 2)
+            );
+
+            // 🔥 MOVE OUTSIDE inner loop
+            $exam->aggregates()->updateOrCreate(
+                ['student_id' => $studentId],
+                [
+                    'total_marks' => $total,
+                    'mean_score' => round($mean, 2),
+                    'result_hash' => $hash
+                ]
+            );
+        }
+
+        $this->rankClass($exam);
+        $this->rankStream($exam);
+    });
+}
+
 
     public function resolveGrade($marks)
     {

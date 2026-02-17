@@ -81,7 +81,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
    
     
     Route::patch('exams/{exam}/publish',[ExamController::class,'publish'])->name('exams.publish');
-    Route::patch('exams/{exams}/unpublish',[ExamController::class,'unpublish'])->name('exams.unpublish');
+    Route::patch('exams/{exam}/unpublish',[ExamController::class,'unpublish'])->name('exams.unpublish');
    
     Route::get('students/{student}/exams/{exam}',[StudentExamResultController::class,'show'])->name('students.exams.show');
 

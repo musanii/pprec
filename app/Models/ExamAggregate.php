@@ -15,4 +15,26 @@ class ExamAggregate extends Model
          'class_rank',
           'stream_rank',
     ];
-}
+
+public function exam()
+    {
+        return $this->belongsTo(Exam::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function schoolClass()
+    {
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
+
+    public function stream()
+    {
+        return $this->belongsTo(Stream::class);
+    }
+
+    
+ }
