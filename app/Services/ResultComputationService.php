@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\ExamResult;
 use App\Models\GradeBoundary;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ResultComputationService
 {
@@ -18,6 +19,12 @@ class ResultComputationService
 
   public function computeExam(Exam $exam)
 {
+
+if ($exam->aggregates()->where('is_locked', true)->exists()) {
+    throw ValidationException::withMessages([
+        'exam' => 'This exam is locked and cannot be recomputed.'
+    ]);
+}
     DB::transaction(function () use ($exam) {
 
         $results = ExamResult::where('exam_id', $exam->id)
@@ -32,9 +39,8 @@ class ResultComputationService
 
             foreach ($subjects as $result) {
 
-                $total += $result->marks;   // 🔥 ADD THIS
-                $subjectCount++;            // 🔥 ADD THIS
-
+                $total += $result->marks;   
+                $subjectCount++;            
                 $grade = $this->resolveGrade($result->marks);
 
                 $result->update([

@@ -122,10 +122,15 @@ class ExamController extends Controller
         DB::transaction(function () use ($exam, $service) {
 
             $service->computeExam($exam);
+            
 
             $exam->update([
                 'is_published' => true,
                 'published_at' => now(),
+            ]);
+
+            $exam->aggregates()->update([
+                'is_locked' => true,
             ]);
 
         });

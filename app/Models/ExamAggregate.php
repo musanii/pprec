@@ -14,6 +14,7 @@ class ExamAggregate extends Model
          'mean_score', 
          'class_rank',
           'stream_rank',
+          'result_hash'
     ];
 
 public function exam()
