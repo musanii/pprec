@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicIntelligenceController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -127,7 +128,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('finance/apply-penalties', [FinanceController::class, 'applyPenalties'])->name('finance.penalties.apply');
     
 
-    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');                                                                     
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');     
+    Route::get('/analytics/academic', [AcademicIntelligenceController::class, 'index'])->name('analytics.academic');                                                                 
    
 });
 

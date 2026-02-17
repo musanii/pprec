@@ -148,11 +148,43 @@
                 <div class="mt-1 text-xs text-slate-500">Search, filter, update student records</div>
             </a>
 
+             <a href="{{ route('admin.fee-structures.index') }}"
+               class="block rounded-2xl border border-slate-200 p-4 hover:bg-slate-50 transition">
+                <div class="text-sm font-medium text-slate-900">Manage  Fee Structures</div>
+                <div class="mt-1 text-xs text-slate-500">Search, filter, update class fees records</div>
+            </a>
+
             <div class="rounded-2xl border border-slate-200 p-4 bg-slate-50">
-                <div class="text-sm font-medium text-slate-900">Create Fee Structure</div>
+           
                 <div class="mt-1 text-xs text-slate-500">Finance module coming next</div>
             </div>
         </div>
+        <div class="bg-white rounded-2xl border border-red-200 shadow-sm p-6 mt-6">
+
+    <div class="text-sm font-semibold text-red-700 mb-4">
+        System Risk Indicators
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 text-sm">
+
+        <div>
+            <div class="text-slate-500">Unpublished Exams</div>
+            <div class="font-semibold text-red-600">
+                {{ $unpublishedExams }}
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">High Debt Students</div>
+            <div class="font-semibold text-red-600">
+                {{ $riskStudents->count() }}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
     </div>
 
     {{-- Recent students table --}}
@@ -231,5 +263,7 @@
             Showing latest {{ $recentStudents->count() }} students
         </div>
     </div>
+
+    
 </div>
 @endsection

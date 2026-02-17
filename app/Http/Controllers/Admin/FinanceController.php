@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\SchoolClass;
 use App\Models\StudentBill;
 use App\Models\Term;
+use App\Services\FinancialAnalyticsService;
 use App\Services\PenaltyService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -16,10 +17,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FinanceController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, FinancialAnalyticsService $analytics)
     {
         $year = AcademicYear::where('is_active', true)->first();
         $term = Term::where('is_active', true)->first();
+        $overview = $analytics->overview();
+        $topDebtClasses = $analytics->topDebtClasses();
+        $monthlyRevenue = $analytics->monthlyRevenue();
+        $chronicDefaulters = $analytics->chronicDefaulters();
 
         $billsQuery = StudentBill::with([
             'student.user',
@@ -111,6 +116,11 @@ class FinanceController extends Controller
         return view('admin.finance.index', compact(
             'year',
             'term',
+
+            'overview',
+            'topDebtClasses',
+            'monthlyRevenue',
+            'chronicDefaulters',
             'totalBilled',
             'totalBalance',
             'totalCollected',
