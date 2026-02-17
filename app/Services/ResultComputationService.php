@@ -35,6 +35,24 @@ class ResultComputationService
                         'grade' => $grade['grade'],
                     ]);
 
+                    $mean = $subjectCount > 0 ? $total/$subjectCount:0;
+
+                    $hash = hash('sha256',
+                    $exam->id .
+                    $studentId .
+                    $total . 
+                    round($mean,2)
+                    );
+
+                    $exam->aggregates()->updateOrCreate(
+                        ['student_id'=>$studentId],
+                        [
+                            'total_marks'=>$total,
+                            'mean_score'=>round($mean,2),
+                            'result_hash'=>$hash
+                        ]
+                    );
+
                 }
             }
 
