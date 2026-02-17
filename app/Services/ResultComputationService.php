@@ -22,7 +22,7 @@ class ResultComputationService
 
             $results = ExamResult::where('exam_id', $exam->id)
                 ->get()
-                ->groubBy('student_id');
+                ->groupBy('student_id');
 
             foreach ($results as $studentId => $subjects) {
                 $total = 0;

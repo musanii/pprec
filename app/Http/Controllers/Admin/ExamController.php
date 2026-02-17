@@ -109,11 +109,13 @@ class ExamController extends Controller
      */
     public function publish(Exam $exam, ResultComputationService $service)
     {
+
         if ($exam->is_published) {
             return back()->with('error', 'Exam already published.');
         }
 
         if ($exam->results()->count() === 0) {
+            dd('here');
             return back()->with('error', 'Cannot publish exam without marks.');
         }
 
