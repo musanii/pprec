@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\StudentExamResultController;
 use App\Http\Controllers\Admin\StudentStatusController;
+use App\Http\Controllers\Admin\StudentTranscriptController;
 use App\Http\Controllers\Admin\StudentTransferController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherAssignmentController;
@@ -133,6 +134,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/analytics/academic', [AcademicIntelligenceController::class, 'index'])->name('analytics.academic'); 
 
     Route::get('exams/{exam}/students/{student}/report-card',[ExamReportController::class,'show'])->name('exams.report');
+    Route::get('students/{student}/transcript',[StudentTranscriptController::class,'show'])->name('students.transcript');
 
 
    

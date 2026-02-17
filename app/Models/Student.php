@@ -52,6 +52,11 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function examAggregates()
+    {
+        return $this->hasMany(ExamAggregate::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
