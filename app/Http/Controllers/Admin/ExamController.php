@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\Term;
+use App\Services\ResultComputationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -106,17 +107,20 @@ class ExamController extends Controller
     /**
      * Publish the specified resource from storage.
      */
-    public function publish(Exam $exam)
+    public function publish(Exam $exam, ResultComputationService $service)
     {
         if ($exam->is_published) {
-            return back()->with('info', 'Exam is already published.');
+            return back()->with('error', 'Exam is already published.');
         }
+
+        $service->computeExam($exam);
+
         $exam->update([
             'is_published' => true,
             'published_at' => now(),
         ]);
 
-        return back()->with('success', 'Exam published and locked.');
+        return back()->with('success', 'Exam computed and published.');
 
     }
 
