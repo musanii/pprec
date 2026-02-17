@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ClassSubjectController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\ExamMarkController;
 use App\Http\Controllers\Admin\ExamRankingController;
+use App\Http\Controllers\Admin\ExamReportController;
 use App\Http\Controllers\Admin\ExamStreamRankingController;
 use App\Http\Controllers\Admin\FeeStructureController;
 use App\Http\Controllers\Admin\FinanceController;
@@ -129,7 +130,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
 
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');     
-    Route::get('/analytics/academic', [AcademicIntelligenceController::class, 'index'])->name('analytics.academic');                                                                 
+    Route::get('/analytics/academic', [AcademicIntelligenceController::class, 'index'])->name('analytics.academic'); 
+
+    Route::get('exams/{exam}/students/{student}/report-card',[ExamReportController::class,'show'])->name('exams.report');
+
+
    
 });
 
