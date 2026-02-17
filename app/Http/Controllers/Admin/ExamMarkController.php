@@ -44,7 +44,11 @@ class ExamMarkController extends Controller
     }
 
     public function update(Exam $exam, Request $request,GradingService $grading){
-        $data=$request->validate([
+        if ($exam->is_published) {
+     return back()->with('error','Marks cannot be edited after publishing.');
+}
+    
+    $data=$request->validate([
             'class_id' => ['required','exists:classes,id'],
             'subject_id' => ['required','exists:subjects,id'],
             'marks' => ['required','array'],

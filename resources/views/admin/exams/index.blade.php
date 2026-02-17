@@ -71,14 +71,14 @@
                                                class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                                                 Edit
                                             </a>
-                                            @if($exam->is_published)
+                                            @if(!$exam->is_published)
                                                 <a href="{{ route('admin.exams.marks.edit', $exam) }}"
                                                 class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
                                                     Enter Marks
                                                 </a>
                                             @else
                                                 <span class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
-                                                    Draft
+                                                    Marks Locked
                                                 </span>
                                             @endif
 

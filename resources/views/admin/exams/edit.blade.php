@@ -103,6 +103,8 @@
                        name="is_published"
                        value="1"
                        id="is_published"
+                       {{ $exam->is_published ? 'disabled' : '' }}
+
                        @checked(old('is_published', $exam->is_published))
                        class="rounded border-slate-300 text-primary focus:ring-primary">
                 <label for="is_published" class="text-sm text-slate-700">

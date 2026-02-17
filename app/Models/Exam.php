@@ -12,11 +12,13 @@ class Exam extends Model
         'start_date',
         'end_date',
         'is_published',
+        'published_at',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'published_at'=>'date',
         'is_published' => 'boolean',
     ];
 

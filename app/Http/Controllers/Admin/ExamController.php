@@ -7,6 +7,7 @@ use App\Models\Exam;
 use App\Models\Term;
 use App\Services\ResultComputationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class ExamController extends Controller
@@ -64,6 +65,9 @@ class ExamController extends Controller
      */
     public function edit(Exam $exam)
     {
+        if ($exam->is_published) {
+    return back()->with('error', 'Results are published and cannot be modified.');
+}
         $terms = Term::with('academicYear')
             ->orderByDesc('is_active')
             ->orderBy('start_date')
@@ -80,24 +84,20 @@ class ExamController extends Controller
         if ($exam->is_published) {
             return back()->with('error', 'Results are published and cannot be modified.');
         }
+
         $data = $request->validate([
             'term_id' => ['required', 'exists:terms,id'],
             'name' => [
                 'required', 'string', 'max:100',
-                Rule::unique('exams', 'name')->where(
-                    fn ($q) => $q->where('term_id', $request->term_id)
-                )->ignore($exam->id),
+                Rule::unique('exams', 'name')
+                    ->where(fn ($q) => $q->where('term_id', $request->term_id))
+                    ->ignore($exam->id),
             ],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'is_published' => ['boolean'],
         ]);
 
-        $exam->update([
-            ...$data,
-            'is_published' => $request->boolean('is_published'),
-            'published_at'=>now()
-        ]);
+        $exam->update($data);
 
         return redirect()
             ->route('admin.exams.index')
@@ -110,18 +110,25 @@ class ExamController extends Controller
     public function publish(Exam $exam, ResultComputationService $service)
     {
         if ($exam->is_published) {
-            return back()->with('error', 'Exam is already published.');
+            return back()->with('error', 'Exam already published.');
         }
 
-        $service->computeExam($exam);
+        if ($exam->results()->count() === 0) {
+            return back()->with('error', 'Cannot publish exam without marks.');
+        }
 
-        $exam->update([
-            'is_published' => true,
-            'published_at' => now(),
-        ]);
+        DB::transaction(function () use ($exam, $service) {
 
-        return back()->with('success', 'Exam computed and published.');
+            $service->computeExam($exam);
 
+            $exam->update([
+                'is_published' => true,
+                'published_at' => now(),
+            ]);
+
+        });
+
+        return back()->with('success', 'Exam published and locked.');
     }
 
     /**
