@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\TeacherAssignmentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TermReportController;
+use App\Http\Controllers\Admin\TimetableController;
 use App\Http\Controllers\Admin\VerificationController;
 use App\Http\Controllers\Parent\ParentDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -142,6 +143,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('students/{student}/transcript',[StudentTranscriptController::class,'show'])->name('students.transcript');
 
     Route::resource('school-periods', SchoolPeriodController::class)->names('school-periods');
+
+    Route::post('timetable',[TimetableController::class,'store'])->name('timetable.store');
     
    
 
