@@ -144,7 +144,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('school-periods', SchoolPeriodController::class)->names('school-periods');
 
-    Route::post('timetable',[TimetableController::class,'store'])->name('timetable.store');
+    Route::resource('timetable',TimetableController::class)->only('index', 'store', 'update','destroy')->names('timetable');
     
    
 
