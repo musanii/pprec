@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TimeTableSlot extends Model
 {
+
+protected $table='timetable_slots';
   protected $fillable =[
     'academic_year_id',
     'term_id',
