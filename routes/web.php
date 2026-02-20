@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\PromotionLogController;
 use App\Http\Controllers\Admin\ReportCardController;
 use App\Http\Controllers\Admin\SchoolClassController;
+use App\Http\Controllers\Admin\SchoolPeriodController;
 use App\Http\Controllers\Admin\StreamController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\StudentExamResultController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Admin\TeacherAssignmentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TermReportController;
+use App\Http\Controllers\Admin\VerificationController;
 use App\Http\Controllers\Parent\ParentDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ResultController;
@@ -41,6 +43,9 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', function () {
     return view('welcome');
 });
+
+ Route::get('students/{student}/transcript/pdf',[StudentTranscriptController::class,'download'])->name('students.transcript.pdf');
+    Route::get('/verify/{hash}', [VerificationController::class, ' verify'])->name('results.verify');
 Route::middleware('auth')->get('/dashboard', function () {
     return match (true) {
         auth()->user()->hasRole('admin') => redirect()->route('admin.dashboard'),
@@ -136,6 +141,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('exams/{exam}/students/{student}/report-card',[ExamReportController::class,'show'])->name('exams.report');
     Route::get('students/{student}/transcript',[StudentTranscriptController::class,'show'])->name('students.transcript');
 
+    Route::resource('school-periods', SchoolPeriodController::class)->names('school-periods');
+    
+   
 
    
 });

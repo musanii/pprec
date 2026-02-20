@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         ClassSeeder::class,
         RoleSeeder::class,
         AdminUserSeeder::class,
+        GradeBoundarySeeder::class,
+        SchoolPeriodSeeder::class
         
        ]);
     }

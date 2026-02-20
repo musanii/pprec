@@ -119,6 +119,10 @@ class ExamController extends Controller
             return back()->with('error', 'Cannot publish exam without marks.');
         }
 
+        if($exam->aggregates()->where('is_locked', true)->exists()){
+            return back()->with('error','Exam results are permanently locked');
+        }
+
         DB::transaction(function () use ($exam, $service) {
 
             $service->computeExam($exam);
