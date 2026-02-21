@@ -8,6 +8,8 @@ use App\Models\AcademicYear;
 use App\Models\SchoolClass;
 use App\Models\SchoolPeriod;
 use App\Models\Stream;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\Term;
 use App\Models\TimeTableSlot;
 use App\Services\TimetableService;
@@ -16,7 +18,6 @@ use Illuminate\Validation\ValidationException;
 
 class TimetableController extends Controller
 {
-
     public function index(Request $request)
     {
         $year = AcademicYear::where('is_active', true)->first();
@@ -28,45 +29,48 @@ class TimetableController extends Controller
         $classes = SchoolClass::orderBy('level')->get();
         $streams = Stream::orderBy('name')->get();
         $periods = SchoolPeriod::where('is_active', true)->orderBy('period_number')->get();
+        $subjects = Subject::where('is_active', true)->orderBy('name')->get();
+        $teachers = Teacher::with('user')->orderBy('id')->get();
 
         $slots = collect();
 
-        if($classId && $term) 
-            {
-                $slots = TimeTableSlot::with(['subject','teacher','period'])
+        if ($classId && $term) {
+            $slots = TimeTableSlot::with(['subject', 'teacher', 'period'])
                 ->where('class_id', $classId)
                 ->where('term_id', $term->id)
-                ->when($streamId, fn($q) =>$q->where('stream_id', $streamId))
+                ->when($streamId, fn ($q) => $q->where('stream_id', $streamId))
                 ->get()
-                ->groupBy(['school_period_id','day_of_week']);
-            }
+                ->groupBy(['school_period_id', 'day_of_week']);
+        }
 
-            return view('admin.timetable.index',compact(
-                'year',
-                'term',
-                'classes',
-                'streams',
-                'periods',
-                'slots',
-                'classId',
-                'streamId'
-            ));
+        return view('admin.timetable.index', compact(
+            'year',
+            'term',
+            'classes',
+            'streams',
+            'periods',
+            'slots',
+            'classId',
+            'streamId',
+            'subjects',
+            'teachers'
 
-
+        ));
 
     }
+
     public function store(StoreTimeTableRequest $request, TimetableService $service)
     {
         $data = $request->validated();
-         try {
-         $service->assign($data);
-        return back()->with('success', 'Slot assigned');
-    } catch (ValidationException $e) {
-        return back()
-            ->withErrors($e->errors())
-            ->withInput();
-    }
+        try {
+            $service->assign($data);
 
-  
+            return back()->with('success', 'Slot assigned successfully.');
+        } catch (ValidationException $e) {
+            return back()
+                ->withErrors($e->errors())
+                ->withInput();
+        }
+
     }
 }

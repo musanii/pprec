@@ -87,9 +87,10 @@
                             {{ $slot->teacher->user->name }}
                         </div>
                     @else
-                        <div class="text-xs text-slate-400">
-                            —
-                        </div>
+                        <button @click="open=true; period={{ $period->id }}; day='{{ $day }}'"
+                            class="text-xs text-primary hover:underline">
+                            + Assign
+                        </button>
                     @endif
 
                 </td>
@@ -100,6 +101,71 @@
 
     </tbody>
 </table>
+
+<div x-data="{ open:false, period:null, day:null }">
+
+    <!-- Hidden Trigger -->
+    <template x-if="open">
+        <div class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+            <div class="bg-white w-[420px] rounded-2xl shadow-xl p-6">
+
+                <h2 class="text-lg font-semibold mb-4">
+                    Assign Slot
+                </h2>
+
+                <form method="POST" action="{{ route('admin.timetable.store') }}">
+                    @csrf
+
+                    <input type="hidden" name="academic_year_id" value="{{ $year->id }}">
+                    <input type="hidden" name="term_id" value="{{ $term->id }}">
+                    <input type="hidden" name="class_id" value="{{ $classId }}">
+                    <input type="hidden" name="stream_id" value="{{ $streamId }}">
+                    <input type="hidden" name="school_period_id" :value="period">
+                    <input type="hidden" name="day_of_week" :value="day">
+
+                    <div class="mb-4">
+                        <label class="text-xs text-slate-600">Subject</label>
+                        <select name="subject_id"
+                                class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm">
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->id }}">
+                                    {{ $subject->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="text-xs text-slate-600">Teacher</label>
+                        <select name="teacher_id"
+                                class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm">
+                            @foreach($teachers as $teacher)
+                                <option value="{{ $teacher->id }}">
+                                    {{ $teacher->user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end gap-3">
+                        <button type="button"
+                                @click="open=false"
+                                class="px-4 py-2 text-sm rounded-xl border">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="px-4 py-2 text-sm rounded-xl bg-primary text-white">
+                            Assign
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </template>
+</div>
 
 </div>
 

@@ -24,6 +24,7 @@ protected $table='timetable_slots';
   {
     return $this->belongsTo(AcademicYear::class);
   }
+  
 
   public function term()
   {
