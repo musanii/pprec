@@ -26,16 +26,25 @@ class TimetableController extends Controller
         $classId = $request->class_id;
         $streamId = $request->stream_id;
 
+        $class = SchoolClass::find($classId);
+        $hasStreams = $class ? $class->streams()->exists():false;
+
         $classes = SchoolClass::orderBy('level')->get();
-        $streams = Stream::orderBy('name')->get();
+        // $streams = Stream::orderBy('name')->get();
         $periods = SchoolPeriod::where('is_active', true)->orderBy('period_number')->get();
         $subjects = Subject::where('is_active', true)->orderBy('name')->get();
         $teachers = Teacher::with('user')->orderBy('id')->get();
 
         $slots = collect();
 
+        $streams = collect();
+        if($classId)
+            {
+                $streams = Stream::where('class_id',$classId)->orderBy('name')->get();
+            }
+
        if ($classId && $term) {
-        $slots = TimetableSlot::with(['subject','teacher','schoolPeriod'])
+        $slots = TimeTableSlot::with(['subject','teacher','schoolPeriod'])
             ->where('class_id', $classId)
             ->where('term_id', $term->id)
             ->when($streamId, fn($q)=>$q->where('stream_id',$streamId))
@@ -53,7 +62,8 @@ class TimetableController extends Controller
             'classId',
             'streamId',
             'subjects',
-            'teachers'
+            'teachers',
+            'hasStreams',
 
         ));
 
@@ -61,7 +71,17 @@ class TimetableController extends Controller
 
     public function store(StoreTimeTableRequest $request, TimetableService $service)
     {
+
+   
         $data = $request->validated();
+
+        if($request->hasStreams && !$data['stream_id'])
+            {
+                return back()->withErrors([
+                    'stream_id'=>'Stream selection is required.'
+                ]);
+            }
+
         try {
             $service->assign($data);
 
@@ -73,4 +93,30 @@ class TimetableController extends Controller
         }
 
     }
+
+    public function  update(StoreTimeTableRequest $request, TimeTableSlot $timetable, TimetableService $service)
+    {
+        $data = $request->validated();
+        try {
+            $service->assign($data,$timetable);
+            return back()->with('success','Slot updated.');
+        } catch (ValidationException $e) {
+            return back()
+            ->withErrors($e->errors())
+            ->withInput();
+        }
+        
+
+    }
+
+    public function destroy(TimeTableSlot $timetable)
+    {
+
+
+ 
+        $timetable->delete();
+        return back()->with('success', 'Slot removed.');
+    }
+ 
+
 }

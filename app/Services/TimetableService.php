@@ -7,23 +7,32 @@ use Illuminate\Validation\ValidationException;
 
 class TimetableService
 {
-    public function assign(array $data){
-        $this->validateTeacherClash($data);
-        $this->validateClassClash($data);
+    public function assign(array $data, ?TimeTableSlot $existing=null){
+        $this->validateTeacherClash($data, $existing?->id);
+        $this->validateClassClash($data, $existing?->id);
+        if($existing)
+            {
+                $existing->update($data);
+                return $existing;
+            }
 
         return TimeTableSlot::create($data);
     }
 
 
-    protected function validateTeacherClash(array $data)
+    protected function validateTeacherClash(array $data , $ignoredId=null)
     {
-        $exists = TimeTableSlot::where('teacher_id', $data['teacher_id'])
+        $query = TimeTableSlot::where('teacher_id', $data['teacher_id'])
         ->where('term_id', $data['term_id'])
         ->where('day_of_week', $data['day_of_week'])
-        ->where('school_period_id', $data['school_period_id'])
-        ->exists();
+        ->where('school_period_id', $data['school_period_id']);
 
-        if($exists){
+        if($ignoredId){
+            $query->where('id','!=', $ignoredId);
+        }
+        
+
+        if($query->exists()){
             throw ValidationException::withMessages([
                 'teacher_id'=>'Teacher is already assigned at this time.'
             ]);
@@ -31,16 +40,20 @@ class TimetableService
 
     }
 
-    protected function validateClassClash(array $data)
+    protected function validateClassClash(array $data, $ignoredId=null)
     {
-        $exists = TimeTableSlot::where('class_id', $data['class_id'])
+        $query = TimeTableSlot::where('class_id', $data['class_id'])
         ->where('stream_id', $data['stream_id'])
         ->where('term_id',$data['term_id'])
         ->where('day_of_week', $data['day_of_week'])
-        ->where('school_period_id', $data['school_period_id'])
-        ->exists();
+        ->where('school_period_id', $data['school_period_id']);
+        if($ignoredId)
+            {
+                $query->where('id','!=', $ignoredId);
+            }
+       
 
-        if($exists)
+        if($query->exists())
             {
                 throw ValidationException::withMessages([
                     'school_period_id'=>'Class already has a subject in this period.'
