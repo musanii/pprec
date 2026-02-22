@@ -116,126 +116,140 @@
               </div>
               {{-- People --}}
 
-                <div>
-                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+               <div x-data="{ open: true }" class="mt-4">
+                    <button @click="open = !open" 
+                        class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
                         x-show="!sidebarCollapsed">
-                        People
+                        <span>People</span>
+                        {{-- Bigger and Bolder Arrow --}}
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <div x-show="open || sidebarCollapsed" x-transition>
+                        <a href="{{ route('admin.students.index') }}" class="sidebar-link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                            <x-heroicon-o-users class="w-5 h-5" />
+                            <span x-show="!sidebarCollapsed">Students</span>
+                        </a>
+                        <a href="{{ route('admin.teachers.index') }}" class="sidebar-link {{ request()->routeIs('admin.teachers.*') ? 'active' : '' }}">
+                            <x-heroicon-o-academic-cap class="w-5 h-5" />
+                            <span x-show="!sidebarCollapsed">Teachers</span>
+                        </a>
                     </div>
-
-                    <a href="{{ route('admin.students.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
-                        <x-heroicon-o-users class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Students</span>
-                    </a>
-
-                    <a href="{{ route('admin.teachers.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.teachers.*') ? 'active' : '' }}">
-                        <x-heroicon-o-academic-cap class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Teachers</span>
-                    </a>
                 </div>
                 
 
                 {{-- Academics --}}
-              <div>
-                        <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
-                            x-show="!sidebarCollapsed">
-                            Academics
-                        </div>
+             <div x-data="{ open: true }" class="mt-4">
+            <button @click="open = !open" 
+                class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
+                x-show="!sidebarCollapsed">
+                <span>Academics</span>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
 
-                        <a href="{{ route('admin.classes.index') }}" class="sidebar-link">
-                            <x-heroicon-o-rectangle-stack class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Classes</span>
-                        </a>
-
-                        <a href="{{ route('admin.streams.index') }}" class="sidebar-link">
-                            <x-heroicon-o-squares-2x2 class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Streams</span>
-                        </a>
-
-                        <a href="{{ route('admin.subjects.index') }}" class="sidebar-link">
-                            <x-heroicon-o-book-open class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Subjects</span>
-                        </a>
-
-                         <a href="{{ route('admin.academic-years.index') }}" class="sidebar-link">
-                            <x-heroicon-o-calendar class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Academic Years</span>
-                        </a>
-
-                         <a href="{{ route('admin.terms.index') }}" class="sidebar-link">
-                            <x-heroicon-o-calendar-days class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Terms</span>
-                        </a>
-
-                         
-
-                        <a href="{{ route('admin.school-periods.index') }}" class="sidebar-link">
-                            <x-heroicon-o-clock class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">School Periods</span>
-                        </a>
-
-                        <a href="{{ route('admin.timetable.index') }}" class="sidebar-link">
-                            <x-heroicon-o-calendar-days class="w-5 h-5" />
-                            <span x-show="!sidebarCollapsed">Timetable</span>
-                        </a>
-                    </div>
+            <div x-show="open || sidebarCollapsed" x-transition>
+                <a href="{{ route('admin.classes.index') }}" class="sidebar-link">
+                    <x-heroicon-o-rectangle-stack class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Classes</span>
+                </a>
+                <a href="{{ route('admin.streams.index') }}" class="sidebar-link">
+                    <x-heroicon-o-squares-2x2 class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Streams</span>
+                </a>
+                <a href="{{ route('admin.subjects.index') }}" class="sidebar-link">
+                    <x-heroicon-o-book-open class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Subjects</span>
+                </a>
+                <a href="{{ route('admin.academic-years.index') }}" class="sidebar-link">
+                    <x-heroicon-o-calendar class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Academic Years</span>
+                </a>
+                <a href="{{ route('admin.terms.index') }}" class="sidebar-link">
+                    <x-heroicon-o-calendar-days class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Terms</span>
+                </a>
+                <a href="{{ route('admin.school-periods.index') }}" class="sidebar-link">
+                    <x-heroicon-o-clock class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">School Periods</span>
+                </a>
+                <a href="{{ route('admin.timetable.index') }}" class="sidebar-link">
+                    <x-heroicon-o-calendar-days class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Timetable</span>
+                </a>
+            </div>
+        </div>
 
                 {{-- Assessment --}}
-                    <div>
-                        <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
-                            x-show="!sidebarCollapsed">
-                            Assessment
+                    <div x-data="{ open: true }" class="mt-4">
+            <button @click="open = !open" 
+                class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
+                x-show="!sidebarCollapsed">
+                <span>Assessmenyt</span>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+                        <div x-show="open || sidebarCollapsed" x-transition>
+                            <a href="{{ route('admin.exams.index') }}" class="sidebar-link">
+                                <x-heroicon-o-clipboard-document-check class="w-5 h-5"/>
+                                <span x-show="!sidebarCollapsed">Exams</span>
+                            </a>
+                            <a href="{{ route('admin.analytics.academic') }}" class="sidebar-link">
+                                <x-heroicon-o-chart-bar class="w-5 h-5"/>
+                                <span x-show="!sidebarCollapsed">Analytics</span>
+                            </a>
                         </div>
-
-                        <a href="{{ route('admin.exams.index') }}" class="sidebar-link">
-                            <x-heroicon-o-clipboard-document-check class="w-5 h-5"/>
-                            <span x-show="!sidebarCollapsed">Exams</span>
-                        </a>
-
-                       
-
-                        <a href="{{ route('admin.analytics.academic') }}" class="sidebar-link">
-                            <x-heroicon-o-chart-bar class="w-5 h-5"/>
-                            <span x-show="!sidebarCollapsed">Analytics</span>
-                        </a>
                     </div>
 
                 {{-- Operations --}}
-                <div>
-                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
-                        x-show="!sidebarCollapsed">
-                        Operations
-                    </div>
-
-                    <a href="{{ route('admin.promotion-logs.index') }}" class="sidebar-link">
-                        <x-heroicon-o-arrow-path class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Promotion Logs</span>
-                    </a>
-
-                    <a href="{{ route('admin.activity-logs.index') }}" class="sidebar-link">
-                        <x-heroicon-o-clipboard-document-list class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Activity Logs</span>
-                    </a>
-                </div>
+               
+               {{-- Finance --}}
+              <div x-data="{ open: true }" class="mt-4">
+            <button @click="open = !open" 
+                class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
+                x-show="!sidebarCollapsed">
+                <span>Operations</span>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div x-show="open || sidebarCollapsed" x-transition>
+                <a href="{{ route('admin.promotion-logs.index') }}" class="sidebar-link">
+                    <x-heroicon-o-arrow-trending-up class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Promotion Logs</span>
+                </a>
+                <a href="{{ route('admin.activity-logs.index') }}" class="sidebar-link">
+                    <x-heroicon-s-arrow-trending-up class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Activity Logs</span>
+                </a>
+            </div>
+        </div>
 
                 {{-- Finance --}}
-                <div>
-                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
-                        x-show="!sidebarCollapsed">
-                        Finance
-                    </div>
-
-                    <a href="{{ route('admin.fee-structures.index') }}" class="sidebar-link">
-                        <x-heroicon-o-banknotes class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Fee Structures</span>
-                    </a>
-
-                    <a href="{{ route('admin.finance.index') }}" class="sidebar-link">
-                        <x-heroicon-o-currency-dollar class="w-5 h-5" />
-                        <span x-show="!sidebarCollapsed">Finance</span>
-                    </a>
-                </div>
+              <div x-data="{ open: true }" class="mt-4">
+            <button @click="open = !open" 
+                class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
+                x-show="!sidebarCollapsed">
+                <span>Finance</span>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div x-show="open || sidebarCollapsed" x-transition>
+                <a href="{{ route('admin.fee-structures.index') }}" class="sidebar-link">
+                    <x-heroicon-o-banknotes class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Fee Structures</span>
+                </a>
+                <a href="{{ route('admin.finance.index') }}" class="sidebar-link">
+                    <x-heroicon-o-currency-dollar class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Finance</span>
+                </a>
+            </div>
+        </div>
                 
 
 
