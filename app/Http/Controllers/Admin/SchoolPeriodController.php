@@ -88,10 +88,10 @@ class SchoolPeriodController extends Controller
     {
         if($schoolPeriod->timeTableSlots()->exists())
             {
-                return back()->with('error','Cannot delete period in use.');
+                return redirect()->route('admin.school-periods.edit')->with('error','Cannot delete period in use.');
             }
 
             $schoolPeriod->delete();
-            return back()->with('success', 'Period deleted.');
+            return redirect()->route('admin.school-periods.index')->with('success', 'Period deleted.');
     }
 }

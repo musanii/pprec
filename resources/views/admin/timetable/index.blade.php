@@ -45,7 +45,7 @@
 @if($classId)
 
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
-
+<div x-data="timetableModal()">
 <table class="min-w-full text-sm">
     <thead class="bg-slate-50 text-slate-600 text-xs">
         <tr>
@@ -87,7 +87,7 @@
                             {{ $slot->teacher->user->name }}
                         </div>
                     @else
-                        <button @click="open=true; period={{ $period->id }}; day='{{ $day }}'"
+                        <button @click="openModal({{ $period->id }}, '{{ $day }}')" 
                             class="text-xs text-primary hover:underline">
                             + Assign
                         </button>
@@ -101,9 +101,6 @@
 
     </tbody>
 </table>
-
-<div x-data="{ open:false, period:null, day:null }">
-
     <!-- Hidden Trigger -->
     <template x-if="open">
         <div class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
@@ -149,7 +146,7 @@
 
                     <div class="flex justify-end gap-3">
                         <button type="button"
-                                @click="open=false"
+                                @click="closeModal()"
                                 class="px-4 py-2 text-sm rounded-xl border">
                             Cancel
                         </button>
@@ -168,6 +165,27 @@
 </div>
 
 </div>
+<script>
+    function timetableModal(){
+        return {
+            open:false,
+            period:null,
+            day:null,
+
+            openModal(periodId, dayName){
+                this.period = periodId;
+                this.day= dayName;
+                this.open=true;
+            },
+            closeModal()
+            {
+                this.open = false;
+            }
+        }
+    }
+</script>
+
+
 
 @endif
 

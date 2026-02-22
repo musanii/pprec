@@ -7,8 +7,52 @@
     <title>{{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+<style>
+.sidebar-link {
+    @apply relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 transition;
+}
+
+.sidebar-link.active {
+    @apply bg-slate-100 font-semibold text-slate-900;
+}
+
+.sidebar-link svg {
+    width: 20px;
+    height: 20px;
+}
+</style>
 
 <body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
+    {{-- Toast Notifications --}}
+<div
+    x-data="{ show:false, message:'', type:'success' }"
+    x-init="
+        @if(session('success'))
+            message='{{ session('success') }}';
+            type='success';
+            show=true;
+        @elseif(session('error'))
+            message='{{ session('error') }}';
+            type='error';
+            show=true;
+        @endif
+
+        setTimeout(()=>show=false,4000);
+    "
+    x-show="show"
+    x-transition
+    x-cloak
+    class="fixed top-6 right-6 z-50"
+>
+    <div :class="type==='success' 
+        ? 'bg-green-600 text-white' 
+        : 'bg-red-600 text-white'"
+        class="px-6 py-4 rounded-xl shadow-2xl text-sm font-medium">
+        <span x-text="message"></span>
+    </div>
+</div>
+ 
 <div x-data="{ sidebarOpen:false, sidebarCollapsed:false }" class="min-h-screen">
 
     {{-- Mobile overlay --}}
@@ -24,7 +68,7 @@
 
         {{-- Desktop Sidebar --}}
         <aside
-            class="hidden md:flex flex-col bg-white border-r border-slate-100 sticky top-0 h-screen transition-all duration-200"
+            class="hidden md:flex flex-col bg-white border-r border-slate-200 sticky top-0 h-screen transition-all duration-300 overflow-hidden"
             :class="sidebarCollapsed ? 'w-20' : 'w-72'"
         >
             {{-- Brand --}}
@@ -62,178 +106,136 @@
             </div>
 
             {{-- Navigation --}}
-            <nav class="px-3 py-4 space-y-1">
+            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
 
                 {{-- ================= ADMIN NAV ================= --}}
                 @role('admin')
+                  {{-- Main--}}
+                <div>
+                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                            x-show="!sidebarCollapsed">
+                            Main
+                        </div>
 
-                <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
-                     x-show="!sidebarCollapsed" x-transition.opacity>
-                    Main
+                        {{-- Dashboard --}}
+                    <a href="{{ route('dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('dashboard')  ? 'active':''}}">
+                    <x-icon-home />
+                    <span x-show="!sidebarCollapsed"> Dashboard</span>
+                    </a>
+              </div>
+              {{-- People --}}
+
+                <div>
+                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                        x-show="!sidebarCollapsed">
+                        People
+                    </div>
+
+                    <a href="{{ route('admin.students.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                        <x-icon-users />
+                        <span x-show="!sidebarCollapsed">Students</span>
+                    </a>
+
+                    <a href="{{ route('admin.teachers.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.teachers.*') ? 'active' : '' }}">
+                        <x-icon-academic-cap />
+                        <span x-show="!sidebarCollapsed">Teachers</span>
+                    </a>
                 </div>
-
-                {{-- Dashboard --}}
-                <a href="{{ route('dashboard') }}"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                   {{ request()->routeIs('dashboard') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                    <span class="h-5 w-5 text-slate-500">
-                       <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" 
-                       xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 106.53 122.88"
-                        style="enable-background:new 0 0 106.53 122.88" xml:space="preserve">
-                        <style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g>
-                            <path class="st0" d="M42.09,16.99c0.43,0.12,0.91,0.07,1.43-0.13l-0.85-4.86c0.32-1.22,0.81-2.17,1.46-2.87 c0.68-0.73,1.53-1.18,2.54-1.38C48,7.65,48.4,8.63,49.74,9.49c4.08,2.6,7.52,3.48,12.56,3.55l-1.04,4.2 c0.33,0.14,0.73,0.18,1.13,0.11c0.81-0.07,1.3,0,1.42,0.26c0.19,0.38,0.02,1.17-0.55,2.45l-2.75,4.53 c-1.02,1.68-2.06,3.37-3.37,4.59c-1.25,1.17-2.79,1.95-4.9,1.95c-1.94,0-3.42-0.76-4.63-1.86c-1.27-1.16-2.29-2.74-3.27-4.3 l-2.45-3.89l0,0l-0.01-0.02c-0.74-1.11-1.13-2.06-1.15-2.79c-0.01-0.24,0.03-0.45,0.11-0.62c0.07-0.15,0.18-0.27,0.32-0.37 C41.39,17.13,41.69,17.03,42.09,16.99L42.09,16.99z M44.34,35.3l4.38,12.87l2.2-7.64l-1.08-1.18c-0.49-0.71-0.59-1.33-0.32-1.86 c0.58-1.16,1.79-0.94,2.92-0.94c1.18,0,2.64-0.22,3.02,1.26c0.12,0.5-0.03,1.01-0.38,1.55l-1.08,1.18l2.2,7.64l3.96-12.87 c2.86,2.57,11.32,3.09,14.47,4.84c1,0.56,1.89,1.26,2.62,2.22c1.1,1.45,1.77,3.34,1.95,5.75l0.66,10.41 c-0.16,1.7-1.12,2.68-3.02,2.83H52.45H27.66c-1.9-0.14-2.86-1.12-3.02-2.83l0.66-10.41c0.18-2.4,0.86-4.3,1.96-5.75 c0.72-0.96,1.62-1.66,2.62-2.22C33.02,38.39,41.48,37.87,44.34,35.3L44.34,35.3z M58,63.95v11.8h43.17v5.59v3.02v13.8h-8.61v-13.8 H58v12.42h-9.18V84.36H13.96v13.8H5.35v-13.8v-3.02v-5.59h43.47v-11.8H58L58,63.95z M96.87,103.57c5.33,0,9.65,4.32,9.65,9.66 s-4.32,9.65-9.65,9.65c-5.33,0-9.66-4.32-9.66-9.65S91.54,103.57,96.87,103.57L96.87,103.57z M9.65,103.57 c5.33,0,9.66,4.32,9.66,9.66s-4.32,9.65-9.66,9.65S0,118.56,0,113.22S4.32,103.57,9.65,103.57L9.65,103.57z M53.41,103.57 c5.33,0,9.65,4.32,9.65,9.66s-4.32,9.65-9.65,9.65c-5.33,0-9.65-4.32-9.65-9.65S48.08,103.57,53.41,103.57L53.41,103.57z M63.99,15.91l0.15-6.26c-0.18-2.58-1.04-4.52-2.39-5.99c-3.33-3.61-9.56-4.54-14.26-2.84c-0.79,0.29-1.54,0.65-2.22,1.08 c-1.94,1.24-3.51,3.03-4.13,5.27c-0.15,0.53-0.25,1.06-0.3,1.58c-0.1,2.19-0.04,4.81,0.11,6.9c-0.23,0.09-0.45,0.19-0.64,0.32 c-0.39,0.26-0.68,0.61-0.87,1.01c-0.18,0.39-0.26,0.83-0.25,1.31c0.03,1.02,0.5,2.25,1.4,3.6l2.45,3.89 c1.03,1.64,2.12,3.32,3.54,4.62c1.48,1.35,3.28,2.27,5.68,2.28c2.57,0.01,4.44-0.94,5.97-2.37c1.46-1.37,2.56-3.15,3.64-4.92 l2.79-4.59c0.02-0.03,0.03-0.06,0.05-0.09l0,0c0.77-1.75,0.93-2.98,0.53-3.8C64.97,16.41,64.56,16.08,63.99,15.91L63.99,15.91z"/></g></svg>
-                    </span>
-                    <span x-show="!sidebarCollapsed" x-transition.opacity>Dashboard</span>
-                    @if(request()->routeIs('dashboard'))
-                        <span class="absolute left-0 top-2 bottom-2 w-1 bg-primary rounded-r"></span>
-                    @endif
-                </a>
-
-                {{-- Students --}}
-               <a href="{{ route('admin.students.index') }}"
-                class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                {{ request()->routeIs('admin.students.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                    <span class="h-5 w-5 text-slate-500">
-                        <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 110.37" style="enable-background:new 0 0 122.88 110.37" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M61.92,0c10.42,0,18.86,8.44,18.86,18.86c0,10.42-8.44,18.86-18.86,18.86c-10.42,0-18.86-8.44-18.86-18.86 C43.07,8.44,51.51,0,61.92,0L61.92,0z M30.19,47.55c2.66-3.81,6.29-4.13,11.61-4.75h39.53c6.14,1.12,10.47,2.19,13.42,7.29 l23.21,31.74c2.65,3.62,4.93,5.88,4.92,10.7c-0.01,3.94-1.91,7.56-5.04,9.59c-4.02,2.62-7.09,1.85-11.15,0.43l-15.93-5.56v13.38 H31.64V97.78l-18.5,5.44c-6.04,1.31-10.35-0.93-12.1-5.14c-2.92-6.99,0.82-11.77,4.65-16.93L30.19,47.55L30.19,47.55z M32.19,76.02 V53.35l29.38,9.97l29.74-10.7V76.2c-20.53-4.3-21.39,14.31-8.7,20.31l-21.4,6.71l-20.67-7.25C53.58,89.97,50.92,70.71,32.19,76.02 L32.19,76.02z"/></g></svg>
-                            </span>
-                    <span x-show="!sidebarCollapsed">Students</span>
-                </a>
-
-                {{-- Teachers --}}
-                <a href="{{ route('admin.teachers.index') }}"
-                   class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                   {{ request()->routeIs('admin.teachers.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                    <span class="h-5 w-5 text-slate-500">
-                        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 94.65"><defs><style>.cls-1{fill-rule:evenodd;}</style></defs><title>training</title><path class="cls-1" d="M21.92,0A10.36,10.36,0,1,1,11.57,10.35,10.35,10.35,0,0,1,21.92,0ZM14.61,22.7l3.68,9.65h.39l1.79-6.18-1-1.05c-.72-1.05-.47-2.25.87-2.47a9.91,9.91,0,0,1,1.45,0,8.37,8.37,0,0,1,1.59.06c1.24.28,1.37,1.48.75,2.44l-1,1.05L25,32.35h.38L28.7,22.7a4.52,4.52,0,0,0,.47.37,6.7,6.7,0,0,1,2.71.85,4.73,4.73,0,0,1,3,2l7.9,10.91,5.63,1.08V16.67h-8a1.86,1.86,0,1,1,0-3.72H77.56V7.52a1.87,1.87,0,0,1,3.73,0V13h39.53a1.86,1.86,0,1,1,0,3.72h-7.93V62.73H121a1.86,1.86,0,0,1,0,3.72H81.55V75a2.56,2.56,0,0,0,.26.2l11.62,11a1.85,1.85,0,1,1-2.54,2.68L81.55,80v8a1.87,1.87,0,0,1-3.73,0V79.68l-9.69,9.21a1.84,1.84,0,0,1-2.62-.07,1.82,1.82,0,0,1,.07-2.61l11.62-11h0a1.71,1.71,0,0,1,.62-.39V66.45H40.37a1.86,1.86,0,0,1,0-3.72h8V47.83L39.1,46A4.88,4.88,0,0,1,36,44.1l-3.93-5.45v.14l-.32,15.78,4,25.24,1.51,8.65c.85,5.78-8,9.21-10.19,1.62L21.91,59.66,16.66,90.57c-1,5.59-10.13,5.64-10.19-1.15l5.79-34.65-.44-18.71a7.9,7.9,0,0,0-1.19,2,12.61,12.61,0,0,0-1,4.58L8.83,53.55C8.39,59.25-.1,59.6,0,53.45c.05-2.76.3-5.54.6-8.37.58-5.42.7-8.78,3.79-14.18a18.3,18.3,0,0,1,4.5-5.21,12.14,12.14,0,0,1,4.88-2.32,7.26,7.26,0,0,0,.84-.67ZM52.13,38.26l10.46-11a2.47,2.47,0,1,1,3.58,3.4L56.33,41a4.89,4.89,0,0,1-4.2,7.46V62.73H109.2V16.67H52.13V38.26Z"/></svg>
-
-
-                    </span>
-                    <span x-show="!sidebarCollapsed" x-transition.opacity>Teachers</span>
-                    @if(request()->routeIs('admin.teachers.*'))
-                        <span class="absolute left-0 top-2 bottom-2 w-1 bg-primary rounded-r"></span>
-                    @endif
-                </a>
                 
 
                 {{-- Academics --}}
-                <div class="pt-4">
-                    <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
-                         x-show="!sidebarCollapsed" x-transition.opacity>
-                        Academics
+              <div>
+                        <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                            x-show="!sidebarCollapsed">
+                            Academics
+                        </div>
+
+                        <a href="{{ route('admin.classes.index') }}" class="sidebar-link">
+                            <x-icon-rectangle-stack />
+                            <span x-show="!sidebarCollapsed">Classes</span>
+                        </a>
+
+                        <a href="{{ route('admin.streams.index') }}" class="sidebar-link">
+                            <x-icon-squares-2x2 />
+                            <span x-show="!sidebarCollapsed">Streams</span>
+                        </a>
+
+                        <a href="{{ route('admin.subjects.index') }}" class="sidebar-link">
+                            <x-icon-book-open />
+                            <span x-show="!sidebarCollapsed">Subjects</span>
+                        </a>
+
+                        <a href="{{ route('admin.school-periods.index') }}" class="sidebar-link">
+                            <x-icon-clock />
+                            <span x-show="!sidebarCollapsed">School Periods</span>
+                        </a>
+
+                        <a href="{{ route('admin.timetable.index') }}" class="sidebar-link">
+                            <x-icon-calendar-days />
+                            <span x-show="!sidebarCollapsed">Timetable</span>
+                        </a>
                     </div>
-
-                    <a href="{{ route('admin.analytics.academic') }}"
-                        class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                        {{ request()->routeIs('admin.analytics.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                            <span class="h-5 w-5 text-slate-500">
-                                <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 108.06" style="enable-background:new 0 0 122.88 108.06" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M15.61,12.79v64.24h91.57V12.79H15.61L15.61,12.79z M24.49,65.88c-0.96,0-1.75-0.78-1.75-1.75 c0-0.96,0.78-1.75,1.75-1.75h11.05V36.23c0-0.2,0.08-0.39,0.22-0.52c0.03-0.03,0.06-0.05,0.09-0.08c0.12-0.09,0.27-0.14,0.43-0.14 h5.58c0.2,0,0.39,0.08,0.52,0.22c0.03,0.03,0.06,0.07,0.08,0.1c0.08,0.12,0.13,0.26,0.13,0.42v26.16h7.88V44.03 c0-0.2,0.08-0.39,0.22-0.52c0.13-0.13,0.32-0.22,0.52-0.22h5.58c0.21,0,0.39,0.08,0.52,0.22c0.13,0.13,0.22,0.32,0.22,0.52v18.36 h7.88V28.43c0-0.2,0.08-0.39,0.22-0.52c0.13-0.13,0.32-0.22,0.52-0.22h5.58c0.2,0,0.39,0.08,0.52,0.22l0,0 c0.13,0.13,0.22,0.32,0.22,0.52v33.96h7.88V38.46c0-0.2,0.08-0.39,0.22-0.52l0,0c0.13-0.13,0.32-0.22,0.52-0.22h5.58 c0.2,0,0.38,0.08,0.52,0.22l0,0l0,0c0.13,0.13,0.22,0.32,0.22,0.52v23.93h7.74c0.96,0,1.75,0.78,1.75,1.75 c0,0.96-0.78,1.75-1.75,1.75H24.49L24.49,65.88z M58.67,90.98c0.19-0.18,0.41-0.33,0.64-0.43v-9.08H2.22 C0.99,81.47,0,80.47,0,79.25c0-1.23,0.99-2.22,2.22-2.22h8.94V12.79H2.22C0.99,12.79,0,11.79,0,10.57c0-1.23,0.99-2.22,2.22-2.22 h56.76v-6c0-1.29,1.05-2.34,2.34-2.34c1.29,0,2.34,1.05,2.34,2.34v6h56.76c1.23,0,2.22,0.99,2.22,2.22c0,1.23-0.99,2.22-2.22,2.22 h-8.81v64.24h9.04c1.23,0,2.22,0.99,2.22,2.22c0,1.23-0.99,2.22-2.22,2.22H63.99v9.33c0.07,0.06,0.15,0.12,0.21,0.18l13.1,12.45 c0.94,0.89,0.97,2.37,0.08,3.31c-0.89,0.94-2.37,0.97-3.31,0.08l-10.09-9.59v8.48c0,1.29-1.05,2.34-2.34,2.34 c-1.29,0-2.34-1.05-2.34-2.34v-8.88l-10.51,9.99c-0.94,0.89-2.42,0.85-3.31-0.08c-0.89-0.94-0.85-2.42,0.08-3.31L58.67,90.98 L58.67,90.98z"/></g></svg>
-                            </span>
-                            <span x-show="!sidebarCollapsed">Analytics</span>
-                        </a>
-
-
-                    @foreach([
-                         ['admin.academic-years.index', 'Academic Years'],
-                          ['admin.terms.index', 'Terms'],
-                        ['admin.classes.index', 'Classes'],
-                        ['admin.streams.index', 'Streams'],
-                        ['admin.subjects.index', 'Subjects'],
-                        ['admin.school-periods.index','School Periods'],
-                        ['admin.timetable.index','TImetable']
-                       
-                       
-                    ] as [$route, $label])
-                        <a href="{{ route($route) }}"
-                           class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                           {{ request()->routeIs(str_replace('.index', '.*', $route)) ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                            <span class="h-5 w-5 text-slate-500">
-                                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95.07 122.88"><defs><style>.cls-1{fill-rule:evenodd;}</style></defs><title>read</title><path class="cls-1" d="M77.62,27.52c-.27,1.89-.58,3.83-.84,5.66l.31,3.48a2.88,2.88,0,0,1,2.26,1.61A8.23,8.23,0,0,1,80,42.83c0,.49-.12,1-.21,1.53l-2.43,1a15.72,15.72,0,0,0,.48-2.69,6.19,6.19,0,0,0-.37-3.32,1.76,1.76,0,0,0-2.28-.94l-3.28,2L70.55,31.2c-6.83,4.25-14.62,6.15-23.11,6.36a42.88,42.88,0,0,1-23.16-6.4l-1.47,8.91-2.9-1.62c-.87-.14-1.61-.28-2.22.72a6.83,6.83,0,0,0-.42,4,17.15,17.15,0,0,0,.4,2.17l-2.41-.95c-.06-.33-.11-.66-.14-1a8.82,8.82,0,0,1,.72-5.32,2.88,2.88,0,0,1,2.3-1.52l.31-3.11c-.39-2.4-.86-4.93-1.21-7.35-4.75-33.3,65.88-36.69,60.38,1.45ZM90.84,51.3l-.75,22.27H91c2.25.05,4,1,4.07,4.65v9c-.14,3.39-1.54,5.18-4.06,5.51H89.46l-.61,18.1a4,4,0,0,1-3.15,4l-37.09,7.91a3.93,3.93,0,0,1-2.15,0l-37.1-7.91a4,4,0,0,1-3.15-4l-.6-18.1H4.06C1.53,92.39.14,90.6,0,87.21v-9c.08-3.69,1.82-4.6,4.07-4.65H5L4.23,51.3a4,4,0,0,1,3.84-4.09,3.88,3.88,0,0,1,1.57.27L47.53,62.34,85.42,47.47A4.11,4.11,0,0,1,87,47.21a4,4,0,0,1,3.85,4.09ZM48.53,67.43,86.05,52.82l-2,56.47-35.53,8V67.43Zm-5.8-1.81v51.46l-32.54-7L8.2,52,42.73,65.62ZM37.7,48a1.83,1.83,0,0,1,0,.4,2,2,0,1,1-3.81-.8,10.63,10.63,0,0,0-3.1.72,1,1,0,0,1-1.22-.68,1.13,1.13,0,0,1,.6-1.39,12.11,12.11,0,0,1,4.55-.85,13.51,13.51,0,0,1,4.51.84,1.12,1.12,0,0,1,.62,1.37.94.94,0,0,1-1.2.71c-.33-.12-.67-.23-1-.32Zm19.53-.18a2.22,2.22,0,0,0,0,.37,2,2,0,1,0,4,0,2,2,0,0,0-.12-.69,12.74,12.74,0,0,1,3.09.62.94.94,0,0,0,1.19-.75A1.11,1.11,0,0,0,64.67,46a14.31,14.31,0,0,0-4.52-.74,14.1,14.1,0,0,0-4.47.74A1.11,1.11,0,0,0,55,47.34a.93.93,0,0,0,1.18.74l1-.29Zm9.4-6.8a1.09,1.09,0,0,1-1.38,1.68c-1.51-1.25-4.61-.69-7.26-.21a19.3,19.3,0,0,1-3.82.45,1.09,1.09,0,0,1,.07-2.17,18,18,0,0,0,3.36-.42c3.12-.57,6.75-1.22,9,.67ZM29.69,42.88a1.09,1.09,0,0,1-1.38-1.68c2.28-1.88,5.91-1.24,9-.67a19.16,19.16,0,0,0,3.36.42,1.09,1.09,0,0,1,.07,2.17,19.38,19.38,0,0,1-3.82-.45c-2.64-.49-5.74-1-7.25.21ZM20.45,44a.63.63,0,0,1,.87-.24.64.64,0,0,1,.24.88,2.25,2.25,0,0,0-.35,1.08,1.69,1.69,0,0,0,.32,1,.37.37,0,0,1,.07.14L20,46.19a2.33,2.33,0,0,1,0-.53A3.58,3.58,0,0,1,20.45,44Zm52.73.63a.63.63,0,0,1,.24-.87.64.64,0,0,1,.87.23,3.5,3.5,0,0,1,.52,1.69,2.58,2.58,0,0,1-.07.68L73.1,47a.57.57,0,0,1,.11-.28,1.72,1.72,0,0,0,.32-1,2.44,2.44,0,0,0-.35-1.08Z"/></svg>
-                            </span>
-                            <span x-show="!sidebarCollapsed" x-transition.opacity>{{ $label }}</span>
-                        </a>
-                    @endforeach
-                     <a href="{{ route('admin.promotion-logs.index') }}"
-                       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
-                        <span class="h-5 w-5 text-slate-500">
-                            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 93.61"><defs><style>.cls-1{fill-rule:evenodd;}</style></defs><title>workflow</title><path class="cls-1" d="M115.64,35.41l3,3a2,2,0,0,1,0,2.87l-2.42,2.42a16.16,16.16,0,0,1,1.5,4h3.13a2,2,0,0,1,2,2V54a2,2,0,0,1-2,2h-3.42a16.06,16.06,0,0,1-1.77,3.88l2.22,2.21a2,2,0,0,1,0,2.87l-3,3A2,2,0,0,1,112,68l-2.42-2.42a15.63,15.63,0,0,1-4,1.5v3.13a2,2,0,0,1-2,2H99.32a2,2,0,0,1-2-2V66.75A16.45,16.45,0,0,1,93.41,65L91.2,67.2a2,2,0,0,1-2.87,0l-3-3a2,2,0,0,1,0-2.87l2.42-2.42a15.77,15.77,0,0,1-1.5-4H83.12a2,2,0,0,1-2-2V48.64a2,2,0,0,1,2-2h3.42a16.06,16.06,0,0,1,1.77-3.88L86.1,40.52a2,2,0,0,1,0-2.87l3-3a2,2,0,0,1,2.87,0l2.42,2.42a15.77,15.77,0,0,1,4-1.5V32.44a2,2,0,0,1,2-2h4.24a2,2,0,0,1,2,2v3.41a16.06,16.06,0,0,1,3.88,1.77l2.21-2.21a2,2,0,0,1,2.86,0ZM44.12,53a2.2,2.2,0,0,1-2-2.36,2.15,2.15,0,0,1,2-2.36H69.19a2.21,2.21,0,0,1,2,2.36,2.16,2.16,0,0,1-2,2.36ZM27.56,46H36a.75.75,0,0,1,.79.79v8.45A.74.74,0,0,1,36,56H27.56a.74.74,0,0,1-.79-.78V46.76a.75.75,0,0,1,.79-.79Zm0,20.85H36a.75.75,0,0,1,.79.79v8.44a.75.75,0,0,1-.79.79H27.56a.75.75,0,0,1-.79-.79V67.61a.75.75,0,0,1,.79-.79Zm16.56,7a2.2,2.2,0,0,1-2-2.35,2.15,2.15,0,0,1,2-2.36h17.1a2.2,2.2,0,0,1,2,2.36,2.15,2.15,0,0,1-2,2.35ZM30,35.17a1.35,1.35,0,0,1-1.81-.23L28,34.78l-2.52-2.59a1.43,1.43,0,0,1,.24-2,1.68,1.68,0,0,1,2.2-.08l1.34,1.42L34.17,27a1.39,1.39,0,0,1,2,.47,1.58,1.58,0,0,1-.16,2.2l-6,5.52Zm14-2c-1.1,0-1.83-1.1-1.83-2.36s.73-2.36,1.83-2.36H73a2.21,2.21,0,0,1,2,2.36,2.16,2.16,0,0,1-2,2.36ZM3.5,70.32c2.93-3.08,4.12-3.47,8.06-4.19V3c-9.19.9-8.13,9.41-8.07,17.32,0,1.06,0,1.62,0,1.88V70.32ZM15,12.09h86.23a2.36,2.36,0,0,1,1.7.71,2.4,2.4,0,0,1,.71,1.7v7H99.19V16H15V67.86h0a1.46,1.46,0,0,1-1.25,1.45C.63,71.34,0,86.9,13.37,89.13H99.19V82.6h4.47v8.6a2.41,2.41,0,0,1-.71,1.7h0a2.4,2.4,0,0,1-1.7.71h-88c-3.6,0-8.59-2.82-10.68-5.8S-.17,81.18,0,76.84V20.36C0,10.69-.1.24,13.37,0h.18A1.47,1.47,0,0,1,15,1.48V12.09ZM102,43a8.34,8.34,0,1,1-8.34,8.34A8.34,8.34,0,0,1,102,43Z"/></svg>
-                        </span>
-                        <span x-show="!sidebarCollapsed" x-transition.opacity>Promotion Logs</span>
-                    </a>
-                </div>
 
                 {{-- Assessment --}}
-                <div class="pt-4">
-                    <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
-                         x-show="!sidebarCollapsed" x-transition.opacity>
-                        Assessment
+                    <div>
+                        <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                            x-show="!sidebarCollapsed">
+                            Assessment
+                        </div>
+
+                        <a href="{{ route('admin.exams.index') }}" class="sidebar-link">
+                            <x-icon-clipboard-document-check />
+                            <span x-show="!sidebarCollapsed">Exams</span>
+                        </a>
+
+                        <a href="{{ route('admin.analytics.academic') }}" class="sidebar-link">
+                            <x-icon-chart-bar />
+                            <span x-show="!sidebarCollapsed">Analytics</span>
+                        </a>
                     </div>
 
-                    <a href="{{ route('admin.exams.index') }}"
-                       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                       {{ request()->routeIs('admin.exams.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                        <span class="h-5 w-5 text-slate-500">
-                         <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 103.12 122.88" style="enable-background:new 0 0 103.12 122.88" xml:space="preserve"><g><path d="M1.18,122.01C0.49,121.69,0,121,0,120.18V2c0-1.1,0.89-2,2-2H21.4h79.72c1.1,0,2,0.89,2,2v107.73 c0,0.11-0.01,0.21-0.02,0.31c-0.28,3.93-1.56,6.99-3.86,9.19c-2.3,2.18-5.53,3.4-9.72,3.64c-0.09,0.01-0.17,0.02-0.26,0.02H2.83 C2.15,122.88,1.54,122.53,1.18,122.01L1.18,122.01z M45.42,39.08c2.47,5.14,9.94,5.32,12.3,0.03c-0.64-0.65-1.12-1.35-1.6-2.04 c-0.08-0.11-0.16-0.23-0.23-0.34c-1.14,0.9-2.52,1.48-4.32,1.48c-1.94,0-3.41-0.75-4.61-1.85c-0.07-0.07-0.14-0.13-0.21-0.2 c-0.17,0.48-0.39,1.05-0.62,1.58C45.89,38.25,45.65,38.73,45.42,39.08L45.42,39.08L45.42,39.08z M58.41,38.54 c2.63,1.86,9.03,2.31,11.49,3.68c0.82,0.45,1.55,1.03,2.15,1.82c1.24,1.63,3.76,7.56-0.34,7.87H64l0.95-10.62 c-2.07-0.4-4.26-0.72-6.55-2.04c-1.41,6.21-11,7.1-13.76,0.17c-2.05,1.03-4.05,1.63-6.44,1.99l1.49,10.49h-8.28 c-4.1-0.31-1.57-6.24-0.34-7.87c0.59-0.78,1.33-1.36,2.15-1.82c2.45-1.37,8.82-1.82,11.47-3.66c0.19-0.29,0.4-0.72,0.6-1.18 c0.3-0.69,0.58-1.45,0.76-1.97c-0.74-0.87-1.37-1.85-1.98-2.82l-2-3.19c-0.73-1.09-1.11-2.09-1.14-2.91 c-0.01-0.39,0.05-0.74,0.2-1.04c0.15-0.32,0.38-0.59,0.69-0.8c0.14-0.1,0.31-0.18,0.49-0.25c-0.13-1.73-0.18-3.91-0.09-5.73 c0.04-0.43,0.13-0.87,0.25-1.3c0.51-1.83,1.8-3.3,3.39-4.32c0.88-0.56,1.84-0.98,2.84-1.26c0.63-0.18-0.09-1.61,0.57-1.68 c3.18-0.33,7.88,1.98,10.1,4.38c1.11,1.2,1.81,2.8,1.96,4.91l-0.13,5.2v0c0.56,0.17,0.91,0.52,1.06,1.09 c0.16,0.63-0.01,1.52-0.55,2.74l0,0c-0.01,0.02-0.02,0.04-0.03,0.07l-2.28,3.76c-0.84,1.38-1.69,2.77-2.8,3.86 c0.1,0.14,0.2,0.29,0.3,0.44c0.45,0.66,0.91,1.33,1.49,1.92C58.38,38.5,58.4,38.52,58.41,38.54L58.41,38.54L58.41,38.54z M43.45,25.32c-0.44,0.02-0.78,0.11-1.01,0.26c-0.13,0.09-0.23,0.2-0.29,0.33c-0.07,0.15-0.1,0.33-0.09,0.54 c0.02,0.61,0.34,1.41,0.95,2.33l0.01,0.01l2,3.19c0.8,1.28,1.65,2.58,2.69,3.54c1.01,0.92,2.23,1.54,3.84,1.55 c1.75,0,3.03-0.64,4.07-1.62c1.08-1.01,1.93-2.4,2.77-3.78l2.26-3.72c0.42-0.96,0.57-1.6,0.48-1.98c-0.06-0.22-0.3-0.33-0.73-0.36 c-0.09,0-0.18-0.01-0.27,0c-0.1,0-0.21,0.01-0.32,0.02c-0.06,0.01-0.12,0-0.17-0.01c-0.2,0.01-0.41,0-0.62-0.03l0.77-3.42 c-5.74,0.9-10.03-3.36-16.1-0.85l0.44,4.03C43.9,25.36,43.67,25.35,43.45,25.32L43.45,25.32L43.45,25.32L43.45,25.32z M70.47,108.18c-1.09,0-1.98-0.89-1.98-2c0-1.1,0.88-2,1.98-2h16.68c1.09,0,1.98,0.89,1.98,2c0,1.1-0.88,2-1.98,2H70.47 L70.47,108.18z M16.82,93.62c-1.09,0-1.98-0.89-1.98-2c0-1.1,0.88-2,1.98-2h70.5c1.09,0,1.98,0.89,1.98,2c0,1.1-0.88,2-1.98,2 H16.82L16.82,93.62z M17.14,79.06c-1.09,0-1.98-0.89-1.98-2c0-1.1,0.88-2,1.98-2h70c1.09,0,1.98,0.89,1.98,2c0,1.1-0.88,2-1.98,2 H17.14L17.14,79.06z M16.82,64.5c-1.09,0-1.98-0.89-1.98-2c0-1.1,0.88-2,1.98-2h30.13c1.09,0,1.98,0.89,1.98,2c0,1.1-0.88,2-1.98,2 H16.82L16.82,64.5z M54.64,64.5c-1.09,0-1.98-0.89-1.98-2c0-1.1,0.88-2,1.98-2h32.5c1.09,0,1.98,0.89,1.98,2c0,1.1-0.88,2-1.98,2 H54.64L54.64,64.5z M99.13,109.68V3.99H21.4H3.99v114.9h85.26l0.04,0c3.21-0.18,5.61-1.04,7.2-2.55 C98.06,114.85,98.93,112.62,99.13,109.68L99.13,109.68z"/></g></svg>        </span>
-                        <span x-show="!sidebarCollapsed" x-transition.opacity>Exams</span>
-                    </a>
-                </div>
-
                 {{-- Operations --}}
-                <div class="pt-4">
-                    <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
-                         x-show="!sidebarCollapsed" x-transition.opacity>
+                <div>
+                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                        x-show="!sidebarCollapsed">
                         Operations
                     </div>
 
-                    {{-- <a href="{{ route('admin.promotions.index') }}"
-                       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
-                        <span class="h-5 w-5 text-slate-500">🔁</span>
-                        <span x-show="!sidebarCollapsed" x-transition.opacity>Promotions</span>
-                    </a> --}}
-
-                    <a href="{{ route('admin.activity-logs.index') }}"
-                       class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition">
-                        <span class="h-5 w-5 text-slate-500">
-                            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 93.61"><defs><style>.cls-1{fill-rule:evenodd;}</style></defs><title>workflow</title><path class="cls-1" d="M115.64,35.41l3,3a2,2,0,0,1,0,2.87l-2.42,2.42a16.16,16.16,0,0,1,1.5,4h3.13a2,2,0,0,1,2,2V54a2,2,0,0,1-2,2h-3.42a16.06,16.06,0,0,1-1.77,3.88l2.22,2.21a2,2,0,0,1,0,2.87l-3,3A2,2,0,0,1,112,68l-2.42-2.42a15.63,15.63,0,0,1-4,1.5v3.13a2,2,0,0,1-2,2H99.32a2,2,0,0,1-2-2V66.75A16.45,16.45,0,0,1,93.41,65L91.2,67.2a2,2,0,0,1-2.87,0l-3-3a2,2,0,0,1,0-2.87l2.42-2.42a15.77,15.77,0,0,1-1.5-4H83.12a2,2,0,0,1-2-2V48.64a2,2,0,0,1,2-2h3.42a16.06,16.06,0,0,1,1.77-3.88L86.1,40.52a2,2,0,0,1,0-2.87l3-3a2,2,0,0,1,2.87,0l2.42,2.42a15.77,15.77,0,0,1,4-1.5V32.44a2,2,0,0,1,2-2h4.24a2,2,0,0,1,2,2v3.41a16.06,16.06,0,0,1,3.88,1.77l2.21-2.21a2,2,0,0,1,2.86,0ZM44.12,53a2.2,2.2,0,0,1-2-2.36,2.15,2.15,0,0,1,2-2.36H69.19a2.21,2.21,0,0,1,2,2.36,2.16,2.16,0,0,1-2,2.36ZM27.56,46H36a.75.75,0,0,1,.79.79v8.45A.74.74,0,0,1,36,56H27.56a.74.74,0,0,1-.79-.78V46.76a.75.75,0,0,1,.79-.79Zm0,20.85H36a.75.75,0,0,1,.79.79v8.44a.75.75,0,0,1-.79.79H27.56a.75.75,0,0,1-.79-.79V67.61a.75.75,0,0,1,.79-.79Zm16.56,7a2.2,2.2,0,0,1-2-2.35,2.15,2.15,0,0,1,2-2.36h17.1a2.2,2.2,0,0,1,2,2.36,2.15,2.15,0,0,1-2,2.35ZM30,35.17a1.35,1.35,0,0,1-1.81-.23L28,34.78l-2.52-2.59a1.43,1.43,0,0,1,.24-2,1.68,1.68,0,0,1,2.2-.08l1.34,1.42L34.17,27a1.39,1.39,0,0,1,2,.47,1.58,1.58,0,0,1-.16,2.2l-6,5.52Zm14-2c-1.1,0-1.83-1.1-1.83-2.36s.73-2.36,1.83-2.36H73a2.21,2.21,0,0,1,2,2.36,2.16,2.16,0,0,1-2,2.36ZM3.5,70.32c2.93-3.08,4.12-3.47,8.06-4.19V3c-9.19.9-8.13,9.41-8.07,17.32,0,1.06,0,1.62,0,1.88V70.32ZM15,12.09h86.23a2.36,2.36,0,0,1,1.7.71,2.4,2.4,0,0,1,.71,1.7v7H99.19V16H15V67.86h0a1.46,1.46,0,0,1-1.25,1.45C.63,71.34,0,86.9,13.37,89.13H99.19V82.6h4.47v8.6a2.41,2.41,0,0,1-.71,1.7h0a2.4,2.4,0,0,1-1.7.71h-88c-3.6,0-8.59-2.82-10.68-5.8S-.17,81.18,0,76.84V20.36C0,10.69-.1.24,13.37,0h.18A1.47,1.47,0,0,1,15,1.48V12.09ZM102,43a8.34,8.34,0,1,1-8.34,8.34A8.34,8.34,0,0,1,102,43Z"/></svg>
-                        </span>
-                        <span x-show="!sidebarCollapsed" x-transition.opacity>Activity Logs</span>
+                    <a href="{{ route('admin.promotion-logs.index') }}" class="sidebar-link">
+                        <x-icon-arrow-path />
+                        <span x-show="!sidebarCollapsed">Promotion Logs</span>
                     </a>
 
-                   
+                    <a href="{{ route('admin.activity-logs.index') }}" class="sidebar-link">
+                        <x-icon-clipboard-document-list />
+                        <span x-show="!sidebarCollapsed">Activity Logs</span>
+                    </a>
                 </div>
 
-
-                <div class="pt-4">
-                    <div class="px-3 pb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400"
-                         x-show="!sidebarCollapsed" x-transition.opacity>
+                {{-- Finance --}}
+                <div>
+                    <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                        x-show="!sidebarCollapsed">
                         Finance
                     </div>
 
-                    <a href="{{ route('admin.fee-structures.index') }}"
-                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                    {{ request()->routeIs('admin.fee-structures.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-
-                        <span class="h-5 w-5 text-slate-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 468.88"><path d="m441.87 339.21-4.41-20.18c18.89 3.51 49.18 41.96 58.98 59.44 4.99 8.93 9.37 18.76 12.95 29.75 7.14 26.59.27 51.47-28.58 57.26-18.08 3.64-51.79 3.89-70.79 2.9-20.45-1.04-52.07-1.02-60.34-22.01-13.32-33.86 11.1-74.21 33.37-98.91 2.94-3.25 5.98-6.27 9.1-9.08 8.1-7.11 16.84-15.58 27.27-19.09l-10.07 18.75 14.63-19.39h7.7l10.19 20.56zm-9.45 13.34v5.64c3.72.4 6.92 1.16 9.57 2.3 5.53 2.39 11.89 9.46 11.89 15.85 0 1.75-.64 3.26-1.91 4.52-1.28 1.26-2.81 1.91-4.62 1.91-3.42 0-5.64-1.85-6.64-5.54-1.16-4.34-3.91-7.24-8.29-8.66v21.69c4.3 1.17 7.76 2.26 10.3 3.23 2.56.97 4.86 2.37 6.87 4.22 4.55 4.03 6.74 9.57 6.74 15.59 0 3.97-.92 7.67-2.79 11.12-4.25 7.89-12.48 11.68-21.12 12.38v12.99c0 2.05-.2 3.54-.61 4.49-.39.94-1.26 1.4-2.63 1.4-1.25 0-2.12-.37-2.63-1.13-.5-.77-.75-1.96-.75-3.56v-14.08c-4.06-.44-7.62-1.41-10.66-2.86-7.33-3.51-13.57-10.69-13.57-19.15 0-7.13 10.81-9.15 13.02-2.35 2.21 6.8 3.82 11.47 11.21 13.56v-24.24c-4.66-1.29-8.54-2.72-11.67-4.3-3.13-1.59-5.68-3.82-7.62-6.74-1.94-2.92-2.92-6.68-2.92-11.27 0-5.97 1.91-10.89 5.71-14.7 3.81-3.82 9.31-6.04 16.5-6.67v-5.53c0-2.92 1.1-4.38 3.29-4.38 2.23 0 3.33 1.42 3.33 4.27zm-6.62 35.77v-19.97c-2.92.88-5.2 2.01-6.83 3.44-1.64 1.42-2.46 3.59-2.46 6.47 0 2.74.77 4.82 2.3 6.23 1.53 1.41 3.86 2.69 6.99 3.83zm6.62 15.48v22.85c6-1.19 11-5.12 11-11.64 0-6.84-5.21-9.39-11-11.21zm-19.14-113.61c-3.33-9.83-6.33-19.77-8.86-29.87 9.43-10.36 45.94-8.98 56.43-.16l-9.71 23.11c5.23-6.87 6.98-9.69 10.1-13.51 1.3.85 2.54 1.81 3.7 2.87 2.76 2.5 5.23 5.26 5.73 9.12.32 2.5-.39 5.04-2.61 7.63l-22.31 25.98c-2.86-.48-5.66-1.16-8.38-2.13 1.26-2.98 2.79-6.25 4.05-9.22l-8.12 8.76c-8.45-1.78-15.25-.72-21.59 2.63l-22.61-27.14c-1.34-1.61-1.95-3.24-1.95-4.85.03-6.56 9.79-12.22 14.92-14.37l11.21 21.15zM142.35 123.43l.76-28.14 80.49 23.25c14.51 3.15 29.1 3.15 43.62 0l76.88-23.5v32.35c0 15.5.95 39.83-6.47 51.94.68.32 1.33.72 1.94 1.18 2.11 1.6 3.76 3.99 4.94 6.97 2.37 5.97 2.5 13.44 1.79 19.76l-.01.08c-.78 7.07-2.93 14.32-6.51 19.79-3.08 4.71-7.24 8.15-12.52 9.22a123.82 123.82 0 0 1-4.68 14.68c-5.39 13.85-13.28 26.94-23.22 37.99 3.37 4.94 7.05 10.35 10.71 15.29 12.54 10.81 36.51 17.42 60.91 23.14-1.03 1.04-2.16 2.24-3.41 3.6l-1.3 1.33c-14.24 15.78-29.35 37.52-37.25 60.93-6.67 19.78-8.28 40.72-.58 60.74H25.55c-21.08-1.61-28.49-14.3-24.53-33.46 4.35-20.95 7.05-36.76 20.94-55.1 6.33-8.35 14.18-14.52 22.88-19.38 25.91-14.45 93.01-19.29 121.59-38.59 4.46-5.76 9.08-12.55 13.21-18.61.8-1.17-4.77-6.38-5.75-7.59-5.57-6.88-17.81-23.96-20.9-32.35-1.75-4.77-2.53-9.46-2.99-12.27l-.04-.57c-4.84-1.26-8.69-4.57-11.58-9-5.39-8.22-7.58-20.68-6.71-30.65.27-3.12.88-6.22 1.98-8.98 1.29-3.26 3.14-5.81 5.55-7.4 2.4-1.57 5.25-2.18 8.55-1.57l.35.07c-1.38-2.44-2.51-5.49-3.42-8.85-4.88-18.01-2.81-28.69-2.33-46.3zm173.56 43.99c-24.08 8.21-56.91 11.4-70.73 12.06-13.74.65-58.03-4.58-83.02-13.56v30.74c0 13.45-1.84 40.69 3.24 52.07 3.97 8.9 13 21.21 19.57 28.57 7.74 8.69 15.77 15.25 23.87 19.9 22.96 13.17 47.68 11.42 68.95-4.14 15.19-11.1 32.02-34.53 36.36-53.1 1.56-6.67 1.76-13.73 1.76-24.42v-48.12zM288.7 299.34a93.504 93.504 0 0 1-9.36 6.94c-22.82 14.79-48.41 16.67-72.53 3.6-5.67-3.07-11.33-7.01-16.96-11.89-5.3 6.61-10.97 14.38-15.72 20.32 24.33 56.93 119.34 58.09 133 3.13-5.8-6.79-12.66-14.54-18.43-22.1zM328 196.46v27.36c3.94-3.14 6.29-10.55 7.08-17.79.46-4.22.54-10.41-1.05-14.4-1.05-2.66-2.21-2.59-3.87-.31-.86 1.17-1.6 2.87-2.16 5.14zm-177.85 27.36v-27.36c-.55-2.25-1.3-3.96-2.16-5.14-1.65-2.28-2.82-2.35-3.87.31-.62 1.57-1.04 3.71-1.22 6.15-.2 2.56-.14 5.4.17 8.25.79 7.23 3.15 14.65 7.08 17.79zm-40.99-163.8v59.85h-1.89a2.35 2.35 0 0 0-2.34 2.34v16.09c0 1.28 1.06 2.34 2.34 2.34h1.89v5.64c-2.4.45-4.23 2.58-4.23 5.1 0 2.85 2.35 5.19 5.19 5.19h9.29c2.85 0 5.2-2.33 5.2-5.19 0-2.53-1.84-4.65-4.24-5.1v-5.64h1.89c1.29 0 2.35-1.05 2.35-2.34v-16.09c0-1.29-1.06-2.34-2.35-2.34h-1.89V63.5l97.95 30.47c17.75 4.22 35.49 4.5 53.23 0L379.67 61.7l9.77-2.92c12.17-4.97 9.13-16.67-2.2-19.36L264.95 2.91c-12.61-3.59-25.22-4.16-37.83 0L107.03 38.98c-13.04 3.18-15.63 15.27-.44 20.24l2.57.8z"/></svg>
-                        </span>
-
+                    <a href="{{ route('admin.fee-structures.index') }}" class="sidebar-link">
+                        <x-icon-banknotes />
                         <span x-show="!sidebarCollapsed">Fee Structures</span>
-
-                        @if(request()->routeIs('admin.fee-structures.*'))
-                            <span class="absolute left-0 top-2 bottom-2 w-1 rounded-r bg-primary"></span>
-                        @endif
                     </a>
-                    
-                    <a href="{{ route('admin.finance.index') }}"
-                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition
-                    {{ request()->routeIs('admin.finance.*') ? 'bg-slate-50 text-slate-900 font-medium' : 'text-slate-700' }}">
-                        <span class="h-5 w-5 text-slate-500">
-                            <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.9 85.6" style="enable-background:new 0 0 122.9 85.6" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M7.5,0h107.9c4.1,0,7.5,3.4,7.5,7.5v70.6c0,4.1-3.4,7.5-7.5,7.5H7.5c-4.1,0-7.5-3.4-7.5-7.5V7.5 C0,3.4,3.4,0,7.5,0L7.5,0z M69.9,63.3h28.5v4H69.9V63.3L69.9,63.3z M69.9,53.1H109v4H69.9V53.1L69.9,53.1z M92.1,35h5.6 c0.3,0,0.5,0.2,0.5,0.5v11c0,0.3-0.2,0.5-0.5,0.5h-5.6c-0.3,0-0.5-0.2-0.5-0.5v-11C91.6,35.3,91.8,35,92.1,35L92.1,35L92.1,35z M70.5,28.3h5.6c0.3,0,0.5,0.2,0.5,0.5v17.8c0,0.3-0.2,0.5-0.5,0.5h-5.6c-0.3,0-0.5-0.2-0.5-0.5V28.8 C69.9,28.5,70.2,28.3,70.5,28.3L70.5,28.3L70.5,28.3L70.5,28.3z M81.3,24.5h5.6c0.3,0,0.5,0.2,0.5,0.5v21.6c0,0.3-0.2,0.5-0.5,0.5 h-5.6c-0.3,0-0.5-0.2-0.5-0.5V25C80.8,24.7,81,24.5,81.3,24.5L81.3,24.5L81.3,24.5z M39.3,48.2l17,0.3c0,6.1-3,11.7-8,15.1 L39.3,48.2L39.3,48.2L39.3,48.2z M37.6,45.3l-0.2-19.8l0-1.3l1.3,0.1h0h0c1.6,0.1,3.2,0.4,4.7,0.8c1.5,0.4,2.9,1,4.3,1.7 c6.9,3.6,11.7,10.8,12.1,19l0.1,1.3l-1.3,0l-19.7-0.6l-1.1,0L37.6,45.3L37.6,45.3L37.6,45.3z M39.8,26.7L40,44.1l17.3,0.5 c-0.7-6.8-4.9-12.7-10.7-15.8c-1.2-0.6-2.5-1.1-3.8-1.5C41.7,27.1,40.8,26.9,39.8,26.7L39.8,26.7L39.8,26.7z M35.9,47.2L45.6,64 c-3,1.7-6.3,2.6-9.7,2.6c-10.7,0-19.4-8.7-19.4-19.4c0-10.4,8.2-19,18.6-19.4L35.9,47.2L35.9,47.2L35.9,47.2z M115.6,14.1H7.2v64.4 h108.4V14.1L115.6,14.1L115.6,14.1z"/></g></svg>
-                        </span>
+
+                    <a href="{{ route('admin.finance.index') }}" class="sidebar-link">
+                        <x-icon-currency-dollar />
                         <span x-show="!sidebarCollapsed">Finance</span>
                     </a>
+                </div>
+                
 
 
-                    </div>
+          
 
                 @endrole
                 {{-- =============== END ADMIN NAV =============== --}}
@@ -314,47 +316,116 @@
         <div class="flex-1 flex flex-col min-w-0">
 
             {{-- Topbar --}}
-            <header class="bg-white border-b border-slate-100">
-                <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <button type="button"
-                                class="md:hidden rounded-lg border border-slate-200 px-3 py-2 text-slate-600 hover:bg-slate-50"
-                                @click="sidebarOpen=true">
-                            Menu
-                        </button>
+          
+<header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
+    <div class="px-8 py-4 flex items-center justify-between">
 
-                        <div>
-                            <div class="text-xs text-slate-500">
-                                Piphan Rose Educational Centre
-                            </div>
-                            <div class="text-lg font-semibold text-slate-900">
-                                @yield('page_title', 'Dashboard')
-                            </div>
+        {{-- Left --}}
+        <div class="flex items-center gap-6">
+            <button type="button"
+                class="md:hidden rounded-lg border border-slate-200 px-3 py-2 text-slate-600 hover:bg-slate-100"
+                @click="sidebarOpen=true">
+                ☰
+            </button>
+
+            <div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">
+                    Piphan Rose Educational Centre
+                </div>
+                <div class="text-xl font-semibold text-slate-900">
+                    @yield('page_title', 'Dashboard')
+                </div>
+            </div>
+        </div>
+
+        {{-- Right --}}
+        <div class="flex items-center gap-6">
+
+            {{-- Messages --}}
+            <div x-data="{ open:false }" class="relative">
+                <button @click="open=!open"
+                    class="relative p-2 rounded-lg hover:bg-slate-100 transition">
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="2" d="M7 8h10M7 12h6m-9 8l4-4h11a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2h3z"/>
+                    </svg>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+
+                <div x-show="open" @click.away="open=false"
+                    class="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-xl border border-slate-200 p-4 text-sm">
+                    <div class="font-semibold mb-2">Messages</div>
+                    <p class="text-slate-500 text-xs">No messages yet.</p>
+                </div>
+            </div>
+
+            {{-- Notifications --}}
+            <div x-data="{ open:false }" class="relative">
+                <button @click="open=!open"
+                    class="relative p-2 rounded-lg hover:bg-slate-100 transition">
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14V9a6 6 0 10-12 0v5c0 .53-.21 1.04-.59 1.41L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+                </button>
+
+                <div x-show="open" @click.away="open=false"
+                    class="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-xl border border-slate-200 p-4 text-sm">
+                    <div class="font-semibold mb-2">Notifications</div>
+                    <p class="text-slate-500 text-xs">No notifications yet.</p>
+                </div>
+            </div>
+
+            {{-- Profile --}}
+            <div x-data="{ open:false }" class="relative">
+                <button @click="open=!open"
+                    class="flex items-center gap-3 rounded-lg hover:bg-slate-100 px-3 py-2 transition">
+
+                    <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                    </div>
+
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium text-slate-800">
+                            {{ auth()->user()->name }}
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            {{ ucfirst(auth()->user()->roles->first()->name ?? '') }}
                         </div>
                     </div>
+                </button>
+
+                <div x-show="open" @click.away="open=false"
+                    class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-slate-200">
+
+                    <a href="#" class="block px-4 py-3 text-sm hover:bg-slate-50">Profile</a>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="rounded-lg border border-slate-200 px-4 py-2 text-sm hover:bg-slate-50">
+                        <button class="w-full text-left px-4 py-3 text-sm hover:bg-slate-50">
                             Logout
                         </button>
                     </form>
                 </div>
-            </header>
+            </div>
+
+        </div>
+    </div>
+</header>
 
             {{-- Content --}}
             <main class="flex-1">
-                <div class="max-w-7xl mx-auto p-6">
+                <div class="px-8 py-8 space-y-6">
                     @yield('content')
                 </div>
             </main>
 
             {{-- Footer --}}
-            <footer class="border-t border-slate-100 bg-white">
-                <div class="max-w-7xl mx-auto px-6 py-4 text-sm text-slate-500">
-                    © {{ date('Y') }} Piphan Rose Educational Centre
-                </div>
-            </footer>
+           <footer class="border-t border-slate-200 bg-white mt-10">
+    <div class="px-8 py-6 flex justify-between items-center text-sm text-slate-500">
+        <div>© {{ date('Y') }} Piphan Rose Educational Centre</div>
+        <div class="text-xs">School Management System v1.0</div>
+    </div>
+</footer>
 
         </div>
     </div>

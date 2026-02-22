@@ -34,14 +34,14 @@ class TimetableController extends Controller
 
         $slots = collect();
 
-        if ($classId && $term) {
-            $slots = TimeTableSlot::with(['subject', 'teacher', 'period'])
-                ->where('class_id', $classId)
-                ->where('term_id', $term->id)
-                ->when($streamId, fn ($q) => $q->where('stream_id', $streamId))
-                ->get()
-                ->groupBy(['school_period_id', 'day_of_week']);
-        }
+       if ($classId && $term) {
+        $slots = TimetableSlot::with(['subject','teacher','schoolPeriod'])
+            ->where('class_id', $classId)
+            ->where('term_id', $term->id)
+            ->when($streamId, fn($q)=>$q->where('stream_id',$streamId))
+            ->get()
+            ->groupBy(['school_period_id','day_of_week']);
+    }
 
         return view('admin.timetable.index', compact(
             'year',
