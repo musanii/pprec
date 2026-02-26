@@ -18,6 +18,8 @@ class StudentDashboardController extends Controller
        $activeTerm = Term::where('is_active', true)->first();
        $enrollment = $student?->activeEnrollment;
 
+       $present = $student->attend
+
       
 
         return view('student.dashboard',

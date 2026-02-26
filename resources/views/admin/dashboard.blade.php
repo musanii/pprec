@@ -110,12 +110,16 @@
     <div class="rounded-2xl border border-slate-100 bg-white shadow-sm p-5">
         <div class="flex items-start justify-between">
             <div>
-                <div class="text-xs text-slate-500">Finance</div>
-                <div class="mt-2 text-2xl font-semibold text-slate-900">—</div>
-                <div class="mt-1 text-xs text-slate-500">Module coming next</div>
+                <div class="text-xs text-slate-500">Attendance</div>
+                <div class="mt-2 text-2xl font-semibold text-slate-900">
+                    {{ $attendanceRate }}
+                </div>
+                <div class="mt-1 text-xs text-slate-500">
+                    Students Attendance Rate
+                </div>
             </div>
             <div class="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-xs text-slate-600">
-                Soon
+                Attendance
             </div>
         </div>
     </div>

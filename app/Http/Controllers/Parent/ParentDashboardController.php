@@ -15,6 +15,13 @@ class ParentDashboardController extends Controller
         abort(403);
     }
 
+    // $children = $parent->students()->withCount([
+    //     'attendances as present_count'=>function($q){
+    //         $q->where('status','present');
+    //     },
+    //     'attendances as total_count'
+    // ])->get();
+
     $students = $parent->students()
         ->with(['user', 'activeEnrollment.schoolClass', 'activeEnrollment.stream'])
         ->get();

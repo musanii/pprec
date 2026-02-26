@@ -4,71 +4,90 @@
 
 @section('content')
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+{{-- KPI Row --}}
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border">
-        <div class="text-xs text-slate-500">Today's Periods</div>
+    <x-kpi-card title="Today's Classes"
+                :value="$todaySlots->count()" />
+
+    <x-kpi-card title="Attendance Completed"
+                :value="$completedToday" />
+
+    <x-kpi-card title="Attendance Pending"
+                :value="$pendingToday" />
+
+    <x-kpi-card title="Weekly Periods"
+                :value="$weekSlots" />
+
+</div>
+
+
+{{-- Teaching Exposure --}}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+    <div class="bg-white rounded-2xl border p-6">
+        <div class="text-xs text-slate-500">Classes Handled</div>
         <div class="text-3xl font-semibold mt-2">
-            {{ $todaySlots->count() }}
+            {{ $uniqueClasses }}
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border">
-        <div class="text-xs text-slate-500">Attendance Taken Today</div>
+    <div class="bg-white rounded-2xl border p-6">
+        <div class="text-xs text-slate-500">Students Reached</div>
         <div class="text-3xl font-semibold mt-2">
-            {{ $todaySessions }}
-        </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl shadow-sm border">
-        <div class="text-xs text-slate-500">Sessions This Week</div>
-        <div class="text-3xl font-semibold mt-2">
-            {{ $weeklySessions }}
+            {{ $studentsCount }}
         </div>
     </div>
 
 </div>
 
-<div class="mt-8 bg-white rounded-2xl border shadow-sm">
+
+{{-- Today's Timetable --}}
+<div class="mt-10 bg-white rounded-2xl border shadow-sm">
 
     <div class="p-6 border-b font-semibold">
-        Today's Classes
+        Today's Timetable
     </div>
 
     <div class="divide-y">
 
-        @forelse($todaySlots as $slot)
+        @foreach($todaySlots as $slot)
 
-            <a href="{{ route('teacher.attendance.take',$slot) }}"
-               class="block p-4 hover:bg-slate-50">
+            @php
+                $done = in_array($slot->id, $todaySessions);
+            @endphp
 
-                <div class="flex justify-between">
-                    <div>
-                        <div class="font-semibold">
-                            {{ $slot->subject->name }}
-                        </div>
-                        <div class="text-xs text-slate-500">
-                            {{ $slot->schoolClass->name }}
-                            @if($slot->stream)
-                                - {{ $slot->stream->name }}
-                            @endif
-                        </div>
+            <div class="p-4 flex justify-between items-center">
+
+                <div>
+                    <div class="font-semibold">
+                        {{ $slot->subject->name }}
                     </div>
-
                     <div class="text-xs text-slate-500">
-                        {{ $slot->period->name }}
+                        {{ $slot->schoolClass->name }}
+                        @if($slot->stream)
+                            - {{ $slot->stream->name }}
+                        @endif
                     </div>
                 </div>
 
-            </a>
+                <div class="flex items-center gap-4">
 
-        @empty
+                    <span class="text-xs px-3 py-1 rounded-full
+                        {{ $done ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                        {{ $done ? 'Completed' : 'Pending' }}
+                    </span>
 
-            <div class="p-6 text-center text-slate-400">
-                No classes today
+                    <a href="{{ route('teacher.attendance.take',$slot) }}"
+                       class="text-sm text-primary underline">
+                        {{ $done ? 'Edit' : 'Take Attendance' }}
+                    </a>
+
+                </div>
+
             </div>
 
-        @endforelse
+        @endforeach
 
     </div>
 
