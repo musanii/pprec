@@ -306,6 +306,18 @@
 
              {{-- =============== Teacher NAV ==================== --}}
                 @role('teacher')
+                <div class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                        x-show="!sidebarCollapsed">
+                       Teacher
+                    </div>
+
+                 <a href="{{ route('teacher.dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('teacher.dashboard')  ? 'active':''}}">
+                    <x-heroicon-o-home class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed"> Dashboard</span>
+                    </a>
+
+                    
                 
             @endrole
 
