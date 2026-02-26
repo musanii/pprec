@@ -59,18 +59,59 @@ public function index(Request $request)
 
 public function students(Request $request)
 {
+    $classId  = $request->class_id;
+    $streamId = $request->stream_id;
 
-$classId = $request->class_id;
+    $classes = SchoolClass::orderBy('level')->get();
+     $streams = collect();
+        if($classId)
+            {
+                $streams = Stream::where('class_id',$classId)->orderBy('name')->get();
+            }
+    $students = Student::with(['user'])
+        ->withCount([
+            'attendances as present_count' => fn($q)=>$q->where('status','present'),
+            'attendances as total_count'
+        ])
+        ->when($classId, function($q) use ($classId){
+            $q->whereHas('enrollments', fn($qq)=>
+                $qq->where('class_id',$classId)
+            );
+        })
+        ->when($streamId, function($q) use ($streamId){
+            $q->whereHas('enrollments', fn($qq)=>
+                $qq->where('stream_id',$streamId)
+            );
+        })
+        ->paginate(25);
 
-$students = Student::withCount([
-    'attendances as present_count' => fn($q)=>$q->where('status','present'),
-    'attendances as total_count'
-])
-->when($classId, function($q) use($classId){
-    $q->whereHas('enrollments', fn($qq)=> $qq->where('class_id',$classId)
-    );
-})->paginate(30);
-return view('admin.attendance.students', compact('students'));
+    return view('admin.attendance.students', compact(
+        'students','classes','streams',
+        'classId','streamId'
+    ));
+}
 
+
+public function analytics()
+{
+    $monthly = Attendance::selectRaw("
+        DATE_FORMAT(created_at,'%Y-%m') as month,
+        SUM(status='present') as present,
+        COUNT(*) as total
+    ")
+    ->groupBy('month')
+    ->orderBy('month')
+    ->get();
+
+    $months = $monthly->pluck('month');
+    $rates = $monthly->map(function($row){
+        return $row->total > 0
+            ? round(($row->present/$row->total)*100,2)
+            : 0;
+    });
+
+    return view('admin.attendance.analytics', compact(
+        'months','rates'
+    ));
 }
 }

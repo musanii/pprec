@@ -187,16 +187,38 @@
                     <x-heroicon-o-calendar-days class="w-5 h-5" />
                     <span x-show="!sidebarCollapsed">Timetable</span>
                 </a>
+               
+            </div>
+        </div>
+
+       {{-- Atendance --}}
+              <div x-data="{ open: true }" class="mt-4">
+            <button @click="open = !open" 
+                class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
+                x-show="!sidebarCollapsed">
+                <span>Attendance</span>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div x-show="open || sidebarCollapsed" x-transition>
                 <a href="{{ route('admin.attendance.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.attendance.*') ? 'active' : '' }}">
-                    <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
-                    <span x-show="!sidebarCollapsed">Attendance Analytics</span>
+                class="sidebar-link {{ request()->routeIs('admin.attendance.index') ? 'active':'' }}">
+                    <x-heroicon-o-clipboard-document-check class="w-5 h-5"/>
+                    <span x-show="!sidebarCollapsed">Class Summary</span>
                 </a>
+
                 <a href="{{ route('admin.attendance.students') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.attendance.students') ? 'active':'' }}">
-                        <x-heroicon-o-user-group class="w-5 h-5"/>
-                        <span x-show="!sidebarCollapsed">Student Attendance</span>
-                    </a>
+                class="sidebar-link {{ request()->routeIs('admin.attendance.students') ? 'active':'' }}">
+                    <x-heroicon-o-user-group class="w-5 h-5"/>
+                    <span x-show="!sidebarCollapsed">Student Report</span>
+                </a>
+
+                <a href="{{ route('admin.attendance.analytics') }}"
+                class="sidebar-link {{ request()->routeIs('admin.attendance.analytics') ? 'active':'' }}">
+                    <x-heroicon-o-chart-bar class="w-5 h-5"/>
+                    <span x-show="!sidebarCollapsed">Analytics</span>
+                </a>
             </div>
         </div>
 

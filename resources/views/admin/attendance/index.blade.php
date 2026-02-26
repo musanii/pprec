@@ -38,9 +38,9 @@
         </div>
 
         <div class="flex gap-2">
-            <button type="submit" class="bg-indigo-600 text-white rounded-xl px-4 py-2 text-sm font-medium">
-                Filter
-            </button>
+           <button class="bg-primary text-white rounded-xl px-4 py-2">
+        Filter
+    </button>
             <a href="{{ request()->url() }}" class="bg-gray-100 text-gray-600 rounded-xl px-4 py-2 text-sm font-medium border text-center">
                 Clear
             </a>
