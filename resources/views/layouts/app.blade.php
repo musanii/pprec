@@ -187,6 +187,11 @@
                     <x-heroicon-o-calendar-days class="w-5 h-5" />
                     <span x-show="!sidebarCollapsed">Timetable</span>
                 </a>
+                <a href="{{ route('admin.attendance.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.attendance.*') ? 'active' : '' }}">
+                    <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
+                    <span x-show="!sidebarCollapsed">Attendance</span>
+                </a>
             </div>
         </div>
 
@@ -195,7 +200,7 @@
             <button @click="open = !open" 
                 class="w-full flex items-center justify-between px-3 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors mb-2 focus:outline-none" 
                 x-show="!sidebarCollapsed">
-                <span>Assessmenyt</span>
+                <span>Assessment</span>
                 <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
                 </svg>
@@ -315,6 +320,12 @@
                     class="sidebar-link {{ request()->routeIs('teacher.dashboard')  ? 'active':''}}">
                     <x-heroicon-o-home class="w-5 h-5" />
                     <span x-show="!sidebarCollapsed"> Dashboard</span>
+                    </a>
+
+                    <a href="{{ route('teacher.attendance.index') }}"
+                    class="sidebar-link {{ request()->routeIs('teacher.attendance.*') ? 'active' : '' }}">
+                        <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
+                        <span x-show="!sidebarCollapsed">Attendance</span>
                     </a>
 
                     

@@ -5,22 +5,12 @@
 @section('content')
 
 {{-- KPI Row --}}
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-    <x-kpi-card title="Today's Classes"
-                :value="$todaySlots->count()" />
-
-    <x-kpi-card title="Attendance Completed"
-                :value="$completedToday" />
-
-    <x-kpi-card title="Attendance Pending"
-                :value="$pendingToday" />
-
-    <x-kpi-card title="Weekly Periods"
-                :value="$weekSlots" />
-
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <x-kpi-card title="Today's Classes" :value="$todaySlots->count()" />
+    <x-kpi-card title="Attendance Completed" :value="$completedToday" />
+    <x-kpi-card title="Attendance Pending" :value="$pendingToday" />
+    <x-kpi-card title="Weekly Periods" :value="$weekSlots" />
 </div>
-
 
 {{-- Teaching Exposure --}}
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">

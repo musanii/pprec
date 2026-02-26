@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AcademicIntelligenceController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AdminAttendanceController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\ClassSubjectController;
@@ -147,8 +148,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('timetable',TimetableController::class)->only('index', 'store', 'update','destroy')->names('timetable');
     
-   
-
+    Route::get('attendance', [AdminAttendanceController::class,'index'])->name('attendance.index');
    
 });
 

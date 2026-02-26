@@ -2,7 +2,7 @@
     <dt class="text-sm font-medium text-gray-500 truncate">
         {{ $title }}
     </dt>
-    <dd class="mt-1 text-3xl font-semibold text-indigo-600">
+    <dd class="text-3xl font-semibold mt-2">
         {{ $value }}
     </dd>
 </div>
