@@ -190,8 +190,13 @@
                 <a href="{{ route('admin.attendance.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.attendance.*') ? 'active' : '' }}">
                     <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
-                    <span x-show="!sidebarCollapsed">Attendance</span>
+                    <span x-show="!sidebarCollapsed">Attendance Analytics</span>
                 </a>
+                <a href="{{ route('admin.attendance.students') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.attendance.students') ? 'active':'' }}">
+                        <x-heroicon-o-user-group class="w-5 h-5"/>
+                        <span x-show="!sidebarCollapsed">Student Attendance</span>
+                    </a>
             </div>
         </div>
 

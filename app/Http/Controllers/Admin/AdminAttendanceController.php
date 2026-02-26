@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\SchoolClass;
 use App\Models\Stream;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class AdminAttendanceController extends Controller
@@ -53,5 +54,23 @@ public function index(Request $request)
 
 
         return view('admin.attendance.index',compact('classes','streams','summary','classId','percentage','streamId','from','to'));
+}
+
+
+public function students(Request $request)
+{
+
+$classId = $request->class_id;
+
+$students = Student::withCount([
+    'attendances as present_count' => fn($q)=>$q->where('status','present'),
+    'attendances as total_count'
+])
+->when($classId, function($q) use($classId){
+    $q->whereHas('enrollments', fn($qq)=> $qq->where('class_id',$classId)
+    );
+})->paginate(30);
+return view('admin.attendance.students', compact('students'));
+
 }
 }

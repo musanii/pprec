@@ -150,6 +150,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::get('attendance', [AdminAttendanceController::class,'index'])->name('attendance.index');
    
+    Route::get('attendance/students', [AdminAttendanceController::class,'students'])->name('attendance.students');
+   
 });
 
 
