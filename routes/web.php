@@ -37,6 +37,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Parent\ResultController as ParentResultController;
+use App\Http\Controllers\Teacher\TeacherAttendanceController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -173,6 +174,10 @@ Route::middleware(['auth','role:parent'])->prefix('parent')->name('parent.')->gr
 //Teacher Routes
 Route::middleware(['auth','role:teacher'])->prefix('teacher')->name('teacher.')->group(function(){
      Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+     //Attendance Routes
+     Route::get('/attendance', [TeacherAttendanceController::class,'index'])->name('attendance.index');
+     Route::get('/attendance/{slot}', [TeacherAttendanceController::class,'take'])->name('attendance.take');
+     Route::post('/attendance/{slot}',[TeacherAttendanceController::class,'store'])->name('attendance.store');
 });
 
 Route::middleware('auth')->group(function () {
