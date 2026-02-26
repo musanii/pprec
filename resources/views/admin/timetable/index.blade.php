@@ -9,7 +9,8 @@
         <div>
             <label class="text-xs font-medium text-slate-600">Class</label>
             <select name="class_id"
-                    class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm" onchange="this.form.stream_id.value=''; this.form.submit();">
+                    class="mt-1 w-full rounded-xl border px-3 py-2.5 text-sm"
+                    onchange="this.form.stream_id.value=''; this.form.submit();">
                 <option value="">Select Class</option>
                 @foreach($classes as $class)
                     <option value="{{ $class->id }}"
@@ -44,13 +45,82 @@
 
 @if($classId)
 
+@php
+    $days = ['monday','tuesday','wednesday','thursday','friday'];
+@endphp
+
+{{-- ================= ALL STREAMS VIEW ================= --}}
+@if($hasStreams && !$streamId)
+
+    @foreach($streams as $stream)
+
+        <div class="mt-10">
+            <h3 class="text-lg font-semibold mb-4">
+                {{ $stream->name }} Stream
+            </h3>
+
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
+                <table class="min-w-full text-sm border border-slate-200">
+                    <thead class="bg-slate-50 text-xs">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Period</th>
+                            @foreach($days as $day)
+                                <th class="px-4 py-3 text-center capitalize">
+                                    {{ ucfirst($day) }}
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($periods as $period)
+                        <tr>
+                            <td class="px-4 py-3 bg-slate-100">
+                                {{ $period->name }}
+                            </td>
+
+                            @foreach($days as $day)
+                                @php
+                                    $slot = $slots[$stream->id][$period->id][$day][0] ?? null;
+                                @endphp
+
+                                <td class="px-4 py-3 text-center border">
+
+                                    @if($slot)
+                                        <div class="bg-indigo-50 rounded-xl p-2 text-left">
+                                            <div class="font-semibold text-indigo-900 text-sm">
+                                                {{ $slot->subject->name }}
+                                            </div>
+                                            <div class="text-xs text-indigo-700">
+                                                {{ $slot->teacher->user->name }}
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-slate-300">—</span>
+                                    @endif
+
+                                </td>
+                            @endforeach
+
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    @endforeach
+
+{{-- ================= SINGLE STREAM / NO STREAM VIEW ================= --}}
+@else
+
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
 <div x-data="timetableModal()">
+
 <table class="min-w-full text-sm border border-slate-200">
     <thead class="bg-slate-50 text-slate-600 text-xs">
         <tr>
             <th class="px-4 py-3 text-left">Period</th>
-            @foreach(['monday','tuesday','wednesday','thursday','friday'] as $day)
+            @foreach($days as $day)
                 <th class="px-4 py-3 text-center capitalize font-semibold text-slate-700">
                     {{ ucfirst($day) }}
                 </th>
@@ -58,7 +128,7 @@
         </tr>
     </thead>
 
-    <tbody class="divide-y">
+    <tbody>
 
     @foreach($periods as $period)
         <tr>
@@ -71,10 +141,7 @@
                 </div>
             </td>
 
-           @php
-               $days =  ['monday','tuesday','wednesday','thursday','friday'];
-           @endphp
-           @foreach($days as $day)
+            @foreach($days as $day)
 
                 @php
                     $slot = $slots[$period->id][$day][0] ?? null;
@@ -84,66 +151,60 @@
 
                     @if($slot)
 
-                    
+                        <div class="group relative bg-indigo-50 rounded-xl p-2 text-left hover:bg-indigo-100 transition">
 
-<div class="group relative bg-indigo-50 rounded-xl p-2 text-left hover:bg-indigo-100 transition">
+                            <div class="font-semibold text-indigo-900 text-sm">
+                                {{ $slot->subject->name }}
+                            </div>
 
-    <div class="font-semibold text-indigo-900 text-sm">
-        {{ $slot->subject->name }}
-    </div>
+                            <div class="flex items-center gap-2 mt-1">
+                                <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">
+                                    {{ strtoupper(substr($slot->teacher->user->name,0,1)) }}
+                                </div>
+                                <div class="text-xs text-indigo-700 truncate">
+                                    {{ $slot->teacher->user->name }}
+                                </div>
+                            </div>
 
-    <div class="flex items-center gap-2 mt-1">
-        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">
-            {{ strtoupper(substr($slot->teacher->user->name,0,1)) }}
-        </div>
-        <div class="text-xs text-indigo-700 truncate">
-            {{ $slot->teacher->user->name }}
-        </div>
-    </div>
+                            <div class="absolute top-1 right-1 hidden group-hover:flex gap-1">
+                                <button
+                                    @click="editSlot(
+                                        {{$slot->id}},
+                                        {{ $period->id }},
+                                        '{{ $day }}',
+                                        {{ $slot->subject_id }},
+                                        {{ $slot->teacher_id }}
+                                    )"
+                                    class="text-xs text-slate-600 hover:text-indigo-600">
+                                    <x-heroicon-o-pencil-square class="w-5 h-5" />
+                                </button>
 
-    {{-- Hover Actions --}}
-    <div class="absolute top-1 right-1 hidden group-hover:flex gap-1">
-        <button
-            @click="editSlot(
-            {{$slot->id}},
-            {{ $period->id }},
-              '{{ $day }}',
-              {{ $slot->subject_id }},
-               {{ $slot->teacher_id }} 
-                )"
-            class="text-xs text-slate-600 hover:text-indigo-600">
-            <x-heroicon-o-pencil-square class="w-5 h-5" />
-        </button>
+                                <form method="POST"
+                                      action="{{ route('admin.timetable.destroy', $slot) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-xs text-red-500 hover:text-red-700">
+                                        <x-heroicon-o-trash class="w-5 h-5" />
+                                    </button>
+                                </form>
+                            </div>
 
-        <form method="POST"
-              action="{{ route('admin.timetable.destroy', $slot) }}">
-            @csrf
-            @method('DELETE')
-            <button class="text-xs text-red-500 hover:text-red-700">
-                <x-heroicon-o-trash class="w-5 h-5" />
-            </button>
-        </form>
-    </div>
+                        </div>
 
-</div>
+                    @else
 
-@else
+                        @if ($hasStreams && !$streamId)
+                            <span class="text-xs text-slate-300 cursor-not-allowed">
+                                Select Stream
+                            </span>
+                        @else
+                            <button @click="openModal({{ $period->id }}, '{{ $day }}')" 
+                                class="w-full h-full py-4 text-xs text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition">
+                                + Assign
+                            </button>
+                        @endif
 
-@if ($hasStreams && !$streamId)
-<span class="text-xs text-slate-300 cursor-not-allowed">
-    Select Stream 
-</span>
-@else
-<button @click="openModal({{ $period->id }}, '{{ $day }}')" 
-    class="w-full h-full py-4 text-xs text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition">
-    + Assign
-</button>
-    
-@endif
-
-
-
-@endif
+                    @endif
 
                 </td>
 
@@ -153,8 +214,8 @@
 
     </tbody>
 </table>
-    <!-- Hidden Trigger -->
-    <template x-if="open">
+
+<template x-if="open">
         <div class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
             <div class="bg-white w-[420px] rounded-2xl shadow-xl p-6">
 
@@ -218,8 +279,8 @@
             </div>
         </div>
     </template>
-</div>
 
+</div>
 </div>
 <script>
     function timetableModal(){
@@ -266,8 +327,8 @@
     }
 </script>
 
+@endif
 
- 
 @endif
 
 @endsection

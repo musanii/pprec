@@ -20,6 +20,8 @@ class TimetableController extends Controller
 {
     public function index(Request $request)
     {
+
+  
         $year = AcademicYear::where('is_active', true)->first();
         $term = Term::where('is_active', true)->first();
 
@@ -43,14 +45,27 @@ class TimetableController extends Controller
                 $streams = Stream::where('class_id',$classId)->orderBy('name')->get();
             }
 
-       if ($classId && $term) {
+      if ($classId && $term) {
+
+    if ($streamId) {
+
         $slots = TimeTableSlot::with(['subject','teacher','schoolPeriod'])
             ->where('class_id', $classId)
             ->where('term_id', $term->id)
-            ->when($streamId, fn($q)=>$q->where('stream_id',$streamId))
+            ->where('stream_id', $streamId)
             ->get()
             ->groupBy(['school_period_id','day_of_week']);
+
+    } else {
+
+        // Load all streams separately
+        $slots = TimeTableSlot::with(['subject','teacher','schoolPeriod'])
+            ->where('class_id', $classId)
+            ->where('term_id', $term->id)
+            ->get()
+            ->groupBy(['stream_id','school_period_id','day_of_week']);
     }
+}
 
         return view('admin.timetable.index', compact(
             'year',
