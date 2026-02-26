@@ -56,4 +56,9 @@ protected $table='timetable_slots';
     return $this->belongsTo(SchoolPeriod::class);
   }
 
+  public function attendanceSessions()
+  {
+    return $this->hasMany(AttendanceSession::class,'timetable_slot_id');
+  }
+
 }
