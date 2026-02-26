@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\TimeTableSlot;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class TimetableService
 {
     public function assign(array $data, ?TimeTableSlot $existing=null){
+        $this->validateTeacherEligibility($data);
         $this->validateTeacherClash($data, $existing?->id);
         $this->validateClassClash($data, $existing?->id);
         if($existing)
@@ -59,6 +61,24 @@ class TimetableService
                     'school_period_id'=>'Class already has a subject in this period.'
                 ]);
             }
+    }
+
+    protected function validateTeacherEligibility(array $data)
+    {
+
+    $exists = DB::table('teacher_subject_class')
+    ->where('teacher_id', $data['teacher_id'])
+    ->where('subject_id', $data['subject_id'])
+    ->where('class_id', $data['class_id'])
+    ->exists();
+
+    if(!$exists)
+        {
+            throw ValidationException::withMessages([
+                'teacher_id' =>'Teacher is not assigned to teach this subject in this class.'
+            ]);
+        }
+
     }
 
 

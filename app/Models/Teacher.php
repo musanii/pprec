@@ -29,4 +29,9 @@ class Teacher extends Model
         ->withPivot('class_id')
         ->withTimestamps();
     }
+
+    public function classes()
+    {
+        return $this->hasMany(SchoolClass::class);
+    }
 }

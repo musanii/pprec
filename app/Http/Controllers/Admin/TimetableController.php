@@ -35,7 +35,10 @@ class TimetableController extends Controller
         // $streams = Stream::orderBy('name')->get();
         $periods = SchoolPeriod::where('is_active', true)->orderBy('period_number')->get();
         $subjects = Subject::where('is_active', true)->orderBy('name')->get();
-        $teachers = Teacher::with('user')->orderBy('id')->get();
+        //$teachers = Teacher::with('user')->orderBy('id')->get();
+        $teachers = Teacher::whereHas('assignments', function($q) use ($classId) {
+                $q->where('class_id', $classId);
+            })->with('user')->get();
 
         $slots = collect();
 
@@ -97,14 +100,14 @@ class TimetableController extends Controller
                 ]);
             }
 
-        try {
+            try {
             $service->assign($data);
-
             return back()->with('success', 'Slot assigned successfully.');
-        } catch (ValidationException $e) {
-            return back()
-                ->withErrors($e->errors())
-                ->withInput();
+                } catch (ValidationException $e) {
+                    return back()->withErrors($e->errors())->withInput();
+                } catch (\Exception $e) {
+            
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
 
     }

@@ -16,23 +16,30 @@
     x-data="{ show:false, message:'', type:'success' }"
     x-init="
         @if(session('success'))
-            message='{{ session('success') }}';
-            type='success';
-            show=true;
+            message = '{{ session('success') }}';
+            type = 'success';
+            show = true;
         @elseif(session('error'))
-            message='{{ session('error') }}';
-            type='error';
-            show=true;
+            message = '{{ session('error') }}';
+            type = 'error';
+            show = true;
+        @elseif($errors->any())
+            {{-- Grab the first validation error message --}}
+            message = '{{ $errors->first() }}';
+            type = 'error';
+            show = true;
         @endif
 
-        setTimeout(()=>show=false,4000);
+        if(show) {
+            setTimeout(() => show = false, 4000);
+        }
     "
     x-show="show"
     x-transition
     x-cloak
     class="fixed top-6 right-6 z-50"
 >
-    <div :class="type==='success' 
+    <div :class="type === 'success' 
         ? 'bg-green-600 text-white' 
         : 'bg-red-600 text-white'"
         class="px-6 py-4 rounded-xl shadow-2xl text-sm font-medium">
