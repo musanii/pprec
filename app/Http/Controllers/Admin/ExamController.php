@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\Term;
+use App\Services\PolicyService;
 use App\Services\ResultComputationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ExamController extends Controller
 {
@@ -121,6 +123,18 @@ class ExamController extends Controller
 
         if($exam->aggregates()->where('is_locked', true)->exists()){
             return back()->with('error','Exam results are permanently locked');
+        }
+
+        $policy = app(PolicyService::class);
+        foreach($exam->aggregates as $aggregate){
+            $student = $aggregate->student;
+
+            if($policy->checkExamEligibility($student, $exam->term)){
+                throw ValidationException::withMessages([
+                    'eligibility'=>'Some students are not eligible for exam publishing.'
+                ]);
+            }
+
         }
 
         DB::transaction(function () use ($exam, $service) {

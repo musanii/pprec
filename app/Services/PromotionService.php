@@ -138,9 +138,16 @@ $summary = $this->preview($year, $action);
     );
 }
 
-protected function handleEnrollment(Enrollment $enrollment, string $action, ?AcademicYear $nextYear){
+protected function handleEnrollment( $enrollment, string $action, ?AcademicYear $nextYear){
     $student = $enrollment->student;
     $currentClass = $enrollment->schoolClass;
+
+    
+    $policy = app(PolicyService::class);
+    if(!$policy->checkPromotionEligibility($student,$nextYear))
+        {
+            continue;
+        }
 
     //close current enrollment
     $enrollment->update(['is_active' => false]);
