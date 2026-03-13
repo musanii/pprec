@@ -40,11 +40,18 @@ use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Parent\ResultController as ParentResultController;
 use App\Http\Controllers\Teacher\TeacherAttendanceController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::controller(WebsiteController::class)->group(function(){
+Route::get('/', 'home')->name('website.home');
+Route::get('/about', 'about')->name('website.about');
+Route::get('/activities', 'activities')->name('website.activities');
+Route::get('/admissions', 'admissions')->name('website.admissions');
+Route::get('/news', 'news')->name('website.news');
+Route::get('/contact', 'contact')->name('website.contact');
 });
 
  Route::get('students/{student}/transcript/pdf',[StudentTranscriptController::class,'download'])->name('students.transcript.pdf');
