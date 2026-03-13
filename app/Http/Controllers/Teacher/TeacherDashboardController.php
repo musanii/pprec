@@ -15,8 +15,16 @@ class TeacherDashboardController extends Controller
     {
 
     $teacher = auth()->user()->teacher;
-   
     $term = Term::where('is_active',true)->first();
+
+    if(!$term || ! $teacher)
+        {
+            return view('teacher.dashboard',[
+                'todaySlots'=>collect(),
+                'todayName'=> now()->format('l'),
+            ]);
+        }
+
      $todayName = strtolower(now()->format('l'));
      $todayDate = now()->toDateString();
 
