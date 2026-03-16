@@ -45,14 +45,7 @@ use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
-Route::controller(WebsiteController::class)->group(function(){
-Route::get('/', 'home')->name('website.home');
-Route::get('/about', 'about')->name('website.about');
-Route::get('/activities', 'activities')->name('website.activities');
-Route::get('/admissions', 'admissions')->name('website.admissions');
-Route::get('/news', 'news')->name('website.news');
-Route::get('/contact', 'contact')->name('website.contact');
-});
+
 
  Route::get('students/{student}/transcript/pdf',[StudentTranscriptController::class,'download'])->name('students.transcript.pdf');
     Route::get('/verify/{hash}', [VerificationController::class, ' verify'])->name('results.verify');
