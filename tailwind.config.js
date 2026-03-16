@@ -1,3 +1,6 @@
+import defaultTheme from 'tailwindcss/defaultTheme'
+
+
 export default {
     content: [
         "./resources/**/*.blade.php",
@@ -7,21 +10,16 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#1E3A8A", // Royal Blue
-                secondary: "#64748B", // Grey
+                brand:{
+                primary: "#1A56A4", // Royal Blue
+                secondary: "#F4F6F9", // Grey
+                accent:"#FFFFFF"
+                }
             },
-            // fontFamily: {
-            //     sans: [
-            //         "Montserrat",
-            //         "ui-sans-serif",
-            //         "system-ui",
-            //         "Segoe UI",
-            //         "Roboto",
-            //         "Arial",
-            //         "Noto Sans",
-            //         "sans-serif",
-            //     ],
-            // },
+            fontFamily: {
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                heading:['Montserrat', 'sans-serif']
+            },
         },
     },
     plugins: [],

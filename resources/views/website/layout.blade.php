@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="bg-gray-100 text-gray-700">
+<body class="bg-brand-secondary font-sans text-gray-700">
 
 @include('website.partials.navbar')
 
