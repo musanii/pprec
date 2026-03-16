@@ -5,6 +5,10 @@
 <div>
 
 <h3 class="text-lg font-heading text-white mb-4">
+    <img 
+    src="/assets/logo/logo-light.svg" 
+    class="h-10 mb-4"
+/>
 Piphan Rose Educational Center
 </h3>
 

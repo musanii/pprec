@@ -6,9 +6,11 @@
 
 <a href="/" class="flex items-center">
 
-<span class="text-2xl font-heading text-brand-primary">
-Piphan Rose
-</span>
+<img 
+    src="/assets/logo/logo.svg" 
+    alt="Piphan Rose Educational Center"
+    class="h-10"
+/>
 
 </a>
 
