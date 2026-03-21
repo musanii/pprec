@@ -16,31 +16,38 @@
 
 </head>
 
-<body class="bg-brand-secondary font-sans text-gray-700">
-    
+<body x-data="{ loading: true }"
+      x-init="window.addEventListener('load', () => loading = false)"
+      class="bg-brand-secondary font-sans text-gray-700">
 
-<div 
-    x-data="{ loading: true }"
-    x-init="window.addEventListener('load', () => loading = false)"
->
+<!-- Loader -->
+<div x-show="loading"
+     x-transition.opacity
+     class="fixed inset-0 flex items-center justify-center bg-brand-secondary z-50">
 
-<div 
-    x-show="loading"
-    class="fixed inset-0 flex items-center justify-center bg-brand-secondary z-50"
->
+    <div class="flex flex-col items-center space-y-6">
 
-<div class="flex flex-col items-center space-y-4">
+        <div class="relative flex items-center justify-center">
 
-<div class="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+            <!-- Spinning ring -->
+            <div class="w-20 h-20 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
 
-<p class="text-sm text-gray-600">
-Loading...
-</p>
+            <!-- PR initials -->
+            <div class="absolute text-brand-primary font-heading text-xl">
+                PR
+            </div>
+
+        </div>
+
+        <p class="text-gray-500 text-sm tracking-wide">
+            Piphan Rose Educational Center
+        </p>
+
+    </div>
 
 </div>
 
-</div>
-
+<!-- Website -->
 <div x-show="!loading">
 
 @include('website.partials.navbar')
@@ -53,4 +60,4 @@ Loading...
 
 </div>
 
-</div>
+</body>
