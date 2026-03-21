@@ -282,4 +282,114 @@ Creativity through music, dance and drama.
 
 </section>
 
+
+<!-- Why Choose Us -->
+
+<section
+class="py-24 bg-white transition-all duration-1000"
+x-data="{ visible:false }"
+x-intersect="visible = true"
+:class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+>
+
+<div class="max-w-7xl mx-auto px-6">
+
+<!-- Header -->
+<div class="text-center mb-16">
+
+<h2 class="text-4xl font-heading text-brand-primary mb-4">
+Why Choose Piphan Rose
+</h2>
+
+<p class="text-gray-600 max-w-2xl mx-auto">
+We provide a learning environment that nurtures academic excellence, discipline and holistic growth.
+</p>
+
+</div>
+
+<!-- Features Grid -->
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+<!-- Feature 1 -->
+<div class="text-center group">
+
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+
+📘
+
+</div>
+
+<h3 class="font-heading text-lg mb-2 text-brand-primary">
+Qualified Teachers
+</h3>
+
+<p class="text-gray-600 text-sm">
+Our educators are experienced, passionate and dedicated to student success.
+</p>
+
+</div>
+
+<!-- Feature 2 -->
+<div class="text-center group">
+
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+
+🏫
+
+</div>
+
+<h3 class="font-heading text-lg mb-2 text-brand-primary">
+Modern Facilities
+</h3>
+
+<p class="text-gray-600 text-sm">
+A safe and well-equipped environment that supports effective learning.
+</p>
+
+</div>
+
+<!-- Feature 3 -->
+<div class="text-center group">
+
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+
+🎯
+
+</div>
+
+<h3 class="font-heading text-lg mb-2 text-brand-primary">
+Holistic Development
+</h3>
+
+<p class="text-gray-600 text-sm">
+We focus on academics, discipline, leadership and life skills.
+</p>
+
+</div>
+
+<!-- Feature 4 -->
+<div class="text-center group">
+
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+
+📈
+
+</div>
+
+<h3 class="font-heading text-lg mb-2 text-brand-primary">
+Proven Performance
+</h3>
+
+<p class="text-gray-600 text-sm">
+Consistent academic excellence and outstanding student outcomes.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
 @endsection
