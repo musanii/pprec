@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -9,6 +10,18 @@ class WebsiteController extends Controller
 public function home()
 {
     return view('website.home');
+}
+
+public function page($slug)
+{
+
+
+
+
+    $page = Page::where('slug', $slug)->where('is_published', true)->firstOrFail();
+
+    dd($page);
+    return view('website.page', compact('page'));
 }
 
 public function about()
