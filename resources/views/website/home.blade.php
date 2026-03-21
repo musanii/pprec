@@ -4,7 +4,10 @@
 
 @section('content')
 
-<section class="relative h-screen flex items-center justify-center text-center text-white">
+<section class="relative h-screen flex items-center justify-center text-center text-white"
+x-data="{ visible:false }"
+x-intersect="visible = true"
+:class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
 
 <!-- Background Image -->
 <div class="absolute inset-0">
@@ -61,6 +64,96 @@ Learn More
 <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
 
 <div class="w-1 h-3 bg-white mt-2 rounded"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Statistics Section -->
+<section
+class="bg-white py-24 transition-all duration-1000"
+x-data="{ visible:false }"
+x-intersect="visible = true"
+:class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+>
+<div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 text-center">
+
+<!-- Students -->
+
+<div 
+x-data="counter(500)"
+x-init="observe($el)"
+>
+
+<h2 class="text-4xl font-heading text-brand-primary">
+
+<span x-text="value"></span>+
+
+</h2>
+
+<p class="mt-2 text-gray-600">
+Students
+</p>
+
+</div>
+
+<!-- Teachers -->
+
+<div 
+x-data="counter(40)"
+x-init="observe($el)"
+>
+
+<h2 class="text-4xl font-heading text-brand-primary">
+
+<span x-text="value"></span>
+
+</h2>
+
+<p class="mt-2 text-gray-600">
+Teachers
+</p>
+
+</div>
+
+<!-- Years -->
+
+<div 
+x-data="counter(15)"
+x-init="observe($el)"
+>
+
+<h2 class="text-4xl font-heading text-brand-primary">
+
+<span x-text="value"></span>
+
+</h2>
+
+<p class="mt-2 text-gray-600">
+Years of Excellence
+</p>
+
+</div>
+
+<!-- Activities -->
+
+<div 
+x-data="counter(20)"
+x-init="observe($el)"
+>
+
+<h2 class="text-4xl font-heading text-brand-primary">
+
+<span x-text="value"></span>+
+
+</h2>
+
+<p class="mt-2 text-gray-600">
+Activities
+</p>
 
 </div>
 
