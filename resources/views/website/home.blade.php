@@ -498,4 +498,59 @@ Our students showcased exceptional communication skills.
 
 </section>
 
+
+
+<!-- Admissions CTA -->
+
+<section class="relative py-32 text-center text-white">
+
+<!-- Background -->
+<div class="absolute inset-0">
+
+<img 
+src="/assets/images/cta.png"
+class="w-full h-full object-cover"
+/>
+
+</div>
+
+<!-- Overlay -->
+<div class="absolute inset-0 bg-black/70"></div>
+
+<!-- Content -->
+<div class="relative z-10 max-w-3xl mx-auto px-6">
+
+<h2 class="text-4xl md:text-5xl font-heading mb-6 leading-tight">
+
+Start Your Child’s Journey to Excellence
+
+</h2>
+
+<p class="text-lg text-gray-200 mb-10">
+
+Join Piphan Rose Educational Center and give your child the foundation for a successful future.
+
+</p>
+
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+
+<a href="/admissions"
+class="bg-brand-primary px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition">
+
+Apply for Admission
+
+</a>
+
+<a href="/contact"
+class="bg-white text-brand-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
+
+Contact Us
+
+</a>
+
+</div>
+
+</div>
+
+</section>
 @endsection
