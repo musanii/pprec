@@ -391,4 +391,111 @@ Consistent academic excellence and strong student outcomes.
 
 </section>
 
+
+<!-- Latest News Section -->
+
+<section
+class="py-24 bg-brand-secondary transition-all duration-1000"
+x-data="{ visible:false }"
+x-intersect="visible = true"
+:class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+>
+
+<div class="max-w-7xl mx-auto px-6">
+
+<!-- Header -->
+<div class="flex items-center justify-between mb-12">
+
+<div>
+<h2 class="text-4xl font-heading text-brand-primary mb-2">
+Latest News
+</h2>
+<p class="text-gray-600">
+Stay updated with school events and announcements.
+</p>
+</div>
+
+<a href="/news"
+class="text-brand-primary font-medium hover:underline">
+View All
+</a>
+
+</div>
+
+<!-- Layout -->
+<div class="grid lg:grid-cols-3 gap-8">
+
+<!-- Featured News -->
+<div class="lg:col-span-2 relative group overflow-hidden rounded-xl shadow-md">
+
+<img src="/assets/images/activities/debating.png"
+class="w-full h-[420px] object-cover transition-transform duration-500 group-hover:scale-105">
+
+<div class="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
+
+<div class="absolute bottom-8 left-8 text-white max-w-lg">
+
+<h3 class="text-2xl font-heading mb-3">
+Annual Sports Day 2026
+</h3>
+
+<p class="text-gray-200 text-sm">
+A day full of excitement, teamwork and outstanding performances from our students.
+</p>
+
+</div>
+
+</div>
+
+<!-- Side News -->
+<div class="flex flex-col gap-8">
+
+<!-- News Item -->
+<div class="flex gap-4 group">
+
+<img src="/assets/images/activities/debating.png"
+class="w-28 h-28 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105">
+
+<div>
+
+<h4 class="font-heading text-lg text-brand-primary mb-1">
+New Science Lab Opened
+</h4>
+
+<p class="text-sm text-gray-600">
+Enhancing practical learning experiences for our students.
+</p>
+
+</div>
+
+</div>
+
+<!-- News Item -->
+<div class="flex gap-4 group">
+
+<img src="/assets/images/activities/debating.png"
+class="w-28 h-28 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105">
+
+<div>
+
+<h4 class="font-heading text-lg text-brand-primary mb-1">
+Debate Team Wins Regionals
+</h4>
+
+<p class="text-sm text-gray-600">
+Our students showcased exceptional communication skills.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
 @endsection
