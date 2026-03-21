@@ -1,11 +1,10 @@
 <svg width="220" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
-  <rect width="40" height="40" fill="#1A56A4" rx="8"/>
+  <rect width="40" height="40" fill="#FFFFFF" rx="8"/>
   <text x="20" y="26" font-family="Montserrat" font-size="18" font-weight="700" text-anchor="middle">
-    <tspan fill="#FFFFFF">P</tspan><tspan fill="#CBD5E1">R</tspan>
+    <tspan fill="#1A56A4">P</tspan><tspan fill="#64748b">R</tspan>
   </text>
 
-  <text x="52" y="27" font-family="Montserrat" font-size="20" font-weight="700" letter-spacing="-0.5">
-    <tspan fill="#1A56A4">Piphan</tspan>
-    <tspan fill="#64748b" dx="5">Rose</tspan>
+  <text x="52" y="27" font-family="Montserrat" font-size="20" fill="#FFFFFF" font-weight="700" letter-spacing="-0.5">
+    Piphan Rose
   </text>
 </svg>

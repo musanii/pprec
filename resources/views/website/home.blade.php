@@ -161,4 +161,125 @@ Activities
 
 </section>
 
+<!-- Activities Section -->
+
+<section
+class="py-24 bg-brand-secondary transition-all duration-1000"
+x-data="{ visible:false }"
+x-intersect="visible = true"
+:class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+>
+
+<div class="max-w-7xl mx-auto px-6">
+
+<!-- Section Header -->
+<div class="text-center mb-16">
+
+<h2 class="text-4xl font-heading text-brand-primary mb-4">
+Co-Curricular Activities
+</h2>
+
+<p class="text-gray-600 max-w-2xl mx-auto">
+We nurture talent beyond the classroom through a wide range of activities that build confidence, teamwork and leadership.
+</p>
+
+</div>
+
+<!-- Cards Grid -->
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+<!-- Debating -->
+<div class="relative group overflow-hidden rounded-xl shadow-md">
+
+<img src="/assets/images/activities/debating.png"
+class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+
+<div class="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
+
+<div class="absolute bottom-6 left-6 text-white">
+
+<h3 class="text-xl font-heading mb-1">
+Debating
+</h3>
+
+<p class="text-sm text-gray-200">
+Build confidence and public speaking skills.
+</p>
+
+</div>
+
+</div>
+
+<!-- Sports -->
+<div class="relative group overflow-hidden rounded-xl shadow-md">
+
+<img src="/assets/images/activities/sports.png"
+class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+
+<div class="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
+
+<div class="absolute bottom-6 left-6 text-white">
+
+<h3 class="text-xl font-heading mb-1">
+Sports
+</h3>
+
+<p class="text-sm text-gray-200">
+Encouraging teamwork and physical excellence.
+</p>
+
+</div>
+
+</div>
+
+<!-- Scouting -->
+<div class="relative group overflow-hidden rounded-xl shadow-md">
+
+<img src="/assets/images/activities/scouting.png"
+class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+
+<div class="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
+
+<div class="absolute bottom-6 left-6 text-white">
+
+<h3 class="text-xl font-heading mb-1">
+Scouting
+</h3>
+
+<p class="text-sm text-gray-200">
+Leadership, discipline and survival skills.
+</p>
+
+</div>
+
+</div>
+
+<!-- Performing Arts -->
+<div class="relative group overflow-hidden rounded-xl shadow-md">
+
+<img src="/assets/images/activities/arts.png"
+class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+
+<div class="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
+
+<div class="absolute bottom-6 left-6 text-white">
+
+<h3 class="text-xl font-heading mb-1">
+Performing Arts
+</h3>
+
+<p class="text-sm text-gray-200">
+Creativity through music, dance and drama.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
 @endsection
