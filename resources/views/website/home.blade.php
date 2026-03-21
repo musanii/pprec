@@ -307,15 +307,14 @@ We provide a learning environment that nurtures academic excellence, discipline 
 
 </div>
 
-<!-- Features Grid -->
 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
 
-<!-- Feature 1 -->
+<!-- Qualified Teachers -->
 <div class="text-center group">
 
-<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary transition group-hover:bg-brand-primary group-hover:text-white">
 
-📘
+<x-heroicon-o-academic-cap class="w-7 h-7" />
 
 </div>
 
@@ -324,17 +323,17 @@ Qualified Teachers
 </h3>
 
 <p class="text-gray-600 text-sm">
-Our educators are experienced, passionate and dedicated to student success.
+Experienced and passionate educators dedicated to student success.
 </p>
 
 </div>
 
-<!-- Feature 2 -->
+<!-- Modern Facilities -->
 <div class="text-center group">
 
-<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary transition group-hover:bg-brand-primary group-hover:text-white">
 
-🏫
+<x-heroicon-o-home-modern class="w-7 h-7" />
 
 </div>
 
@@ -343,17 +342,17 @@ Modern Facilities
 </h3>
 
 <p class="text-gray-600 text-sm">
-A safe and well-equipped environment that supports effective learning.
+A safe, modern and well-equipped learning environment.
 </p>
 
 </div>
 
-<!-- Feature 3 -->
+<!-- Holistic Development -->
 <div class="text-center group">
 
-<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary transition group-hover:bg-brand-primary group-hover:text-white">
 
-🎯
+<x-heroicon-o-arrow-top-right-on-square class="w-7 h-7" />
 
 </div>
 
@@ -362,17 +361,17 @@ Holistic Development
 </h3>
 
 <p class="text-gray-600 text-sm">
-We focus on academics, discipline, leadership and life skills.
+Balanced focus on academics, leadership and life skills.
 </p>
 
 </div>
 
-<!-- Feature 4 -->
+<!-- Proven Performance -->
 <div class="text-center group">
 
-<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary text-2xl transition group-hover:bg-brand-primary group-hover:text-white">
+<div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary transition group-hover:bg-brand-primary group-hover:text-white">
 
-📈
+<x-heroicon-o-presentation-chart-line class="w-7 h-7" />
 
 </div>
 
@@ -381,7 +380,7 @@ Proven Performance
 </h3>
 
 <p class="text-gray-600 text-sm">
-Consistent academic excellence and outstanding student outcomes.
+Consistent academic excellence and strong student outcomes.
 </p>
 
 </div>
